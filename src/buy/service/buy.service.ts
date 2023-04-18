@@ -1,0 +1,30 @@
+import { Injectable } from "@nestjs/common";
+import {ProductsServiceDb} from "../../../db/products/products.service";
+import {BasketService} from "../../basket/service/basket.service";
+import {AddOrderDto} from "../dto/add-order.dto";
+import {OrdersServiceDb} from "../../../db/orders/orders.service";
+
+@Injectable()
+export class BuyService {
+    constructor(
+        private productsServiceDb: ProductsServiceDb,
+        private basketService: BasketService,
+        private ordersServiceDb: OrdersServiceDb
+    ) {}
+
+
+    async addOrder(order: AddOrderDto) {
+        const hashOrder = String(Date.now() + Math.floor(Math.random() * 10000));
+
+        for(let i = 0; i < order.products.length; i++) {
+            await this.ordersServiceDb.saveOrder({
+                product: Number(order.products[i].id),
+                count: order.products[i].count,
+                complete: false,
+                id_order: hashOrder,
+                contact_info: order.contact_info
+            })
+        }
+    }
+}
+

@@ -1,0 +1,133 @@
+.wrapper__logo {
+    display: flex;
+    justify-content: center;
+    flex: 1;
+    position: fixed;
+    width: 100%;
+    height: 48px;
+    background-color: #f8b71d;
+    z-index: 1;
+}
+
+.wrapper__logo h2 {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    font-weight: 400;
+}
+
+.wrapper__filter {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.wrapper__content {
+    display: flex;
+    justify-content: space-between;
+    flex: 20;
+}
+
+.wrapper__content-content {
+    display: flex;
+    flex-direction: column;
+    width: 70%;
+    margin: 0 auto;
+    padding-bottom: 50px;
+    margin-top: 48px;
+}
+
+.wrapper__content-left-bar-menu {
+    position: fixed;
+    width: 11%;
+    background-color: #f8b71d;
+    height: 96vh;
+    display: flex;
+    flex-direction: column;
+    top: 46px;
+    z-index: 1;
+}
+
+.wrapper__content-menu-item {
+    margin-top: 50px;
+    margin-left: 50px;
+    transition: .2s;
+    color: #000;
+    text-decoration: none;
+}
+
+.wrapper__content-menu-item:hover {
+    color: white;
+    transition: .2s;
+}
+
+.footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+    background-color: #f8b71d;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+.wrapper__logo-open-menu {
+    background-color: transparent;
+    border: none;
+    position: absolute;
+    left: 0;
+    height: 50px;
+    width: 50px;
+    cursor: pointer;
+}
+
+.wrapper__logo-open-menu-decoration-1 {
+    content: "";
+    background-color: black;
+    height: 3px;
+}
+
+.wrapper__logo-open-menu-decoration-2 {
+    content: "";
+    background-color: black;
+    height: 3px;
+    margin-top: 10px;
+}
+
+.wrapper__logo-open-menu-decoration-3 {
+    content: "";
+    background-color: black;
+    height: 3px;
+    margin-top: 10px;
+}
+
+.exit__btn {
+    position: absolute;
+    right: 30px;
+    top: 10px;
+    background: #f8b71d;
+    border-color: #f8b71d;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.basket-icon {
+    position: absolute;
+    top: 10px;
+    right: 40px;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+}
+
+.wrapper__message-form {
+    display: none;
+    max-width: 800px;
+    width: 100%;
+    margin: 0 auto;
+    margin-top: 50px;
+    text-align: center;
+    padding-top: 30px;
+    padding-bottom: 30px;
+}
+

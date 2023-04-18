@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+    {{> head}}
+<body>
+<div class="wrapper__filter">
+    {{> top-bar}}
+
+    {{#if admin}}
+        <div class="wrapper__content">
+            <div class="wrapper__content-content">{{{body}}}</div>
+        </div>
+    {{else}}
+        <div class="wrapper__content">
+            <div class="wrapper__content-left-bar-menu">
+                <a href="/" class="wrapper__content-menu-item">Всі товари</a>
+                <a href="/products/by-type/earrings" class="wrapper__content-menu-item">Сережки</a>
+                <a href="/products/by-type/dukachi" class="wrapper__content-menu-item">Дукачі</a>
+                <a href="/products/by-type/suspensions" class="wrapper__content-menu-item">Підвіски</a>
+                <a href="/products/by-type/bracelets" class="wrapper__content-menu-item">Браслети</a>
+                <a href="/products/by-type/another" class="wrapper__content-menu-item">Інше</a>
+                <a href="/basket" class="wrapper__content-menu-item">Кошик</a>
+            </div>
+            <div class="wrapper__content-content">{{{body}}}</div>
+        </div>
+    {{/if}}
+</div>
+
+<script src="/js/main.js" type="module"></script>
+{{#each scripts}}
+    <script src="{{this}}" type="module"></script>
+{{/each}}
+</body>
+</html>

@@ -1,0 +1,43 @@
+.wrapper__orders-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    background-color: #F5F5F5;
+    padding: 20px;
+}
+
+.wrapper__orders-item button {
+    border: none;
+    background-color: #f8b71d;
+    padding: 10px;
+    border-radius: 5px;
+    transition: .2s;
+    cursor: pointer;
+}
+
+.wrapper__orders-item button:hover {
+    transition: .2s;
+    background-color: #e59603;
+}
+
+.wrapper__orders-item-complete {
+    color: #e54724;
+}
+
+.wrapper__orders-logo {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.load-more-orders-btn {
+    background-color: #f8b71d;
+    display: block;
+    margin: 0 auto;
+    margin-top: 200px;
+    color: black;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+}

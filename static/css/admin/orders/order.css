@@ -1,0 +1,41 @@
+.wrapper__order {
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    background-color: #F5F5F5;
+    padding: 20px;
+    border-radius: 5px;
+    margin-top: 100px;
+    font-size: 20px;
+}
+
+.wrapper__order-item {
+    display: flex;
+    flex-direction: column;
+    margin-top: 50px;
+}
+
+.wrapper__order-all-sum {
+    margin-top: 50px;
+}
+
+.wrapper__order-done-btn {
+    background-color: #69B904FF;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 20px;
+    margin-top: 50px;
+    cursor: pointer;
+}
+
+.wrapper__order-delete-btn {
+    background-color: #e54724;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    margin-top: 20px;
+    cursor: pointer;
+}

@@ -1,0 +1,32 @@
+<div class="wrapper__products" data-type="{{type}}">
+    {{#if products}}
+        {{#each products}}
+            <div class="wrapper__products-item">
+                <a href="/products/{{this.id}}" class="wrapper__products-item-link">
+                    <div class="wrapper__products-item-content">
+                        <img src="/images/{{this.file_name}}" alt="Зображення">
+                        <h2 class="wrapper__products-item-content-name">{{this.name}}</h2>
+                        <h4 class="wrapper__products-item-content-name">{{this.type}}</h4>
+                        {{#if this.available}}
+                            <h4 class="wrapper__products-item-content-name">Є в наявності</h4>
+                        {{else}}
+                            <h4 class="wrapper__products-item-content-name">Немає в наявності</h4>
+                        {{/if}}
+                        <p class="wrapper__products-item-content-price">Ціна: <strong>{{this.price}} грн</strong></p>
+                    </div>
+                </a>
+                {{#if this.inBasket}}
+                    <button class="wrapper__product-add-to-basket-btn" style="background-color: #fff; color: #000;">
+                        <strong>Вже в кошику</strong>
+                    </button>
+                {{else}}
+                    <button class="wrapper__product-add-to-basket-btn" data-product="{{id}}">
+                        <strong>Додати до кошика</strong>
+                    </button>
+                {{/if}}
+            </div>
+        {{/each}}
+    {{else}}
+        <h2>Немає товарів :(</h2>
+    {{/if}}
+</div>

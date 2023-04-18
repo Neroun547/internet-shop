@@ -1,0 +1,21 @@
+<div class="wrapper__logo">
+    {{#if admin}}
+
+        {{#if auth}}
+            <a href="/admin/auth/exit">
+                <button class="exit__btn">Вийти</button>
+            </a>
+            <a href="/admin" class="link-to-main-page">Головна</a>
+        {{/if}}
+    {{else}}
+        <button class="wrapper__logo-open-menu">
+            <div class="wrapper__logo-open-menu-decoration-1"></div>
+            <div class="wrapper__logo-open-menu-decoration-2"></div>
+            <div class="wrapper__logo-open-menu-decoration-3"></div>
+        </button>
+        <h2>Zolotar</h2>
+        <a href="/basket">
+            <img src="/icons/basket.png" alt="Кошик" class="basket-icon">
+        </a>
+    {{/if}}
+</div>

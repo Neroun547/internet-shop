@@ -1,0 +1,38 @@
+.upload__product-form {
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    margin-top: 200px;
+    max-width: 1000px;
+    width: 100%;
+}
+
+.upload__product-form input {
+    border: none;
+    border-bottom: 1px solid #000;
+    margin-top: 30px;
+    outline: none;
+}
+
+.upload__product-form select {
+    margin-top: 30px;
+}
+
+.upload__product-form button {
+    border: none;
+    margin-top: 30px;
+    cursor: pointer;
+    height: 50px;
+    background-color: #f8b71d;
+}
+
+.wrapper__message-form {
+    display: none;
+    max-width: 800px;
+    width: 100%;
+    margin: 0 auto;
+    margin-top: 50px;
+    text-align: center;
+    padding-top: 30px;
+    padding-bottom: 30px;
+}
