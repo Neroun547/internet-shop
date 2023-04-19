@@ -13,7 +13,7 @@ if(window.matchMedia("(max-width: 755px").matches) {
 }
 
 window.addEventListener("scroll", async function () {
-    console.log(window.scrollY)
+
     if(window.scrollY >= limitForScroll && wrapperProducts.children.length > 1 && skip > 0) {
         let products;
 

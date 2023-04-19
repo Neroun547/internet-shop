@@ -29,7 +29,11 @@
                 </span>
     </div>
 </div>
-<script src="/js/main.js" type="module"></script>
+{{#if admin}}
+{{else}}
+    <script src="/js/main.js" type="module"></script>
+{{/if}}
+
 {{#each scripts}}
     <script src="{{this}}" type="module"></script>
 {{/each}}
