@@ -7,18 +7,20 @@ export function questionModal(content, action) {
 
     const wrapperModal = document.createElement("div");
 
+    wrapperModal.classList.add("wrapper__question-modal");
     wrapperModal.style.position = "absolute";
     wrapperModal.style.top = "20vh";
     wrapperModal.style.left = "50%";
     wrapperModal.style.backgroundColor = "#F5F5F5";
-    wrapperModal.style.height = "400px";
-    wrapperModal.style.width = "1000px";
+    wrapperModal.style.height = "auto";
+    wrapperModal.style.width = "60%";
     wrapperModal.style.transform = "translate(-50%)";
     wrapperModal.style.margin = "10px";
     wrapperModal.style.borderRadius = "5px";
 
     const wrapperContent = document.createElement("div");
 
+    wrapperContent.classList.add("wrapper__question-modal-content")
     wrapperContent.innerHTML = content;
     wrapperContent.style.maxWidth = "800px";
     wrapperContent.style.width = "100%";
@@ -30,10 +32,12 @@ export function questionModal(content, action) {
 
     const wrapperBtn = document.createElement("div");
 
+    wrapperBtn.classList.add("wrapper__question-modal-btn");
     wrapperBtn.style.display = "flex";
     wrapperBtn.style.justifyContent = "space-between";
     wrapperBtn.style.width = "70%";
     wrapperBtn.style.margin = "0 auto";
+    wrapperBtn.style.paddingBottom = "10px";
 
     const confirmButton = document.createElement("button");
 

@@ -44,6 +44,31 @@
     }
 }
 
+@media screen and (max-width: 950px) {
+    .wrapper__question-modal {
+        width: 80% !important;
+    }
+}
+
+@media screen and (max-width: 750px) {
+    .wrapper__question-modal {
+        font-size: 16px !important;
+    }
+    .wrapper__question-modal-btn {
+        flex-direction: column;
+    }
+    .wrapper__question-modal-btn button {
+        margin-top: 40px !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+    }
+    .wrapper__question-modal-content {
+        overflow-wrap: break-word !important;
+        padding: 0 !important;
+        font-size: 16px !important;
+    }
+}
+
 @media screen and (max-width: 650px) {
     .wrapper__cookie-info {
         font-size: 14px;
