@@ -22,10 +22,10 @@ loadMoreOrdersBtn.addEventListener("click", async function () {
                     loadMoreOrdersBtn
                 )
             }
-            if (response.length < 10) {
-                skip = 0;
-                loadMoreOrdersBtn.remove();
-            }
+        }
+        if (response.length < 10) {
+            skip = 0;
+            loadMoreOrdersBtn.remove();
         }
     }
 });
