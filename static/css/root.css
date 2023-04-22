@@ -7,9 +7,11 @@
 }
 
 .wrapper__products-item {
-    position: relative;
+    height: min-content;
     background-color: #F5F5F5;
     cursor: pointer;
+    padding-top: 5px;
+    padding-bottom: 5px;
 }
 
 .wrapper__products-item:hover {
@@ -33,7 +35,6 @@
 .wrapper__products-item-content-price {
     margin-top: 20px;
     text-align: center;
-    margin-bottom: 30px;
 }
 
 
@@ -48,11 +49,11 @@
     height: 50px;
     width: 100%;
     display: block;
+    margin: 0 auto;
+    margin-top: 20px;
     cursor: pointer;
     background-color: #69B904FF;
     color: #fff;
-    position: absolute;
-    bottom: 0;
 }
 
 
