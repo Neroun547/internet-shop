@@ -22,7 +22,8 @@ window.addEventListener("scroll", async function () {
                         response[i].name,
                         response[i].type,
                         response[i].available,
-                        response[i].price
+                        response[i].price,
+                        response[i].num
                     )
                 )
             }
@@ -33,7 +34,7 @@ window.addEventListener("scroll", async function () {
     }
 });
 
-function createProductCard(id, filename, alt, name, type, available, price) {
+function createProductCard(id, filename, alt, name, type, available, price, num) {
     const wrapperProductsItem = document.createElement("div");
     wrapperProductsItem.classList.add("wrapper__products-item");
 
@@ -43,6 +44,13 @@ function createProductCard(id, filename, alt, name, type, available, price) {
     img.classList.add("wrapper__products-item-image");
 
     wrapperProductsItem.appendChild(img);
+
+    const wrapperProductsNum = document.createElement("div");
+    wrapperProductsNum.classList.add("wrapper__products-item-num");
+
+    wrapperProductsNum.innerText = "Порядковий номер: " + num;
+
+    wrapperProductsItem.appendChild(wrapperProductsNum);
 
     const wrapperProductsItemName = document.createElement("div");
     wrapperProductsItemName.classList.add("wrapper__products-item-name");
