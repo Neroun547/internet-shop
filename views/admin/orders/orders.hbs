@@ -1,12 +1,28 @@
 <div class="wrapper__orders">
     <h2 class="wrapper__orders-logo">Замовлення</h2>
     {{#if orders}}
+        <select name="sort" id="sort-select">
+            <option value="">Всі замовлення</option>
+            <option value="in_process">В процессі</option>
+            <option value="returned">Повернені</option>
+            <option value="completed">Виконані</option>
+            <option value="not_completed">Не виконані</option>
+        </select>
+    {{/if}}
+    {{#if orders}}
         {{#each orders}}
             <div class="wrapper__orders-item">
                 <div class="wrapper__orders-item-complete">
-                    {{#if this.complete}}
+                    {{#if (equals this.status "completed")}}
                         <span style="color: #69B904FF;">Виконано</span>
-                    {{else}}
+                    {{/if}}
+                    {{#if (equals this.status "returned")}}
+                        <span style="color: #000;">Повернено клієнтом</span>
+                    {{/if}}
+                    {{#if (equals this.status "in_process")}}
+                        <span style="color: #000;">В процессі</span>
+                    {{/if}}
+                    {{#if (isNotStatus this.status)}}
                         <span>Не виконано</span>
                     {{/if}}
                 </div>
@@ -18,6 +34,6 @@
         {{/each}}
         <button class="load-more-orders-btn">Завантажити ще замовлення</button>
     {{else}}
-        <h2>Немає замовлень</h2>
+        <h2 class="not-orders-logo">Немає замовлень</h2>
     {{/if}}
 </div>

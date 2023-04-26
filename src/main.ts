@@ -6,6 +6,7 @@ import * as hbs from "express-handlebars";
 import * as cookieParser from 'cookie-parser';
 import {HttpExceptionFilter} from "../error-filter/error-filter";
 import {ValidationPipe} from "@nestjs/common";
+import { statuses } from "../constants";
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(MainModule);
@@ -22,7 +23,18 @@ async function bootstrap() {
 
   app.engine("hbs", hbs({
     extname: "hbs",
-    partialsDir: resolve( "views/partials")
+    partialsDir: resolve( "views/partials"),
+    helpers: {
+      equals (value1, value2) {
+        return value1 === value2;
+      },
+      haveStatus (status) {
+        return !!statuses.find((el) => el === status);
+      },
+      isNotStatus (status) {
+        return status === null || status === "";
+      }
+    }
   }));
 
   await app.listen(3000);

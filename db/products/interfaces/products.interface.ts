@@ -5,4 +5,5 @@ export interface ProductsInterface {
     price: number | null;
     available: boolean;
     type: string;
+    num: number;
 }

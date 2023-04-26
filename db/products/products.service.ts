@@ -16,10 +16,15 @@ export class ProductsServiceDb {
         productModel.available = product.available;
         productModel.price = product.price;
         productModel.type = product.type;
+        productModel.num = product.num;
 
         await this.repository.persistAndFlush(productModel);
 
         return productModel;
+    }
+
+    async getProductById(id: number) {
+        return await this.repository.findOne({ id: id });
     }
 
     async getProductAndImagesById(id: number) {
@@ -31,15 +36,27 @@ export class ProductsServiceDb {
     }
 
     async getProductsAndImagesByType(take: number, skip: number, type: string) {
-        return await this.repository.find({ type: type }, { limit: take, offset: skip, populate: ["productsImages"] });
+        return await this.repository.find({ type: type }, { limit: take, offset: skip, populate: ["productsImages"], orderBy: { num: "ASC" } });
     }
     async getProductsAndImages(take: number, skip: number) {
-        return await this.repository.find({  }, { limit: take, offset: skip, populate: ["productsImages"] });
+        return await this.repository.find({  }, { limit: take, offset: skip, populate: ["productsImages"], orderBy: { num: "ASC" } });
     }
     async deleteProductById(id: number) {
         await this.repository.nativeDelete( { id: id });
     }
     async updateProductById(id: number, product: ProductsInterface) {
         await this.repository.nativeUpdate({ id: id }, product);
+    }
+    async getCountAvailableProducts() {
+        return await this.repository.count({ available: true });
+    }
+    async getCountProducts() {
+        return await this.repository.count();
+    }
+    async getLastProductByNum() {
+        return (await this.repository.find({}, { orderBy: { num: "DESC" }, limit: 1 }))[0];
+    }
+    async getProductByNum(num: number) {
+        return await this.repository.findOne({ num: num });
     }
 }

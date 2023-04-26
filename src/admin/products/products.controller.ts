@@ -14,10 +14,14 @@ import {AuthGuard} from "../auth/guards/auth.guard";
 import {FilesInterceptor} from "@nestjs/platform-express";
 import {ProductsService} from "../../products/service/products.service";
 import {UploadProductDto} from "./dto/upload-product.dto";
+import {ProductsServiceDb} from "../../../db/products/products.service";
 
 @Controller()
 export class ProductsController {
-    constructor(private productsService: ProductsService) {}
+    constructor(
+        private productsService: ProductsService,
+        private productsServiceDb: ProductsServiceDb
+    ) {}
 
     @UseGuards(AuthGuard)
     @Get()
@@ -25,10 +29,15 @@ export class ProductsController {
         const productsAndImages = await this.productsService.getProductsByType(8, 0);
         const parseProductsAndImages = this.productsService.parseProductsForLoadCards(productsAndImages, "");
 
+        const countProducts = await this.productsServiceDb.getCountProducts();
+        const countAvailableProducts = await this.productsServiceDb.getCountAvailableProducts();
+
         res.render("admin/products/products", {
             auth: true,
             admin: true,
             products: parseProductsAndImages,
+            countProducts: countProducts,
+            countAvailableProducts: countAvailableProducts,
             styles: ["/css/admin/products/products.css"],
             scripts: ["/js/admin/products/products.js", "/js/admin/products/load-more-products.js"]
         });
@@ -101,6 +110,7 @@ export class ProductsController {
     @Patch(":id")
     async updateProductById(@Param("id", new ParseIntPipe()) id: number, @UploadedFiles() files: Array<Express.Multer.File>, @Body() body) {
         body.available = body.available === "true" ? true : false;
+        body.num = Number(body.num);
 
         await this.productsService.updateProductById(id, body, files);
 

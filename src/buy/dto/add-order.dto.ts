@@ -7,4 +7,8 @@ export class AddOrderDto {
 
     @IsArray()
     products: Array<any>;
+
+    @IsString()
+    remark: string;
 }
+

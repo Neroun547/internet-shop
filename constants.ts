@@ -5,3 +5,5 @@ export const translateTypeProduct = {
     bracelets: "Браслети",
     another: "інше"
 }
+
+export const statuses = ["in_process", "returned", "completed"];

@@ -1,6 +1,52 @@
+import { showModal } from "../../common/show-modal.js";
+
+const wrapperSelectedImages = document.querySelector(".wrapper__selected-images");
 const uploadProductForm = document.querySelector(".upload__product-form");
 const wrapperMessageForm = document.querySelector(".wrapper__message-form ");
 const filesInput = document.getElementById("files__input");
+const wrapperSelectedLeft = document.querySelector(".wrapper__selected-left");
+const wrapperSelectedRight = document.querySelector(".wrapper__selected-right");
+
+let indexDisplayImg = 0;
+
+wrapperSelectedLeft.addEventListener("click", function () {
+   wrapperSelectedImages.children[indexDisplayImg].style.display = "none";
+
+   if(indexDisplayImg) {
+      indexDisplayImg -= 1;
+   } else {
+      indexDisplayImg = wrapperSelectedImages.children.length - 1;
+   }
+   wrapperSelectedImages.children[indexDisplayImg].style.display = "block";
+});
+
+wrapperSelectedRight.addEventListener("click", function () {
+   wrapperSelectedImages.children[indexDisplayImg].style.display = "none";
+
+   if(indexDisplayImg < wrapperSelectedImages.children.length-1) {
+      indexDisplayImg += 1;
+   } else {
+      indexDisplayImg = 0;
+   }
+   wrapperSelectedImages.children[indexDisplayImg].style.display = "block";
+});
+
+filesInput.addEventListener("change", function (e) {
+   deleteImagesFromWrapperSelectedImages();
+
+   for(let i = 0; i < filesInput.files.length; i++) {
+      createImageInWrapperSelectedImages(filesInput.files[i]);
+   }
+   wrapperSelectedImages.children[0].style = "block";
+
+   if(filesInput.files.length > 1) {
+      wrapperSelectedRight.style.display = "block";
+      wrapperSelectedLeft.style.display = "block";
+   } else {
+      wrapperSelectedRight.style.display = "none";
+      wrapperSelectedLeft.style.display = "none";
+   }
+});
 
 uploadProductForm.addEventListener("submit", async function (e) {
    e.preventDefault();
@@ -24,13 +70,9 @@ uploadProductForm.addEventListener("submit", async function (e) {
    });
 
    if(api.ok) {
-      wrapperMessageForm.style.display = "block";
-      wrapperMessageForm.style.border = "1px solid green";
-      wrapperMessageForm.innerHTML = "Товар завантажено успішно";
+      showModal("Товар завантажено успішно", "/admin");
    } else {
-      wrapperMessageForm.style.display = "block";
-      wrapperMessageForm.style.border = "1px solid red";
-      wrapperMessageForm.innerHTML = "Помилка завантаження. Перевірте тип файлу";
+      showModal("Помилка завантаження. Перевірте тип файлу", "/admin");
    }
 
    const timeout = setTimeout(function () {
@@ -38,3 +80,21 @@ uploadProductForm.addEventListener("submit", async function (e) {
       clearTimeout(timeout);
    }, 4000);
 });
+
+function createImageInWrapperSelectedImages(file) {
+   const img = document.createElement("img");
+   img.src = URL.createObjectURL(file);
+   img.onload = () => {
+      URL.revokeObjectURL(img.src);
+   };
+   img.style.display = "none";
+
+   wrapperSelectedImages.appendChild(img);
+}
+
+function deleteImagesFromWrapperSelectedImages() {
+   for(let i = 0; i < wrapperSelectedImages.children.length; i++) {
+      wrapperSelectedImages.children[i].remove();
+   }
+}
+

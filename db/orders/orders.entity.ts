@@ -14,9 +14,6 @@ export class Orders implements OrdersInterface {
     count: number;
 
     @Property({ nullable: false })
-    complete: boolean;
-
-    @Property({ nullable: false })
     id_order: string;
 
     @Property({ nullable: false })
@@ -24,4 +21,10 @@ export class Orders implements OrdersInterface {
 
     @Property({ onCreate: () => new Date() })
     created_at: string;
+
+    @Property()
+    remark: string;
+
+    @Property({ nullable: true })
+    status: string | null;
 }

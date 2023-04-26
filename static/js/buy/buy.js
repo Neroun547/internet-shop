@@ -7,6 +7,7 @@ const radioInputAnother = document.getElementById("contact-another");
 const contactPhoneInput = document.getElementById("contact-phone-input");
 const contactEmailInput = document.getElementById("contact-email-input");
 const contactAnotherInput = document.getElementById("contact-another-input");
+const contactRemarkInput = document.getElementById("contact-remark");
 const wrapperProductsItem = document.querySelectorAll(".wrapper__products-item");
 
 const buyForm = document.getElementById("buy-form");
@@ -80,7 +81,8 @@ buyForm.addEventListener("submit", async function (e) {
                },
                body: JSON.stringify({
                    contact_info: phone,
-                   products: products
+                   products: products,
+                   remark: contactRemarkInput.value
                })
            });
 
@@ -100,7 +102,8 @@ buyForm.addEventListener("submit", async function (e) {
            },
            body: JSON.stringify({
                contact_info: email,
-               products: products
+               products: products,
+               remark: contactRemarkInput.value
            })
        });
 
@@ -117,7 +120,8 @@ buyForm.addEventListener("submit", async function (e) {
            },
            body: JSON.stringify({
                contact_info: another,
-               products: products
+               products: products,
+               remark: contactRemarkInput.value
            })
        });
 

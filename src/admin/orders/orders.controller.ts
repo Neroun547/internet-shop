@@ -1,7 +1,8 @@
-import {Controller, Delete, Get, Param, ParseIntPipe, Patch, Query, Res, UseGuards} from "@nestjs/common";
+import {Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Query, Res, UseGuards} from "@nestjs/common";
 import { Response } from "express";
 import {OrdersService} from "./service/orders.service";
 import {AuthGuard} from "../auth/guards/auth.guard";
+import {ChangeStatusDto} from "./dto/change-status.dto";
 
 @Controller()
 export class OrdersController {
@@ -19,7 +20,7 @@ export class OrdersController {
                 auth: true,
                 admin: true,
                 styles: ["/css/admin/orders/orders.css"],
-                scripts: ["/js/admin/orders/load-more-orders.js"]
+                scripts: ["/js/admin/orders/orders.js"]
             });
         } else {
             res.render("admin/orders/orders", {
@@ -33,7 +34,17 @@ export class OrdersController {
 
     @UseGuards(AuthGuard)
     @Get("load-more")
-    async loadMoreOrders(@Query("take", new ParseIntPipe()) take: number, @Query("skip", new ParseIntPipe()) skip: number) {
+    async loadMoreOrders(
+        @Query("take", new ParseIntPipe()) take: number,
+        @Query("skip", new ParseIntPipe()) skip: number,
+        @Query("status") status: string
+    ) {
+        if(status && status === "not_completed") {
+            return await this.ordersService.getOrdersByStatus(take, skip, null);
+        }
+        if(status && status !== "not_completed") {
+            return await this.ordersService.getOrdersByStatus(take, skip, status);
+        }
         return await this.ordersService.getOrders(take, skip);
     }
 
@@ -50,15 +61,17 @@ export class OrdersController {
             contact_info: order.contact_info,
             idOrder: idOrder,
             complete: order.complete,
+            remark: order.remark,
+            status: order.status,
             styles: ["/css/admin/orders/order.css"],
             scripts: ["/js/admin/orders/order.js"]
         });
     }
 
     @UseGuards(AuthGuard)
-    @Patch(":idOrder")
-    async setOrderCompleteTrueByOrderId(@Param("idOrder") idOrder: string) {
-        await this.ordersService.setOrderCompleteTrueByOrderId(idOrder);
+    @Patch("/change-status/:idOrder")
+    async changeStatusOrderByOrderId(@Param("idOrder") idOrder: string, @Body() body: ChangeStatusDto) {
+        await this.ordersService.changeStatusByOrderId(idOrder, body.status);
 
         return;
     }
@@ -67,6 +80,14 @@ export class OrdersController {
     @Delete(":idOrder")
     async deleteOrderByOrderId(@Param("idOrder") idOrder: string) {
         await this.ordersService.deleteOrderByOrderId(idOrder);
+
+        return;
+    }
+
+    @UseGuards(AuthGuard)
+    @Delete("/status/:idOrder")
+    async deleteStatusOrderByOrderId(@Param("idOrder") idOrder: string) {
+        await this.ordersService.deleteStatusByOrderId(idOrder);
 
         return;
     }

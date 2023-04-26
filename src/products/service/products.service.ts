@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import {Injectable, NotFoundException} from "@nestjs/common";
 import { ProductsServiceDb } from "../../../db/products/products.service";
 import {ProductsImagesServiceDb} from "../../../db/products-images/products-images.service";
 import {ProductsInterface} from "../../../db/products/interfaces/products.interface";
@@ -45,7 +45,8 @@ export class ProductsService {
     }
 
     async uploadProduct(product: ProductsInterface, files: Array<Express.Multer.File>) {
-        const savedProduct = await this.productsServiceDb.saveProductAndReturn(product);
+        const numLastProduct = (await this.productsServiceDb.getLastProductByNum()).num;
+        const savedProduct = await this.productsServiceDb.saveProductAndReturn({...product, num: numLastProduct + 1});
 
         for(let i = 0; i < files.length; i++) {
             if(files[i].mimetype === "image/jpeg") {
@@ -73,6 +74,15 @@ export class ProductsService {
     }
 
     async updateProductById(id: number, product: ProductsInterface, files: Array<Express.Multer.File>) {
+        const productInDbWithSimilarNum = JSON.parse(JSON.stringify(await this.productsServiceDb.getProductByNum(product.num)));
+
+        if(productInDbWithSimilarNum) {
+            const updatedProductInDb = await this.productsServiceDb.getProductById(id);
+
+            delete productInDbWithSimilarNum.productsImages;
+
+            await this.productsServiceDb.updateProductById(productInDbWithSimilarNum.id, { ...productInDbWithSimilarNum, num: updatedProductInDb.num });
+        }
         await this.productsServiceDb.updateProductById(id, product);
 
         if(files.length) {
@@ -110,6 +120,7 @@ export class ProductsService {
        await productAndImages.productsImages.init();
 
        return {
+           num: productAndImages.num,
            id: productAndImages.id,
            name: productAndImages.name,
            price: productAndImages.price,
@@ -123,10 +134,14 @@ export class ProductsService {
     async deleteProductById(id: number) {
         const productAndImages = await this.productsServiceDb.getProductAndImagesById(id);
 
-        for(let i = 0; i < productAndImages.productsImages.length; i++) {
-            await this.productsImagesServiceDb.deleteProductImageById(productAndImages.productsImages[i].id);
+        if(productAndImages && productAndImages.productsImages.length) {
+            for (let i = 0; i < productAndImages.productsImages.length; i++) {
+                await this.productsImagesServiceDb.deleteProductImageById(productAndImages.productsImages[i].id);
+            }
+            await this.ordersServiceDb.deleteOrdersByProductId(id);
+            await this.productsServiceDb.deleteProductById(id);
+        } else {
+            throw new NotFoundException();
         }
-        await this.ordersServiceDb.deleteOrdersByProductId(id);
-        await this.productsServiceDb.deleteProductById(id);
     }
 }

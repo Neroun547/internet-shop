@@ -28,6 +28,7 @@
     margin-bottom: 20px;
     margin-top: 50px;
     cursor: pointer;
+    width: 100%;
 }
 
 .wrapper__order-delete-btn {
@@ -38,4 +39,39 @@
     padding: 10px;
     margin-top: 20px;
     cursor: pointer;
+    width: 100%;
+}
+
+.wrapper__order-item-delete-status-btn {
+    background-color: #e54724;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    margin-top: 20px;
+    cursor: pointer;
+    width: 100%;
+}
+
+.wrapper__order-return-btn {
+    background-color: #f8b71d;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    cursor: pointer;
+    width: 100%;
+}
+
+.wrapper__order-in-process-btn {
+    background-color: #ccc;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    margin-top: 20px;
+    cursor: pointer;
+    width: 100%;
+}
+
+.wrapper__order-item-status {
+    margin-top: 50px;
 }

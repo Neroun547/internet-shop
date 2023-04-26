@@ -23,6 +23,9 @@ export class Products implements ProductsInterface {
     @Property()
     type: string;
 
+    @Property()
+    num: number;
+
     @OneToMany({ entity: () => ProductsImages, mappedBy: 'product' })
     productsImages = new Collection<ProductsImages>(this);
 }

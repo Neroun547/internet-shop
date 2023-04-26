@@ -20,10 +20,11 @@ export class BuyService {
             await this.ordersServiceDb.saveOrder({
                 product: Number(order.products[i].id),
                 count: order.products[i].count,
-                complete: false,
                 id_order: hashOrder,
-                contact_info: order.contact_info
-            })
+                contact_info: order.contact_info,
+                status: null,
+                remark: order.remark.trim().length ? order.remark.trim() : "",
+            });
         }
     }
 }

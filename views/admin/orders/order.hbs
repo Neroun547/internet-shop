@@ -6,15 +6,42 @@
             <div class="wrapper__order-item-type">Тип: {{this.product.type}}</div>
             <div class="wrapper__order-item-price">Ціна: {{this.product.price}}</div>
             <div class="wrapper__order-item-count">Кількість: {{this.count}}</div>
+            {{#if this.product.available}}
+                <div>Є в наявності</div>
+            {{else}}
+                <div>Немає в наявності</div>
+            {{/if}}
         </div>
     {{/each}}
     <div class="wrapper__order-all-sum">Загальна сума замовлення: {{all_sum}}</div>
     <div class="wrapper__order-contact-info">Контактна інформація клієнта: {{contact_info}}</div>
+    {{#if remark}}
+        <div>Примітка від клієнта: {{remark}}</div>
+    {{/if}}
 
-    {{#if complete}}
-        <button class="wrapper__order-done-btn" style="background-color: #fff; color: #000;">Вже виконано</button>
-    {{else}}
-        <button class="wrapper__order-done-btn" data-idOrder="{{idOrder}}">Позначити як виконане</button>
+    <div class="wrapper__order-item-status">
+        {{#if (haveStatus status)}}
+            {{#if (equals status "completed")}}
+                <button class="wrapper__order-done-btn" style="background-color: #fff; color: #000;">Вже виконано</button>
+            {{/if}}
+
+            {{#if (equals status "returned")}}
+                <button class="wrapper__order-return-btn" style="background-color: #fff; color: #000;">Клієнт повернув товар</button>
+            {{/if}}
+
+            {{#if (equals status "in_process")}}
+                <button class="wrapper__order-in-process-btn" style="background-color: #fff; color: #000;">В процесі ..-</button>
+            {{/if}}
+
+        {{else}}
+            <button class="wrapper__order-done-btn" data-idOrder="{{idOrder}}">Позначити як "виконано"</button>
+            <button class="wrapper__order-return-btn" data-idOrder="{{idOrder}}">Позначити як "Клієнт повернув товар"</button>
+            <button class="wrapper__order-in-process-btn" data-idOrder="{{idOrder}}">Позначити як "В процесі"</button>
+        {{/if}}
+    </div>
+
+    {{#if (haveStatus status)}}
+        <button class="wrapper__order-item-delete-status-btn" data-idOrder="{{idOrder}}">Скинути статус замовлення</button>
     {{/if}}
     <button class="wrapper__order-delete-btn" data-idOrder="{{idOrder}}">Видалити замовлення</button>
 </div>
