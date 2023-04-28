@@ -3,6 +3,7 @@ export const translateTypeProduct = {
     dukachi: "Дукачі",
     suspensions: "Підвіски",
     bracelets: "Браслети",
+    sets: "Комплекти",
     another: "інше"
 }
 
