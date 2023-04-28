@@ -45,8 +45,8 @@ export class ProductsService {
     }
 
     async uploadProduct(product: ProductsInterface, files: Array<Express.Multer.File>) {
-        const numLastProduct = (await this.productsServiceDb.getLastProductByNum()).num;
-        const savedProduct = await this.productsServiceDb.saveProductAndReturn({...product, num: numLastProduct + 1});
+        const lastProduct = (await this.productsServiceDb.getLastProductByNum());
+        const savedProduct = await this.productsServiceDb.saveProductAndReturn({...product, num: lastProduct ? lastProduct.num + 1 : 1});
 
         for(let i = 0; i < files.length; i++) {
             if(files[i].mimetype === "image/jpeg") {
@@ -140,8 +140,22 @@ export class ProductsService {
             }
             await this.ordersServiceDb.deleteOrdersByProductId(id);
             await this.productsServiceDb.deleteProductById(id);
+
+            await this.calculateNumsProductsAfterDeleteProduct(productAndImages.num);
         } else {
             throw new NotFoundException();
+        }
+    }
+
+    async calculateNumsProductsAfterDeleteProduct(numDeleteProduct: number) {
+        let numDeleteProductIncremented = numDeleteProduct;
+        const productsCountAfterNum = await this.productsServiceDb.getCountProductsBiggerNum(numDeleteProduct);
+
+        if(productsCountAfterNum > 0) {
+            for(let i = 0; i < productsCountAfterNum; i++) {
+                await this.productsServiceDb.updateProductsNumToPrev(numDeleteProductIncremented);
+                numDeleteProductIncremented += 1;
+            }
         }
     }
 }

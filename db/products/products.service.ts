@@ -59,4 +59,10 @@ export class ProductsServiceDb {
     async getProductByNum(num: number) {
         return await this.repository.findOne({ num: num });
     }
+    async updateProductsNumToPrev(num: number) {
+        await this.repository.nativeUpdate({ num: num + 1 }, { num });
+    }
+    async getCountProductsBiggerNum(num: number) {
+        return await this.repository.count({ num: { $gt: num } });
+    }
 }
