@@ -25,16 +25,16 @@ export class OrdersServiceDb {
     }
 
     async getOrders(take: number, skip: number) {
-        return await this.em.execute("SELECT DISTINCT id_order, created_at, status FROM orders LIMIT ? OFFSET ?",
+        return await this.em.execute("SELECT DISTINCT id_order, created_at, status FROM orders ORDER BY created_at DESC LIMIT ? OFFSET ?",
             [take, skip]);
     }
 
     async getOrdersByStatus(take: number, skip: number, status: string | null) {
         if(status === null) {
-            return await this.em.execute("SELECT DISTINCT id_order, created_at, status FROM orders WHERE status IS NULL LIMIT ? OFFSET ?",
+            return await this.em.execute("SELECT DISTINCT id_order, created_at, status FROM orders WHERE status IS NULL ORDER BY created_at DESC LIMIT ? OFFSET ?",
                 [take, skip]);
         } else {
-            return await this.em.execute("SELECT DISTINCT id_order, created_at, status FROM orders WHERE status = ? LIMIT ? OFFSET ?",
+            return await this.em.execute("SELECT DISTINCT id_order, created_at, status FROM orders WHERE status = ? ORDER BY created_at DESC LIMIT ? OFFSET ?",
                 [status, take, skip]);
         }
     }
