@@ -49,6 +49,9 @@ export class ProductsController {
         const products = await this.productsService.getProductsByType(8, 0, type);
         const parseProducts = this.productsService.parseProductsForLoadCards(products, req.cookies["basket_in_shop"]);
 
+        const maxProductsPrice = await this.productsService.getMaxPriceProducts();
+        const minProductsPrice = await this.productsService.getMinPriceProducts();
+
         if(!products.length) {
             res.render("root", {
                 products: false,
@@ -60,7 +63,9 @@ export class ProductsController {
                 products: parseProducts,
                 styles: ["/css/root.css"],
                 scripts: ["/js/root.js", "/js/load-more-products.js"],
-                type: type
+                type: type,
+                maxProductsPrice: maxProductsPrice,
+                minProductsPrice: minProductsPrice
             });
         }
     }
