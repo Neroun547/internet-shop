@@ -33,7 +33,7 @@ export class ProductsController {
         @Req() req: Request) {
 
         if(available && priceFrom && priceTo) {
-            const productsAndImages = await this.productsService.getProductsByFilters(take, skip, available, priceFrom, priceTo);
+            const productsAndImages = await this.productsService.getProductsByFilters(take, skip, available, Number(priceFrom), Number(priceTo));
 
             return this.productsService.parseProductsForLoadCards(productsAndImages, req.cookies["basket_in_shop"]);
         } else {
