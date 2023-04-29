@@ -47,6 +47,8 @@ wrapperFiltersForm.addEventListener("submit", async function (e) {
     const products = await fetch("/products/by-filters?priceFrom=" + priceFromFilter + "&priceTo=" + priceToFilter + "&available=" + availableFilter);
     const response = await products.json();
 
+    skip = 8;
+
     if(response.length) {
         deleteAllElementsFromHTML(document.querySelectorAll(".wrapper__products-item"));
 
