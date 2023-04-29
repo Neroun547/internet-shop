@@ -27,4 +27,10 @@ export class Orders implements OrdersInterface {
 
     @Property({ nullable: true })
     status: string | null;
+
+    @Property()
+    first_name: string;
+
+    @Property()
+    last_name: string;
 }

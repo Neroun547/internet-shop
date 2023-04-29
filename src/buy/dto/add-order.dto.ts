@@ -10,5 +10,12 @@ export class AddOrderDto {
 
     @IsString()
     remark: string;
-}
 
+    @IsString()
+    @Length(1, 255)
+    first_name: string;
+
+    @Length(1, 255)
+    @IsString()
+    last_name: string;
+}

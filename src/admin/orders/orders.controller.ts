@@ -50,7 +50,7 @@ export class OrdersController {
 
     @UseGuards(AuthGuard)
     @Get(":idOrder")
-    async getProductPage(@Param("idOrder") idOrder: string, @Res() res: Response) {
+    async getOrderPage(@Param("idOrder") idOrder: string, @Res() res: Response) {
         const order = await this.ordersService.getOrderAndProductByOrderId(idOrder);
 
         res.render("admin/orders/order", {
@@ -63,6 +63,8 @@ export class OrdersController {
             complete: order.complete,
             remark: order.remark,
             status: order.status,
+            first_name: order.first_name,
+            last_name: order.last_name,
             styles: ["/css/admin/orders/order.css"],
             scripts: ["/js/admin/orders/order.js"]
         });

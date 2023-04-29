@@ -20,6 +20,8 @@ export class OrdersServiceDb {
         orderModel.id_order = order.id_order;
         orderModel.remark = order.remark;
         orderModel.status = order.status;
+        orderModel.first_name = order.first_name;
+        orderModel.last_name = order.last_name;
 
         await this.repository.persistAndFlush(orderModel);
     }

@@ -9,4 +9,6 @@ export interface OrdersInterface {
     created_at?: string;
     remark: string;
     status: string | null;
+    first_name: string;
+    last_name: string;
 }

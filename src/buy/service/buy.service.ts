@@ -24,6 +24,8 @@ export class BuyService {
                 contact_info: order.contact_info,
                 status: null,
                 remark: order.remark.trim().length ? order.remark.trim() : "",
+                first_name: order.first_name,
+                last_name: order.last_name
             });
         }
     }

@@ -4,10 +4,13 @@ const radioInputPhone = document.getElementById("contact-phone");
 const radioInputEmail = document.getElementById("contact-email");
 const radioInputAnother = document.getElementById("contact-another");
 
+const contactFirstNameInput = document.getElementById("first_name");
+const contactLastNameInput = document.getElementById("last_name");
 const contactPhoneInput = document.getElementById("contact-phone-input");
 const contactEmailInput = document.getElementById("contact-email-input");
 const contactAnotherInput = document.getElementById("contact-another-input");
 const contactRemarkInput = document.getElementById("contact-remark");
+
 const wrapperProductsItem = document.querySelectorAll(".wrapper__products-item");
 
 const buyForm = document.getElementById("buy-form");
@@ -56,21 +59,22 @@ radioInputAnother.addEventListener("change", function () {
 
 buyForm.addEventListener("submit", async function (e) {
     e.preventDefault();
-
     let wrapperProductsItem = document.querySelectorAll(".wrapper__products-item");
 
-   const phone = contactPhoneInput.value;
-   const email = contactEmailInput.value;
-   const another = contactAnotherInput.value;
+    const firstName = contactFirstNameInput.value;
+    const lastName = contactLastNameInput.value;
+    const phone = contactPhoneInput.value;
+    const email = contactEmailInput.value;
+    const another = contactAnotherInput.value;
 
-   const products = [];
+    const products = [];
 
-   for(let i = 0; i < wrapperProductsItem.length; i++) {
-       const id = wrapperProductsItem[i].getAttribute("id");
-       const countProduct = Number(wrapperProductsItem[i].querySelector(".wrapper__products-item-count").querySelector(".count-product-input").value);
+    for(let i = 0; i < wrapperProductsItem.length; i++) {
+        const id = wrapperProductsItem[i].getAttribute("id");
+        const countProduct = Number(wrapperProductsItem[i].querySelector(".wrapper__products-item-count").querySelector(".count-product-input").value);
 
        products.push({ id: id, count: countProduct });
-   }
+    }
 
    if(phone.trim()) {
        if((/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im).test(phone)) {
@@ -82,7 +86,9 @@ buyForm.addEventListener("submit", async function (e) {
                body: JSON.stringify({
                    contact_info: phone,
                    products: products,
-                   remark: contactRemarkInput.value
+                   remark: contactRemarkInput.value,
+                   first_name: firstName,
+                   last_name: lastName
                })
            });
 
@@ -103,7 +109,9 @@ buyForm.addEventListener("submit", async function (e) {
            body: JSON.stringify({
                contact_info: email,
                products: products,
-               remark: contactRemarkInput.value
+               remark: contactRemarkInput.value,
+               first_name: firstName,
+               last_name: lastName
            })
        });
 
@@ -121,7 +129,9 @@ buyForm.addEventListener("submit", async function (e) {
            body: JSON.stringify({
                contact_info: another,
                products: products,
-               remark: contactRemarkInput.value
+               remark: contactRemarkInput.value,
+               first_name: firstName,
+               last_name: lastName
            })
        });
 

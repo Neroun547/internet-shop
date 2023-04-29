@@ -48,7 +48,9 @@ export class OrdersService {
             contact_info: arr[0].contact_info,
             complete: arr[0].complete,
             remark: arr[0].remark,
-            status: arr[0].status
+            status: arr[0].status,
+            first_name: arr[0].first_name,
+            last_name: arr[0].last_name
         };
 
         for(let i = 0; i < arr.length; i++) {

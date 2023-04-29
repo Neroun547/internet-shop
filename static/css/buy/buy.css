@@ -1,3 +1,28 @@
+#first_name {
+    border: none;
+    border-bottom-color: currentcolor;
+    border-bottom-style: none;
+    border-bottom-width: medium;
+    border-bottom: 1px solid #000;
+    outline: none;
+    background-color: transparent;
+    width: 95%;
+    border-radius: 0px;
+}
+
+#last_name {
+    border: none;
+    border-bottom-color: currentcolor;
+    border-bottom-style: none;
+    border-bottom-width: medium;
+    border-bottom: 1px solid #000;
+    outline: none;
+    background-color: transparent;
+    width: 95%;
+    border-radius: 0px;
+    margin-bottom: 50px;
+}
+
 #contact-phone-input {
     display: none;
     border: none;
