@@ -1,3 +1,4 @@
+{{#if products}}
 <div class="wrapper__filters">
     <form class="wrapper__filters-form">
         <select name="select__available" id="select__available">
@@ -18,6 +19,7 @@
     </form>
 </div>
 <button class="show-filters-btn">Фільтри</button>
+{{/if}}
 
 <div class="wrapper__products" data-type="{{type}}">
     {{#if products}}

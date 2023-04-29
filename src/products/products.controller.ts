@@ -62,7 +62,7 @@ export class ProductsController {
             res.render("root", {
                 products: parseProducts,
                 styles: ["/css/root.css"],
-                scripts: ["/js/root.js", "/js/load-more-products.js"],
+                scripts: ["/js/root.js"],
                 type: type,
                 maxProductsPrice: maxProductsPrice,
                 minProductsPrice: minProductsPrice
