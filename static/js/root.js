@@ -48,6 +48,7 @@ wrapperFiltersForm.addEventListener("submit", async function (e) {
     const response = await products.json();
 
     skip = 8;
+    limitForScroll = 150;
 
     if(response.length) {
         deleteAllElementsFromHTML(document.querySelectorAll(".wrapper__products-item"));
