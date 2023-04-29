@@ -78,14 +78,14 @@ export class ProductsServiceDb {
                 price: {
                     $gte: priceFrom,
                     $lte: priceTo
-                }, available: available, type: type
+                }, available: available, type: type ? type : ""
             }, { limit: take, offset: skip, populate: ["productsImages"], orderBy: { num: "ASC" }  });
         } else {
             return await this.repository.find({
                 price: {
                     $gte: priceFrom,
                     $lte: priceTo
-                }, type: type
+                }, type: type ? type : ""
             }, { limit: take, offset: skip, populate: ["productsImages"], orderBy: { num: "ASC" }  });
         }
     }
