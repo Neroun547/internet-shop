@@ -1,6 +1,6 @@
-import {Controller, Get, Param, ParseIntPipe, Query, Req, Res} from "@nestjs/common";
+import {Controller, Get, Param, ParseFloatPipe, ParseIntPipe, Query, Req, Res} from "@nestjs/common";
 import {ProductsService} from "./service/products.service";
-import { Request, Response } from "express";
+import {Request, Response} from "express";
 import {BasketService} from "../basket/service/basket.service";
 
 @Controller()
@@ -10,18 +10,37 @@ export class ProductsController {
         private basketService: BasketService
     ) {}
 
+    @Get("by-filters")
+    async getProductsByFilters(
+        @Query("available") available: string,
+        @Query("priceFrom", new ParseFloatPipe()) priceFrom: number,
+        @Query("priceTo", new ParseFloatPipe()) priceTo: number,
+        @Req() req: Request
+    ) {
+        const productsAndImages = await this.productsService.getProductsByFilters(8, 0, available, priceFrom, priceTo);
+
+        return this.productsService.parseProductsForLoadCards(productsAndImages, req.cookies["basket_in_shop"]);
+    }
+
     @Get("load-more")
     async loadMoreProducts(
         @Query("take", new ParseIntPipe()) take: number,
         @Query("skip", new ParseIntPipe()) skip: number,
         @Query("type") type: string,
-        @Req() req: Request,
-        @Res() res: Response) {
+        @Query("available") available: string,
+        @Query("priceFrom") priceFrom: number,
+        @Query("priceTo") priceTo: number,
+        @Req() req: Request) {
 
-        const productsAndImages = await this.productsService.getProductsByType(take, skip, type);
-        const parseData = this.productsService.parseProductsForLoadCards(productsAndImages, req.cookies["basket_in_shop"]);
+        if(available && priceFrom && priceTo) {
+            const productsAndImages = await this.productsService.getProductsByFilters(take, skip, available, priceFrom, priceTo);
 
-        res.send(parseData);
+            return this.productsService.parseProductsForLoadCards(productsAndImages, req.cookies["basket_in_shop"]);
+        } else {
+            const productsAndImages = await this.productsService.getProductsByType(take, skip, type);
+
+            return this.productsService.parseProductsForLoadCards(productsAndImages, req.cookies["basket_in_shop"]);
+        }
     }
 
     @Get("by-type/:type")

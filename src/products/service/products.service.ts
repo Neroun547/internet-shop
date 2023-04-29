@@ -16,7 +16,7 @@ export class ProductsService {
         private ordersServiceDb: OrdersServiceDb
     ) {}
 
-    parseProductsForLoadCards(productsAndImages, basket: string) {
+    parseProductsForLoadCards(productsAndImages, basket?: string) {
         const parseArr = [];
 
         for(let i = 0; i < productsAndImages.length; i++) {
@@ -156,6 +156,27 @@ export class ProductsService {
                 await this.productsServiceDb.updateProductsNumToPrev(numDeleteProductIncremented);
                 numDeleteProductIncremented += 1;
             }
+        }
+    }
+
+    async getMaxPriceProducts() {
+        return await this.productsServiceDb.getMaxPriceProducts();
+    }
+
+    async getMinPriceProducts() {
+        return await this.productsServiceDb.getMinPriceProducts();
+    }
+
+    async getProductsByFilters(take: number, skip: number, available: string, priceFrom: number, priceTo: number) {
+
+        if(available === "all") {
+            return await this.productsServiceDb.getProductsAndImagesByFilters(take, skip, priceFrom, priceTo);
+        }
+        if(available === "not_available") {
+            return await this.productsServiceDb.getProductsAndImagesByFilters(take, skip, priceFrom, priceTo, false);
+        }
+        if(available === "available") {
+            return await this.productsServiceDb.getProductsAndImagesByFilters(take, skip, priceFrom, priceTo, true);
         }
     }
 }

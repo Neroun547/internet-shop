@@ -3,6 +3,7 @@ import {InjectRepository} from "@mikro-orm/nestjs";
 import {Products} from "./products.entity";
 import {EntityRepository} from "@mikro-orm/core";
 import {ProductsInterface} from "./interfaces/products.interface";
+import {limits} from "argon2";
 
 @Injectable()
 export class ProductsServiceDb {
@@ -64,5 +65,28 @@ export class ProductsServiceDb {
     }
     async getCountProductsBiggerNum(num: number) {
         return await this.repository.count({ num: { $gt: num } });
+    }
+    async getMaxPriceProducts() {
+        return (await this.repository.find({ }, { orderBy: { price: "DESC" }, limit: 1 }))[0].price;
+    }
+    async getMinPriceProducts() {
+        return (await this.repository.find({ }, { orderBy: { price: "ASC" }, limit: 1 }))[0].price;
+    }
+    async getProductsAndImagesByFilters(take: number, skip: number, priceFrom: number, priceTo: number, available?) {
+        if(available !== undefined) {
+            return await this.repository.find({
+                price: {
+                    $gte: priceFrom,
+                    $lte: priceTo
+                }, available: available
+            }, { limit: take, offset: skip, populate: ["productsImages"] });
+        } else {
+            return await this.repository.find({
+                price: {
+                    $gte: priceFrom,
+                    $lte: priceTo
+                }
+            }, { limit: take, offset: skip, populate: ["productsImages"] });
+        }
     }
 }

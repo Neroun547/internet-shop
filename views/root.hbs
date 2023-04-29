@@ -1,3 +1,24 @@
+<div class="wrapper__filters">
+    <form class="wrapper__filters-form">
+        <select name="select__available" id="select__available">
+            <option value="all">Всі</option>
+            <option value="available">Які є в наявності</option>
+            <option value="not_available">Яких немає в наявності</option>
+        </select>
+        <div class="wrapper__filters-price-inputs">
+            <span class="wrapper__filters-price-span">Ціна від:</span>
+            <input type="number" placeholder="Від" min="{{minProductsPrice}}" max="{{maxProductsPrice}}" step="0.01" class="wrapper__filters-price-inputs-from" value="{{minProductsPrice}}">
+            <input type="range" min="{{minProductsPrice}}" max="{{maxProductsPrice}}" class="wrapper__filters-range-input-from" step="0.01" value="{{minProductsPrice}}">
+
+            <span class="wrapper__filters-price-span">Ціна до:</span>
+            <input type="number" placeholder="До" min="{{minProductsPrice}}" max="{{maxProductsPrice}}" step="0.01" class="wrapper__filters-price-inputs-to" value="{{maxProductsPrice}}">
+            <input type="range" min="{{minProductsPrice}}" max="{{maxProductsPrice}}" class="wrapper__filters-range-input-to" step="0.01" value="{{maxProductsPrice}}">
+        </div>
+        <button type="submit" class="wrapper__filters-form-submit">Застосувати фільтри</button>
+    </form>
+</div>
+<button class="show-filters-btn">Фільтри</button>
+
 <div class="wrapper__products" data-type="{{type}}">
     {{#if products}}
         {{#each products}}
