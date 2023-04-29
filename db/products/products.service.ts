@@ -74,19 +74,35 @@ export class ProductsServiceDb {
     }
     async getProductsAndImagesByFilters(take: number, skip: number, priceFrom: number, priceTo: number, type: string, available?) {
         if(available !== undefined) {
+            if(type) {
+                return await this.repository.find({
+                    price: {
+                        $gte: priceFrom,
+                        $lte: priceTo
+                    }, available: available, type: type
+                }, {limit: take, offset: skip, populate: ["productsImages"], orderBy: {num: "ASC"}});
+            }
             return await this.repository.find({
                 price: {
                     $gte: priceFrom,
                     $lte: priceTo
-                }, available: available, type: type ? type : ""
-            }, { limit: take, offset: skip, populate: ["productsImages"], orderBy: { num: "ASC" }  });
+                }, available: available
+            }, {limit: take, offset: skip, populate: ["productsImages"], orderBy: {num: "ASC"}});
         } else {
+            if(type) {
+                return await this.repository.find({
+                    price: {
+                        $gte: priceFrom,
+                        $lte: priceTo
+                    }, type: type
+                }, {limit: take, offset: skip, populate: ["productsImages"], orderBy: {num: "ASC"}});
+            }
             return await this.repository.find({
                 price: {
                     $gte: priceFrom,
                     $lte: priceTo
-                }, type: type ? type : ""
-            }, { limit: take, offset: skip, populate: ["productsImages"], orderBy: { num: "ASC" }  });
+                }
+            }, {limit: take, offset: skip, populate: ["productsImages"], orderBy: {num: "ASC"}});
         }
     }
 }
