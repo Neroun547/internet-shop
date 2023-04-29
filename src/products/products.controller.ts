@@ -15,9 +15,10 @@ export class ProductsController {
         @Query("available") available: string,
         @Query("priceFrom", new ParseFloatPipe()) priceFrom: number,
         @Query("priceTo", new ParseFloatPipe()) priceTo: number,
+        @Query("type") type: string,
         @Req() req: Request
     ) {
-        const productsAndImages = await this.productsService.getProductsByFilters(8, 0, available, priceFrom, priceTo);
+        const productsAndImages = await this.productsService.getProductsByFilters(8, 0, available, priceFrom, priceTo, type);
 
         return this.productsService.parseProductsForLoadCards(productsAndImages, req.cookies["basket_in_shop"]);
     }
@@ -33,7 +34,7 @@ export class ProductsController {
         @Req() req: Request) {
 
         if(available && priceFrom && priceTo) {
-            const productsAndImages = await this.productsService.getProductsByFilters(take, skip, available, Number(priceFrom), Number(priceTo));
+            const productsAndImages = await this.productsService.getProductsByFilters(take, skip, available, Number(priceFrom), Number(priceTo), type);
 
             return this.productsService.parseProductsForLoadCards(productsAndImages, req.cookies["basket_in_shop"]);
         } else {

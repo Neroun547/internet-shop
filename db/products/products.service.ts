@@ -72,20 +72,20 @@ export class ProductsServiceDb {
     async getMinPriceProducts() {
         return (await this.repository.find({ }, { orderBy: { price: "ASC" }, limit: 1 }))[0].price;
     }
-    async getProductsAndImagesByFilters(take: number, skip: number, priceFrom: number, priceTo: number, available?) {
+    async getProductsAndImagesByFilters(take: number, skip: number, priceFrom: number, priceTo: number, type: string, available?) {
         if(available !== undefined) {
             return await this.repository.find({
                 price: {
                     $gte: priceFrom,
                     $lte: priceTo
-                }, available: available
+                }, available: available, type: type
             }, { limit: take, offset: skip, populate: ["productsImages"], orderBy: { num: "ASC" }  });
         } else {
             return await this.repository.find({
                 price: {
                     $gte: priceFrom,
                     $lte: priceTo
-                }
+                }, type: type
             }, { limit: take, offset: skip, populate: ["productsImages"], orderBy: { num: "ASC" }  });
         }
     }

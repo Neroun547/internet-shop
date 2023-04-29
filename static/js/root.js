@@ -44,7 +44,7 @@ wrapperFiltersForm.addEventListener("submit", async function (e) {
     priceFromFilter = wrapperFiltersInputFrom.value;
     priceToFilter = wrapperFiltersInputTo.value;
 
-    const products = await fetch("/products/by-filters?priceFrom=" + priceFromFilter + "&priceTo=" + priceToFilter + "&available=" + availableFilter);
+    const products = await fetch("/products/by-filters?priceFrom=" + priceFromFilter + "&priceTo=" + priceToFilter + "&available=" + availableFilter + "&type=" + productsType);
     const response = await products.json();
 
     skip = 8;

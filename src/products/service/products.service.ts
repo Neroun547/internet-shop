@@ -167,16 +167,16 @@ export class ProductsService {
         return await this.productsServiceDb.getMinPriceProducts();
     }
 
-    async getProductsByFilters(take: number, skip: number, available: string, priceFrom: number, priceTo: number) {
+    async getProductsByFilters(take: number, skip: number, available: string, priceFrom: number, priceTo: number, type: string) {
 
         if(available === "all") {
-            return await this.productsServiceDb.getProductsAndImagesByFilters(take, skip, priceFrom, priceTo);
+            return await this.productsServiceDb.getProductsAndImagesByFilters(take, skip, priceFrom, priceTo, type);
         }
         if(available === "not_available") {
-            return await this.productsServiceDb.getProductsAndImagesByFilters(take, skip, priceFrom, priceTo, false);
+            return await this.productsServiceDb.getProductsAndImagesByFilters(take, skip, priceFrom, priceTo, type, false);
         }
         if(available === "available") {
-            return await this.productsServiceDb.getProductsAndImagesByFilters(take, skip, priceFrom, priceTo, true);
+            return await this.productsServiceDb.getProductsAndImagesByFilters(take, skip, priceFrom, priceTo, type, true);
         }
     }
 }
