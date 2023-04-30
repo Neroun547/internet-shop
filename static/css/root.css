@@ -107,4 +107,8 @@
     border-radius: 5px;
 }
 
+.no-products-filters {
+    width: max-content;
+}
+
 

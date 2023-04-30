@@ -51,6 +51,11 @@ wrapperFiltersForm.addEventListener("submit", async function (e) {
     limitForScroll = 150;
 
     if(response.length) {
+        const noProductsFilters = document.querySelector(".no-products-filters");
+
+        if(noProductsFilters) {
+            noProductsFilters.remove();
+        }
         deleteAllElementsFromHTML(document.querySelectorAll(".wrapper__products-item"));
 
         for(let i = 0; i < response.length; i++) {
@@ -66,6 +71,13 @@ wrapperFiltersForm.addEventListener("submit", async function (e) {
                     response[i].inBasket
                 )
             )
+        }
+    } else {
+        const noProductsFilters = document.querySelector(".no-products-filters");
+
+        if(!noProductsFilters) {
+            deleteAllElementsFromHTML(document.querySelectorAll(".wrapper__products-item"));
+            document.querySelector(".wrapper__products").innerHTML = "<h3 class='no-products-filters'>За цими фільтрами товарів не знайдено</h3>";
         }
     }
 });
