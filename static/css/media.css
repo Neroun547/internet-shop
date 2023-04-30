@@ -154,6 +154,10 @@
     .wrapper__product-add-to-basket-btn {
         font-size: 14px;
     }
+    .no-products-filters {
+        width: auto;
+        font-size: 14px;
+    }
 }
 
 @media screen and (max-width: 470px) {
