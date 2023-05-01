@@ -10,6 +10,7 @@ import { ProductsModuleAdmin } from "./admin/products/products.module";
 import {BasketModule} from "./basket/basket.module";
 import {BuyModule} from "./buy/buy.module";
 import {OrdersModule} from "./admin/orders/orders.module";
+import {ChatModule} from "./chat/chat.module";
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import {OrdersModule} from "./admin/orders/orders.module";
       BasketModule,
       BuyModule,
       OrdersModule,
+      ChatModule,
       MikroOrmModule.forRoot({
           dbName: "internet_shop",
           user: "root",
@@ -61,6 +63,10 @@ import {OrdersModule} from "./admin/orders/orders.module";
           {
               path: "buy",
               module: BuyModule
+          },
+          {
+              path: "chat",
+              module: ChatModule
           }
       ])
   ],
