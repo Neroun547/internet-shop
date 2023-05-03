@@ -10,7 +10,8 @@ export class ChatController {
     @Get("/auth")
     authChatPage(@Res() res: Response) {
         res.render("chat/auth", {
-            styles: ["/css/admin/auth/auth.css", "/css/chat/auth.css"]
+            styles: ["/css/admin/auth/auth.css", "/css/chat/auth.css"],
+            scripts: ["/js/chat/auth/auth.js"]
         });
     }
 
@@ -27,5 +28,10 @@ export class ChatController {
         await this.chatService.createUser(body);
 
         return { message: "Аккаунт створено успішно" };
+    }
+
+    @Post("auth")
+    async auth() {
+
     }
 }
