@@ -1,8 +1,10 @@
-import {Controller, Get, Res, UseGuards} from "@nestjs/common";
+import {Controller, Get, Res, UseFilters, UseGuards} from "@nestjs/common";
 import { Response } from "express";
 import {AuthGuard} from "./auth/guards/auth.guard";
+import {HttpExceptionFilter} from "../../error-filters/error-filter-admin";
 
 @Controller()
+@UseFilters(HttpExceptionFilter)
 export class AdminController {
 
     @UseGuards(AuthGuard)

@@ -11,6 +11,8 @@ import {BasketModule} from "./basket/basket.module";
 import {BuyModule} from "./buy/buy.module";
 import {OrdersModule} from "./admin/orders/orders.module";
 import {ChatModule} from "./chat/chat.module";
+import {ChatAuthModule} from "./chat/auth/chat-auth.module";
+import {ChatSignupModule} from "./chat/signup/chat-signup.module";
 
 @Module({
   imports: [
@@ -26,6 +28,8 @@ import {ChatModule} from "./chat/chat.module";
       BuyModule,
       OrdersModule,
       ChatModule,
+      ChatAuthModule,
+      ChatSignupModule,
       MikroOrmModule.forRoot({
           dbName: "internet_shop",
           user: "root",
@@ -66,7 +70,11 @@ import {ChatModule} from "./chat/chat.module";
           },
           {
               path: "chat",
-              module: ChatModule
+              module: ChatModule,
+              children: [
+                  { path: "auth", module: ChatAuthModule },
+                  { path: "signup", module: ChatSignupModule }
+              ]
           }
       ])
   ],

@@ -1,5 +1,5 @@
 import {IsString, Length} from "class-validator";
-import {ChatUsersInterface} from "../../../db/chat-users/interfaces/chat-users.interface";
+import {ChatUsersInterface} from "../../../../db/chat-users/interfaces/chat-users.interface";
 
 export class CreateUserDto implements ChatUsersInterface {
     @IsString()

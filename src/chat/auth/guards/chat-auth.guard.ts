@@ -8,7 +8,7 @@ import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 
 @Injectable()
-export class AuthGuard implements CanActivate {
+export class ChatAuthGuard implements CanActivate {
     constructor(private jwtService: JwtService) {}
 
     async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -22,7 +22,7 @@ export class AuthGuard implements CanActivate {
             const payload = await this.jwtService.verifyAsync(
                 token,
                 {
-                    secret: process.env.SECRET_JWT
+                    secret: process.env.SECRET_JWT_CHAT_AUTH
                 }
             );
             request['user'] = payload;
@@ -33,6 +33,6 @@ export class AuthGuard implements CanActivate {
     }
 
     private extractTokenFromCookie(request: Request): string | undefined {
-        return request.cookies[process.env.AUTH_TOKEN_COOKIE_NAME];
+        return request.cookies[process.env.AUTH_CHAT_COOKIE_NAME];
     }
 }

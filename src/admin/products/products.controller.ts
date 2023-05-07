@@ -5,7 +5,7 @@ import {
     Get, Param, ParseIntPipe, Patch,
     Post, Req,
     Res,
-    UploadedFiles,
+    UploadedFiles, UseFilters,
     UseGuards,
     UseInterceptors
 } from "@nestjs/common";
@@ -13,10 +13,11 @@ import { Response, Request } from "express";
 import {AuthGuard} from "../auth/guards/auth.guard";
 import {FilesInterceptor} from "@nestjs/platform-express";
 import {ProductsService} from "../../products/service/products.service";
-import {UploadProductDto} from "./dto/upload-product.dto";
 import {ProductsServiceDb} from "../../../db/products/products.service";
+import {HttpExceptionFilter} from "../../../error-filters/error-filter-admin";
 
 @Controller()
+@UseFilters(HttpExceptionFilter)
 export class ProductsController {
     constructor(
         private productsService: ProductsService,

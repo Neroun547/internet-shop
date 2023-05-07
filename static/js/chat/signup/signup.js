@@ -1,4 +1,8 @@
+import { showModal } from "../../common/show-modal.js";
+
 const chatSignUpForm = document.getElementById("chat-signup-form");
+const chatSignupPassword = document.getElementById("chat-signup-password");
+const chatSignupUsername = document.getElementById("chat-signup-username")
 
 chatSignUpForm.addEventListener("submit", async function (e) {
    e.preventDefault();
@@ -18,6 +22,9 @@ chatSignUpForm.addEventListener("submit", async function (e) {
    if(api.ok) {
        window.location.href = "/chat/auth";
    } else {
-       // TODO ...
+       showModal(response.message);
+
+       chatSignupPassword.value = "";
+       chatSignupUsername.value = "";
    }
 });

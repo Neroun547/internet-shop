@@ -1,10 +1,24 @@
-import {Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Query, Res, UseGuards} from "@nestjs/common";
+import {
+    Body,
+    Controller,
+    Delete,
+    Get,
+    Param,
+    ParseIntPipe,
+    Patch,
+    Query,
+    Res,
+    UseFilters,
+    UseGuards
+} from "@nestjs/common";
 import { Response } from "express";
 import {OrdersService} from "./service/orders.service";
 import {AuthGuard} from "../auth/guards/auth.guard";
 import {ChangeStatusDto} from "./dto/change-status.dto";
+import {HttpExceptionFilter} from "../../../error-filters/error-filter-admin";
 
 @Controller()
+@UseFilters(HttpExceptionFilter)
 export class OrdersController {
     constructor(private ordersService: OrdersService) {}
 
