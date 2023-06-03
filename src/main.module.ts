@@ -10,9 +10,10 @@ import { ProductsModuleAdmin } from "./admin/products/products.module";
 import {BasketModule} from "./basket/basket.module";
 import {BuyModule} from "./buy/buy.module";
 import {OrdersModule} from "./admin/orders/orders.module";
-import {ChatModule} from "./chat/chat.module";
-import {ChatAuthModule} from "./chat/auth/chat-auth.module";
-import {ChatSignupModule} from "./chat/signup/chat-signup.module";
+import {SupportChatModule} from "./support-chat/support-chat.module";
+import {SupportChatAuthModule} from "./support-chat/auth/support-chat-auth.module";
+import {SupportChatSignupModule} from "./support-chat/signup/support-chat-signup.module";
+import {SupportChatModuleAdmin} from "./admin/support-chat/support-chat.module";
 
 @Module({
   imports: [
@@ -27,9 +28,10 @@ import {ChatSignupModule} from "./chat/signup/chat-signup.module";
       BasketModule,
       BuyModule,
       OrdersModule,
-      ChatModule,
-      ChatAuthModule,
-      ChatSignupModule,
+      SupportChatModule,
+      SupportChatAuthModule,
+      SupportChatSignupModule,
+      SupportChatModuleAdmin,
       MikroOrmModule.forRoot({
           dbName: "internet_shop",
           user: "root",
@@ -41,20 +43,14 @@ import {ChatSignupModule} from "./chat/signup/chat-signup.module";
       }),
       RouterModule.register([
           {
-            path: "admin/auth",
-            module: AuthModule
-          },
-          {
-              path: "admin",
-              module: AdminModule
-          },
-          {
-              path: "admin/products",
-              module: ProductsModuleAdmin
-          },
-          {
-              path: "admin/orders",
-              module: OrdersModule
+            path: "admin",
+            module: AdminModule,
+            children: [
+                { path: "products", module: ProductsModuleAdmin },
+                { path: "orders", module: OrdersModule },
+                { path: "auth", module: AuthModule },
+                { path: "support", module: SupportChatModuleAdmin }
+            ]
           },
           {
               path: "products",
@@ -69,11 +65,11 @@ import {ChatSignupModule} from "./chat/signup/chat-signup.module";
               module: BuyModule
           },
           {
-              path: "chat",
-              module: ChatModule,
+              path: "support",
+              module: SupportChatModule,
               children: [
-                  { path: "auth", module: ChatAuthModule },
-                  { path: "signup", module: ChatSignupModule }
+                  { path: "auth", module: SupportChatAuthModule },
+                  { path: "signup", module: SupportChatSignupModule }
               ]
           }
       ])

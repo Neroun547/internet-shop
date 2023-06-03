@@ -10,7 +10,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
         const status = exception.getStatus();
 
         if(status === 401) {
-            response.redirect("/chat/auth");
+            response.redirect("/support/auth");
         } else {
             const errorResponse = exception.getResponse();
 

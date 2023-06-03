@@ -7,7 +7,7 @@ const chatAuthUsername = document.getElementById("chat-auth-username");
 chatAuthForm.addEventListener("submit", async function (e) {
     e.preventDefault();
 
-    const api = await fetch("/chat/auth", {
+    const api = await fetch("/support/auth", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -20,7 +20,7 @@ chatAuthForm.addEventListener("submit", async function (e) {
     const response = await api.json();
 
     if(api.ok) {
-        window.location.href = "/chat";
+        window.location.href = "/support";
     } else {
         showModal(response.message);
 
