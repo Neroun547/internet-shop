@@ -10,19 +10,21 @@ let skipLoadMore = 10;
 sendMessageForm.addEventListener("submit", async function (e) {
     e.preventDefault();
 
-    await fetch("/admin/support/save-message", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            message: e.target[0].value,
-            chatId: Number(chatId)
-        })
-    });
-    wrapperChatMessages.appendChild(createMessage(e.target[0].value, true))
+    if(e.target[0].value.trim().length) {
+        await fetch("/admin/support/save-message", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                message: e.target[0].value,
+                chatId: Number(chatId)
+            })
+        });
+        wrapperChatMessages.appendChild(createMessage(e.target[0].value, true))
 
-    e.target[0].value = "";
+        e.target[0].value = "";
+    }
 });
 
 function createMessage(message, sender) {

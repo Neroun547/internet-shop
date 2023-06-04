@@ -10,7 +10,7 @@ let skipLoadMore = 10;
 sendMessageForm.addEventListener("submit", async function (e) {
    e.preventDefault();
 
-   if(e.target[0].value.trim()) {
+   if(e.target[0].value.trim().length) {
 
       await fetch("/support/save-message", {
          method: "POST",
