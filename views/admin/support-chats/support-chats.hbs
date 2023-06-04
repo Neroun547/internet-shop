@@ -1,0 +1,11 @@
+<div class="wrapper__support-chats">
+    {{#each chats}}
+        <div class="wrapper__support-chats-item">
+            <span>Ім'я користувача: {{this.username}}</span>
+            <a href="/admin/support/{{this.id}}">
+                <button class="wrapper__support-chats-item-start-chat">Перейти до переписки</button>
+            </a>
+            <button class="wrapper__support-chats-item-delete-button" id="{{this.id}}">Видалити</button>
+      </div>
+    {{/each}}
+</div>

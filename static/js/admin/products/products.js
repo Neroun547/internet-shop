@@ -1,4 +1,4 @@
-const deleteProductBtn = document.querySelectorAll(".wrapper__products-item-edit-btn");
+const deleteProductBtn = document.querySelectorAll(".wrapper__products-item-delete-btn");
 
 for(let i = 0; i < deleteProductBtn.length; i++) {
     deleteProductBtn[i].addEventListener("click", async function () {

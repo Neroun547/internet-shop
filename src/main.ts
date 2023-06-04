@@ -4,7 +4,6 @@ import { NestExpressApplication } from "@nestjs/platform-express";
 import { resolve } from "path";
 import * as hbs from "express-handlebars";
 import * as cookieParser from 'cookie-parser';
-import {HttpExceptionFilter} from "../error-filter/error-filter";
 import {ValidationPipe} from "@nestjs/common";
 import { statuses } from "../constants";
 
@@ -14,8 +13,6 @@ async function bootstrap() {
   app.use(cookieParser());
 
   app.useGlobalPipes(new ValidationPipe());
-
-  app.useGlobalFilters(new HttpExceptionFilter());
 
   app.useStaticAssets(resolve( "static"));
   app.setBaseViewsDir(resolve( "views"));

@@ -10,11 +10,19 @@ export class HttpExceptionFilter implements ExceptionFilter {
         const status = exception.getStatus();
 
         if(status === 401) {
-            response.redirect("/admin/auth");
+            response.redirect("/support/auth");
         } else {
-            response
-                .status(status)
-                .json(exception);
+            const errorResponse = exception.getResponse();
+
+            if(Array.isArray(errorResponse['message'])) {
+                response
+                    .status(status)
+                    .json({ message: errorResponse['message'][0] });
+            } else {
+                response
+                    .status(status)
+                    .json(errorResponse);
+            }
         }
     }
 }
