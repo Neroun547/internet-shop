@@ -50,6 +50,23 @@
     }
 }
 
+@media screen and (max-width: 950px) {
+    .wrapper__support-chats-item {
+        flex-direction: column;
+    }
+    .wrapper__support-chats-item-delete-button {
+        width: 90%;
+        margin-top: 20px;
+    }
+    .wrapper__support-chats-item a {
+        width: 90%;
+        margin-top: 20px;
+    }
+    .wrapper__support-chats-item-start-chat {
+        width: 100%;
+    }
+}
+
 @media screen and (max-width: 750px) {
     .wrapper__question-modal {
         font-size: 16px !important;
