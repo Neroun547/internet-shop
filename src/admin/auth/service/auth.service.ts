@@ -15,13 +15,13 @@ export class AuthService {
         const userInDb = await this.usersServiceDb.getUserByName(user.name);
 
         if(!userInDb) {
-            throw new UnauthorizedException();
+            throw new UnauthorizedException({ message: "Хибне ім'я або пароль" });
         }
         const checkPassword = await argon2.verify(userInDb.password, user.password);
 
         if(checkPassword) {
             return this.jwtService.sign(JSON.parse(JSON.stringify(userInDb)), { secret: process.env.SECRET_JWT});
         }
-        throw new UnauthorizedException();
+        throw new UnauthorizedException({ message: "Хибне ім'я або пароль" });
     }
 }
