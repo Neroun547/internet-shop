@@ -24,6 +24,7 @@
     width: 72%;
     height: 80vh;
     overflow-y: scroll;
+    overflow-x: hidden;
     padding: 5px;
 }
 
@@ -38,6 +39,7 @@
     border-radius: 5px;
     font-size: 18px;
     margin-top: 20px;
+    max-width: 50%;
 }
 
 .wrapper__chat-send-message {
@@ -57,12 +59,13 @@
     font-size: 18px;
     margin-top: 20px;
     margin-left: auto;
+    overflow-wrap: break-word;
+    max-width: 50%;
 }
 
 .wrapper__chat-send-message-form {
     display: flex;
-    max-width: 1000px;
-    width: 100%;
+    width: 72%;
     margin: 0 auto;
     height: 40px;
 }
