@@ -19,4 +19,8 @@ export class SupportChatMessagesServiceDb {
     async getMessagesWhereIdGreater(chatId: number, take: number, messageId: number, admin=true) {
         return await this.repository.find({ chat: chatId, admin: admin, id: { $gt: messageId } }, { limit: take });
     }
+
+    async deleteMessagesByChatId(chatId: number) {
+        await this.repository.nativeDelete({ chat: chatId });
+    }
 }

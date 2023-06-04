@@ -39,6 +39,7 @@
     border-radius: 5px;
     font-size: 18px;
     margin-top: 20px;
+    overflow-wrap: break-word;
     max-width: 50%;
 }
 

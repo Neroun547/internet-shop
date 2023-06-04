@@ -37,9 +37,11 @@ export class SupportChatService {
     }
 
     async getMessagesWhereIdGreater(userId: number, take: number, idMessage: number) {
-        const chatId = (await this.supportChatsServiceDb.getChatByUserId(userId)).id;
+        const chat = await this.supportChatsServiceDb.getChatByUserId(userId);
 
-        return await this.supportChatMessagesServiceDb.getMessagesWhereIdGreater(chatId, take, idMessage);
+        if(chat) {
+            return await this.supportChatMessagesServiceDb.getMessagesWhereIdGreater(chat.id, take, idMessage);
+        }
     }
 }
 

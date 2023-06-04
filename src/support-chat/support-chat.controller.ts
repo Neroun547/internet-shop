@@ -1,4 +1,16 @@
-import {Body, Controller, Get, ParseIntPipe, Post, Query, Req, Res, UseFilters, UseGuards} from "@nestjs/common";
+import {
+    Body,
+    Controller,
+    Delete,
+    Get, Param,
+    ParseIntPipe,
+    Post,
+    Query,
+    Req,
+    Res,
+    UseFilters,
+    UseGuards
+} from "@nestjs/common";
 import { Response, Request } from "express";
 import {SupportChatService} from "./service/support-chat.service";
 import {SupportChatAuthGuard} from "./auth/guards/support-chat-auth.guard";
@@ -16,7 +28,7 @@ export class SupportChatController {
         const messages = await this.chatService.getMessages(req["user"].id, 10, 0);
 
         res.render("support-chat/chat", {
-            styles: ["/css/chat/chat.css"],
+            styles: ["/css/chat/chat.css", "/css/chat-media.css"],
             scripts: ["/js/chat/chat.js"],
             messages: messages,
             idLastMessage: messages[messages.length - 1] ? messages[messages.length - 1].id : -1,

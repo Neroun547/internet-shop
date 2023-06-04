@@ -30,4 +30,10 @@ export class SupportChatServiceAdmin {
     async getMessagesWhereIdGreater(chatId: number, take: number, idMessage: number) {
         return await this.supportChatMessagesServiceDb.getMessagesWhereIdGreater(chatId, take, idMessage, false);
     }
+
+
+    async deleteChat(chatId: number) {
+        await this.supportChatMessagesServiceDb.deleteMessagesByChatId(chatId);
+        await this.supportChatServiceDb.deleteChatById(chatId);
+    }
 }

@@ -1,8 +1,9 @@
-import {Body, Controller, Get, Param, ParseIntPipe, Post, Query, Req, Res, UseGuards} from "@nestjs/common";
+import {Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Query, Req, Res, UseGuards} from "@nestjs/common";
 import { Response, Request } from "express";
 import {SupportChatServiceAdmin} from "./service/support-chat.service";
 import {AuthGuard} from "../auth/guards/auth.guard";
 import {SaveMessageAdminDto} from "./dto/save-message-admin.dto";
+import {SupportChatAuthGuard} from "../../support-chat/auth/guards/support-chat-auth.guard";
 
 @Controller()
 export class SupportChatControllerAdmin {
@@ -18,7 +19,8 @@ export class SupportChatControllerAdmin {
             auth: true,
             admin: true,
             chats: chats,
-            styles: ["/css/admin/support-chats/support-chats.css"]
+            styles: ["/css/admin/support-chats/support-chats.css"],
+            scripts: ["/js/admin/chat/chats.js"]
         });
     }
 
@@ -28,8 +30,8 @@ export class SupportChatControllerAdmin {
         const messages = await this.supportChatsServiceAdmin.getMessagesByChatId(id, 10, 0);
 
         res.render("admin/support-chats/support-chat", {
-            styles: ["/css/chat/chat.css"],
-            scripts: ["/js/admin/chat/chat.js"],
+            styles: ["/css/chat/chat.css", "/css/chat-media.css"],
+            scripts: ["/js/admin/chat/chat.js", "/js/admin/chat/chats.js"],
             messages: messages,
             admin: true,
             auth: true,
@@ -64,5 +66,13 @@ export class SupportChatControllerAdmin {
         @Query("idLastMessage", new ParseIntPipe()) idLastMessage: number
     ) {
         return await this.supportChatsServiceAdmin.getMessagesWhereIdGreater(chatId, take, idLastMessage);
+    }
+
+    @Delete(":id")
+    @UseGuards(SupportChatAuthGuard)
+    async deleteChat(@Param("id", new ParseIntPipe()) id: number) {
+        await this.supportChatsServiceAdmin.deleteChat(id);
+
+        return;
     }
 }

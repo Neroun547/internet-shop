@@ -19,5 +19,8 @@ export class SupportChatServiceDb {
     async getChats(skip: number, take: number) {
         return await this.repository.find({  }, { limit: take, offset: skip, populate: ["support_chat_user"] });
     }
+    async deleteChatById(id: number) {
+        await this.repository.nativeDelete({ id: id });
+    }
 }
 
