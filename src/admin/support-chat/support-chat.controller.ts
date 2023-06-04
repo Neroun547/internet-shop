@@ -68,8 +68,8 @@ export class SupportChatControllerAdmin {
         return await this.supportChatsServiceAdmin.getMessagesWhereIdGreater(chatId, take, idLastMessage);
     }
 
+    @UseGuards(AuthGuard)
     @Delete(":id")
-    @UseGuards(SupportChatAuthGuard)
     async deleteChat(@Param("id", new ParseIntPipe()) id: number) {
         await this.supportChatsServiceAdmin.deleteChat(id);
 
