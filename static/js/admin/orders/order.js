@@ -5,6 +5,8 @@ const deleteBtn = document.querySelector(".wrapper__order-delete-btn");
 const returnedBtn = document.querySelector(".wrapper__order-return-btn");
 const inProcessBtn = document.querySelector(".wrapper__order-in-process-btn");
 const deleteStatusBtn = document.querySelector(".wrapper__order-item-delete-status-btn");
+const showAdminNoteBtn = document.querySelector(".wrapper__order-admin-note-btn");
+const adminNoteForm = document.querySelector(".wrapper__order-admin-note-form");
 
 if(doneBtn) {
     doneBtn.addEventListener("click", async function () {
@@ -97,3 +99,11 @@ if(deleteStatusBtn) {
         }
     });
 }
+
+showAdminNoteBtn.addEventListener("click", function () {
+    if(!adminNoteForm.style.display || adminNoteForm.style.display === "none") {
+        adminNoteForm.style.display = "block";
+    } else {
+        adminNoteForm.style.display = "none";
+    }
+});

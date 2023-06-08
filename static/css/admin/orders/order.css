@@ -19,6 +19,39 @@
     margin-top: 50px;
 }
 
+.wrapper__order-admin-note-btn {
+    background-color: #f8b71d;
+    border: none;
+    padding: 10px;
+    width: 100%;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.wrapper__order-admin-note-form {
+    display: none;
+}
+
+.wrapper__order-admin-note-form textarea {
+    resize: none;
+    display: block;
+    margin: 0 auto;
+    margin-top: 20px;
+    width: 100%;
+    height: 300px;
+}
+
+.wrapper__order-admin-note-form button {
+    background-color: #f8b71d;
+    display: block;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    margin: 0 auto;
+    margin-top: 20px;
+    cursor: pointer;
+}
+
 .wrapper__order-done-btn {
     background-color: #69B904FF;
     color: #fff;

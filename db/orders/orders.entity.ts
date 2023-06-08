@@ -33,4 +33,7 @@ export class Orders implements OrdersInterface {
 
     @Property()
     last_name: string;
+
+    @Property()
+    admin_note: string;
 }

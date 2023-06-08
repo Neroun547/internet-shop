@@ -32,6 +32,10 @@ export class OrdersService {
         await this.ordersServiceDb.deleteStatusByOrderId(idOrder);
     }
 
+    async addAdminNote(id: string, note: string) {
+        await this.ordersServiceDb.addAdminNoteByIdOrder(id, note);
+    }
+
     parseOrders(arr) {
         const result = [];
 
@@ -50,7 +54,8 @@ export class OrdersService {
             remark: arr[0].remark,
             status: arr[0].status,
             first_name: arr[0].first_name,
-            last_name: arr[0].last_name
+            last_name: arr[0].last_name,
+            admin_note: arr[0].admin_note
         };
 
         for(let i = 0; i < arr.length; i++) {

@@ -5,7 +5,7 @@ import {
     Get,
     Param,
     ParseIntPipe,
-    Patch,
+    Patch, Post,
     Query,
     Res,
     UseFilters,
@@ -16,6 +16,7 @@ import {OrdersService} from "./service/orders.service";
 import {AuthGuard} from "../auth/guards/auth.guard";
 import {ChangeStatusDto} from "./dto/change-status.dto";
 import {HttpExceptionFilter} from "../../../error-filters/error-filter-admin";
+import {AddAdminNoteDto} from "./dto/add-admin-note.dto";
 
 @Controller()
 @UseFilters(HttpExceptionFilter)
@@ -79,6 +80,7 @@ export class OrdersController {
             status: order.status,
             first_name: order.first_name,
             last_name: order.last_name,
+            admin_note: order.admin_note,
             styles: ["/css/admin/orders/order.css"],
             scripts: ["/js/admin/orders/order.js"]
         });
@@ -106,5 +108,13 @@ export class OrdersController {
         await this.ordersService.deleteStatusByOrderId(idOrder);
 
         return;
+    }
+
+    @UseGuards(AuthGuard)
+    @Post("/add-admin-note/:id")
+    async addAdminNote(@Body() body: AddAdminNoteDto, @Param("id") id: string, @Res() res: Response) {
+        await this.ordersService.addAdminNote(id, body.note);
+
+        res.redirect("/admin/orders/"+id);
     }
 }

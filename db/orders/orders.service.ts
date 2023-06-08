@@ -22,6 +22,7 @@ export class OrdersServiceDb {
         orderModel.status = order.status;
         orderModel.first_name = order.first_name;
         orderModel.last_name = order.last_name;
+        orderModel.admin_note = order.admin_note;
 
         await this.repository.persistAndFlush(orderModel);
     }
@@ -59,5 +60,8 @@ export class OrdersServiceDb {
     }
     async deleteStatusByOrderId(orderId: string) {
         await this.repository.nativeUpdate({ id_order: orderId }, { status: null });
+    }
+    async addAdminNoteByIdOrder(idOrder: string, note: string) {
+        await this.repository.nativeUpdate({ id_order: idOrder }, { admin_note: note });
     }
 }

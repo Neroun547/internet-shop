@@ -11,4 +11,5 @@ export interface OrdersInterface {
     status: string | null;
     first_name: string;
     last_name: string;
+    admin_note: string;
 }

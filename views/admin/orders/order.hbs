@@ -22,6 +22,11 @@
     {{/if}}
 
     <div class="wrapper__order-item-status">
+        <button class="wrapper__order-admin-note-btn">Додати примітку</button>
+        <form class="wrapper__order-admin-note-form" method="POST" action="/admin/orders/add-admin-note/{{idOrder}}">
+            <textarea name="note">{{admin_note}}</textarea>
+            <button type="submit">Додати примітку</button>
+        </form>
         {{#if (haveStatus status)}}
             {{#if (equals status "completed")}}
                 <button class="wrapper__order-done-btn" style="background-color: #fff; color: #000;">Вже виконано</button>
