@@ -14,6 +14,8 @@ import {SupportChatModule} from "./support-chat/support-chat.module";
 import {SupportChatAuthModule} from "./support-chat/auth/support-chat-auth.module";
 import {SupportChatSignupModule} from "./support-chat/signup/support-chat-signup.module";
 import {SupportChatModuleAdmin} from "./admin/support-chat/support-chat.module";
+import { ArticlesModule } from "./articles/articles.module";
+import { ArticlesModuleAdmin } from "./admin/articles/articles.module";
 
 @Module({
   imports: [
@@ -32,6 +34,8 @@ import {SupportChatModuleAdmin} from "./admin/support-chat/support-chat.module";
       SupportChatAuthModule,
       SupportChatSignupModule,
       SupportChatModuleAdmin,
+      ArticlesModule,
+      ArticlesModuleAdmin,
       MikroOrmModule.forRoot({
           dbName: "internet_shop",
           user: "root",
@@ -49,7 +53,8 @@ import {SupportChatModuleAdmin} from "./admin/support-chat/support-chat.module";
                 { path: "products", module: ProductsModuleAdmin },
                 { path: "orders", module: OrdersModule },
                 { path: "auth", module: AuthModule },
-                { path: "support", module: SupportChatModuleAdmin }
+                { path: "support", module: SupportChatModuleAdmin },
+                { path: "articles", module: ArticlesModuleAdmin }
             ]
           },
           {
@@ -71,6 +76,10 @@ import {SupportChatModuleAdmin} from "./admin/support-chat/support-chat.module";
                   { path: "auth", module: SupportChatAuthModule },
                   { path: "signup", module: SupportChatSignupModule }
               ]
+          },
+          {
+              path: "articles",
+              module: ArticlesModule
           }
       ])
   ],

@@ -1,11 +1,12 @@
 import { NestFactory } from '@nestjs/core';
 import { MainModule } from './main.module';
 import { NestExpressApplication } from "@nestjs/platform-express";
-import { resolve } from "path";
+import { resolve, join } from "path";
 import * as hbs from "express-handlebars";
 import * as cookieParser from 'cookie-parser';
 import {ValidationPipe} from "@nestjs/common";
 import { statuses } from "../constants";
+const express = require("express");
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(MainModule);
@@ -13,6 +14,8 @@ async function bootstrap() {
   app.use(cookieParser());
 
   app.useGlobalPipes(new ValidationPipe());
+
+  app.use('/tinymce', express.static(join(__dirname, 'node_modules', 'tinymce')));
 
   app.useStaticAssets(resolve( "static"));
   app.setBaseViewsDir(resolve( "views"));

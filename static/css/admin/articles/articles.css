@@ -1,0 +1,23 @@
+a {
+    text-decoration: none;
+}
+
+.upload__article-button {
+    display: block;
+    margin: 0 auto;
+    margin-top: 25px;
+    background-color: #f8b71d;
+    padding: 5px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 22px;
+}
+
+.wrapper__articles-no-articles {
+    text-align: center;
+    margin-top: 300px;
+    font-size: 28px;
+}
+
+

@@ -1,0 +1,15 @@
+<a href="/admin/articles/upload-article">
+    <button class="upload__article-button">
+        Завантажити статтю
+    </button>
+</a>
+
+<div class="wrapper__articles">
+    {{#if articles}}
+
+    {{else}}
+        <div class="wrapper__articles-no-articles">
+            Ще немає статтей
+        </div>
+    {{/if}}
+</div>
