@@ -13,6 +13,15 @@ export class Articles implements ArticlesInterface {
     filename: string;
 
     @Property()
-    created_at: string | Date;
+    created_at: string;
+
+    @Property()
+    updated_at: string;
+
+    @Property()
+    name: string;
+
+    @Property()
+    theme: string;
 }
 

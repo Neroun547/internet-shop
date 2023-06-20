@@ -1,5 +1,7 @@
 .wrapper__redactor-form {
-    margin-top: 100px;
+    margin-top: 50px;
+    display: flex;
+    flex-direction: column;
 }
 
 .wrapper__redactor-form button {
@@ -14,4 +16,12 @@
     margin: 0 auto;
     margin-top: 20px;
     cursor: pointer;
+}
+
+.wrapper__redactor-form-authors-input {
+    margin-bottom: 20px;
+    border: none;
+    border-bottom: 1px solid #000;
+    outline: none;
+    font-size: 18px;
 }

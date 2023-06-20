@@ -18,5 +18,10 @@
     {{else}}
         <link rel="stylesheet" href="/css/media.css">
     {{/if}}
+    {{#if headScripts}}
+        {{#each headScripts}}
+            <script src="{{this}}"></script>
+        {{/each}}
+    {{/if}}
     <title>Zolotar</title>
 </head>
