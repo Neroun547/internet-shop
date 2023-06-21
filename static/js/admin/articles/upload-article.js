@@ -42,7 +42,6 @@ tinymce.init({
         });
 
         input.click();
-    },
-   // images_upload_handler: example_image_upload_handler,
+    }
 });
 
