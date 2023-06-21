@@ -1,8 +1,23 @@
-import {Body, Controller, Delete, Get, Param, Patch, Post, Res, UseGuards} from "@nestjs/common";
+import {
+    BadRequestException,
+    Body,
+    Controller,
+    Delete,
+    Get,
+    Param,
+    Patch,
+    Post,
+    Req,
+    Res,
+    UseGuards,
+    UseInterceptors
+} from "@nestjs/common";
 import { Response } from "express";
 import {AuthGuard} from "../auth/guards/auth.guard";
 import {SaveArticleDto} from "./dto/save-article.dto";
 import {ArticlesService} from "./service/articles.service";
+import {FileInterceptor} from "@nestjs/platform-express";
+import { Request } from "express";
 
 @Controller()
 export class ArticlesController {

@@ -39,11 +39,15 @@ export class ProductsImagesServiceDb {
 
     }
 
+    async getProductImagesByProductId(productId: number) {
+        return await this.repository.find({ product: productId });
+    }
+
     async deleteProductImageById(id: number) {
         await this.repository.nativeDelete({ id: id });
     }
 
-    async deleteProductImageByProductId(productId: number) {
+    async deleteProductImagesByProductId(productId: number) {
         await this.repository.nativeDelete({ product: productId });
     }
 }

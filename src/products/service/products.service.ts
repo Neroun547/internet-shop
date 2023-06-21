@@ -6,6 +6,8 @@ import { rename } from "fs/promises";
 import {BasketService} from "../../basket/service/basket.service";
 import { translateTypeProduct } from "../../../constants";
 import {OrdersServiceDb} from "../../../db/orders/orders.service";
+import { unlink } from "fs/promises";
+import { resolve } from "path";
 
 @Injectable()
 export class ProductsService {
@@ -35,6 +37,16 @@ export class ProductsService {
             }
         }
         return parseArr;
+    }
+
+    async deleteProductImages(productImages) {
+        for(let i = 0; i < productImages.length; i++) {
+            try {
+                await unlink(resolve("static/images/" + productImages[i].file_name));
+            } catch {
+
+            }
+        }
     }
 
     async getProductsByType(take: number, skip: number, type?: string) {
@@ -86,7 +98,11 @@ export class ProductsService {
         await this.productsServiceDb.updateProductById(id, product);
 
         if(files.length) {
-            await this.productsImagesServiceDb.deleteProductImageByProductId(id);
+            const productImages = await this.productsImagesServiceDb.getProductImagesByProductId(id);
+
+            await this.deleteProductImages(productImages);
+
+            await this.productsImagesServiceDb.deleteProductImagesByProductId(id);
 
             for(let i = 0; i < files.length; i++) {
                 if(files[i].mimetype === "image/jpeg") {
@@ -135,12 +151,10 @@ export class ProductsService {
         const productAndImages = await this.productsServiceDb.getProductAndImagesById(id);
 
         if(productAndImages && productAndImages.productsImages.length) {
-            for (let i = 0; i < productAndImages.productsImages.length; i++) {
-                await this.productsImagesServiceDb.deleteProductImageById(productAndImages.productsImages[i].id);
-            }
+            await this.deleteProductImages(productAndImages.productsImages);
+            await this.productsImagesServiceDb.deleteProductImagesByProductId(id);
             await this.ordersServiceDb.deleteOrdersByProductId(id);
             await this.productsServiceDb.deleteProductById(id);
-
             await this.calculateNumsProductsAfterDeleteProduct(productAndImages.num);
         } else {
             throw new NotFoundException();
