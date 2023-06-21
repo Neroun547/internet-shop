@@ -12,7 +12,6 @@ export class AdminController {
     getAdminPage(@Res() res: Response) {
         res.render("admin/root", {
             admin: true,
-            auth: true,
             styles: ["/css/admin/main.css"]
         });
     }

@@ -67,10 +67,12 @@ export class ProductsServiceDb {
         return await this.repository.count({ num: { $gt: num } });
     }
     async getMaxPriceProducts() {
-        return (await this.repository.find({ }, { orderBy: { price: "DESC" }, limit: 1 }))[0].price;
+        return (await this.repository.find({ }, { orderBy: { price: "DESC" }, limit: 1 }))[0]
+            ? (await this.repository.find({ }, { orderBy: { price: "DESC" }, limit: 1 }))[0].price : null;
     }
     async getMinPriceProducts() {
-        return (await this.repository.find({ }, { orderBy: { price: "ASC" }, limit: 1 }))[0].price;
+        return (await this.repository.find({ }, { orderBy: { price: "ASC" }, limit: 1 }))[0]
+            ? (await this.repository.find({ }, { orderBy: { price: "ASC" }, limit: 1 }))[0].price : null;
     }
     async getProductsAndImagesByFilters(take: number, skip: number, priceFrom: number, priceTo: number, type: string, available?) {
         if(available !== undefined) {

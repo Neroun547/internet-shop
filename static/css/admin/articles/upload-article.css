@@ -1,0 +1,27 @@
+.wrapper__redactor-form {
+    margin-top: 50px;
+    display: flex;
+    flex-direction: column;
+}
+
+.wrapper__redactor-form button {
+    background-color: #f8b71d;
+    border: none;
+    border-radius: 5px;
+    font-size: 20px;
+    max-width: 500px;
+    width: 100%;
+    height: 50px;
+    display: block;
+    margin: 0 auto;
+    margin-top: 20px;
+    cursor: pointer;
+}
+
+.wrapper__redactor-form-authors-input {
+    margin-bottom: 20px;
+    border: none;
+    border-bottom: 1px solid #000;
+    outline: none;
+    font-size: 18px;
+}

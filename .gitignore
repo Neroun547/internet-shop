@@ -1,5 +1,6 @@
 # compiled output
 /static/images
+/views/articles/articles
 /dist
 /node_modules
 

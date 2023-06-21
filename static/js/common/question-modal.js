@@ -1,15 +1,21 @@
-export function questionModal(content, action) {
+export function questionModal(content, action, scrollUp=true) {
     const body = document.getElementsByTagName("body")[0];
     const wrapperFilter = document.querySelector(".wrapper__filter");
 
     wrapperFilter.style.filter = "brightness(40%)";
     wrapperFilter.style.backgroundColor = "#555";
 
+
     const wrapperModal = document.createElement("div");
 
     wrapperModal.classList.add("wrapper__question-modal");
     wrapperModal.style.position = "absolute";
-    wrapperModal.style.top = "20vh";
+
+    if(scrollUp) {
+        wrapperModal.style.top = "20vh";
+    } else {
+        wrapperModal.style.top = window.scrollY + 100 + "px";
+    }
     wrapperModal.style.left = "50%";
     wrapperModal.style.backgroundColor = "#F5F5F5";
     wrapperModal.style.height = "auto";
@@ -92,9 +98,11 @@ export function questionModal(content, action) {
 
     body.appendChild(wrapperModal);
 
-    window.scrollTo({
-        top: 0,
-        left: 0,
-        behavior: 'smooth'
-    });
+    if(scrollUp) {
+        window.scrollTo({
+            top: 0,
+            left: 0,
+            behavior: 'smooth'
+        });
+    }
 }

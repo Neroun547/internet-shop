@@ -9,6 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/main/main.css">
     <link rel="stylesheet" href="/css/admin/main.css">
+
     {{#each styles}}
         <link rel="stylesheet" href="{{this}}">
     {{/each}}
@@ -16,6 +17,11 @@
         <link rel="stylesheet" href="/css/admin/media.css">
     {{else}}
         <link rel="stylesheet" href="/css/media.css">
+    {{/if}}
+    {{#if headScripts}}
+        {{#each headScripts}}
+            <script src="{{this}}"></script>
+        {{/each}}
     {{/if}}
     <title>Zolotar</title>
 </head>
