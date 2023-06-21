@@ -204,7 +204,10 @@
 @media screen and (max-width: 400px) {
     .wrapper__content-left-bar-menu {
         width: 100%;
-        overflow-y: scroll;
+    }
+
+    .wrapper__content-menu-item {
+        margin-top: 40px;
     }
 }
 
