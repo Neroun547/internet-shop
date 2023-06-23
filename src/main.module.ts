@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import {MiddlewareConsumer, Module} from '@nestjs/common';
 import { MainController } from './main.controller';
 import {RouterModule} from "@nestjs/core";
 import {AuthModule} from "./admin/auth/auth.module";
@@ -16,9 +16,13 @@ import {SupportChatSignupModule} from "./support-chat/signup/support-chat-signup
 import {SupportChatModuleAdmin} from "./admin/support-chat/support-chat.module";
 import { ArticlesModule } from "./articles/articles.module";
 import { ArticlesModuleAdmin } from "./admin/articles/articles.module";
+import {StatisticsModule} from "./admin/statistics/statistics.module";
+import {StatisticsMiddleware} from "../middlewars/statistics.middleware";
+import {StatisticsModuleDb} from "../db/statistics/statistics.module";
 
 @Module({
   imports: [
+      StatisticsModuleDb,
       ConfigModule.forRoot({
           envFilePath: '.env',
           isGlobal: true
@@ -36,6 +40,7 @@ import { ArticlesModuleAdmin } from "./admin/articles/articles.module";
       SupportChatModuleAdmin,
       ArticlesModule,
       ArticlesModuleAdmin,
+      StatisticsModule,
       MikroOrmModule.forRoot({
           dbName: "internet_shop",
           user: "root",
@@ -43,7 +48,8 @@ import { ArticlesModuleAdmin } from "./admin/articles/articles.module";
           type: "mysql",
           port: 3306,
           entities: [],
-          autoLoadEntities: true
+          autoLoadEntities: true,
+          allowGlobalContext: true
       }),
       RouterModule.register([
           {
@@ -54,7 +60,8 @@ import { ArticlesModuleAdmin } from "./admin/articles/articles.module";
                 { path: "orders", module: OrdersModule },
                 { path: "auth", module: AuthModule },
                 { path: "support", module: SupportChatModuleAdmin },
-                { path: "articles", module: ArticlesModuleAdmin }
+                { path: "articles", module: ArticlesModuleAdmin },
+                { path: "statistics", module: StatisticsModule }
             ]
           },
           {
@@ -86,4 +93,10 @@ import { ArticlesModuleAdmin } from "./admin/articles/articles.module";
   controllers: [MainController],
   providers: [],
 })
-export class MainModule {}
+export class MainModule {
+    configure(consumer: MiddlewareConsumer) {
+        consumer
+            .apply(StatisticsMiddleware)
+            .forRoutes("*");
+    }
+}

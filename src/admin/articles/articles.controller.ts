@@ -8,7 +8,7 @@ import {
     Patch,
     Post,
     Req,
-    Res,
+    Res, UseFilters,
     UseGuards,
     UseInterceptors
 } from "@nestjs/common";
@@ -18,8 +18,10 @@ import {SaveArticleDto} from "./dto/save-article.dto";
 import {ArticlesService} from "./service/articles.service";
 import {FileInterceptor} from "@nestjs/platform-express";
 import { Request } from "express";
+import {HttpExceptionFilter} from "../../../error-filters/error-filter-admin";
 
 @Controller()
+@UseFilters(HttpExceptionFilter)
 export class ArticlesController {
     constructor(private articlesService: ArticlesService) {}
 
