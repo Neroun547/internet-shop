@@ -1,11 +1,25 @@
-import {Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Query, Req, Res, UseGuards} from "@nestjs/common";
+import {
+    Body,
+    Controller,
+    Delete,
+    Get,
+    Param,
+    ParseIntPipe,
+    Post,
+    Query,
+    Req,
+    Res,
+    UseFilters,
+    UseGuards
+} from "@nestjs/common";
 import { Response, Request } from "express";
 import {SupportChatServiceAdmin} from "./service/support-chat.service";
 import {AuthGuard} from "../auth/guards/auth.guard";
 import {SaveMessageAdminDto} from "./dto/save-message-admin.dto";
-import {SupportChatAuthGuard} from "../../support-chat/auth/guards/support-chat-auth.guard";
+import {HttpExceptionFilter} from "../../../error-filters/error-filter-admin";
 
 @Controller()
+@UseFilters(HttpExceptionFilter)
 export class SupportChatControllerAdmin {
     constructor(private supportChatsServiceAdmin: SupportChatServiceAdmin) {
     }
