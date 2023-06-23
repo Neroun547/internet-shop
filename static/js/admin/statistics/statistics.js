@@ -6,14 +6,20 @@ const svgWidth = Number(svg.getAttribute("width"));
 const lengthForYLine = 1240;
 const lengthForXLine = 630;
 
-let dateFrom;
-let dateTo;
+if(dateToInput.value && dateFromInput.value) {
+    fetch("/admin/statistics/data?date_from=" + dateFromInput.value + "&" + "date_to=" + dateToInput.value)
+        .then((res) => {
+            return res.json();
+        })
+        .then((data) => {
+            drawStats(data);
+        });
+}
 
 dateFromInput.addEventListener("change", async function (e) {
-    dateFrom = e.target.value;
 
-    if(dateTo) {
-        const api = await fetch("/admin/statistics/data?date_from=" + dateFrom + "&" + "date_to=" + dateTo);
+    if(dateToInput.value) {
+        const api = await fetch("/admin/statistics/data?date_from=" + e.target.value + "&" + "date_to=" + dateToInput.value);
         const res = await api.json();
 
         drawStats(res);
@@ -21,10 +27,9 @@ dateFromInput.addEventListener("change", async function (e) {
 });
 
 dateToInput.addEventListener("change", async function (e) {
-    dateTo = e.target.value;
 
-    if(dateFrom) {
-        const api = await fetch("/admin/statistics/data?date_from=" + dateFrom + "&" + "date_to=" + dateTo);
+    if(dateFromInput.value) {
+        const api = await fetch("/admin/statistics/data?date_from=" + dateFromInput.value + "&" + "date_to=" + e.target.value);
         const res = await api.json();
 
         drawStats(res);
@@ -295,5 +300,3 @@ function deleteModal() {
         }
     }
 }
-
-
