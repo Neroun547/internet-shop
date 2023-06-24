@@ -10,5 +10,8 @@ export class Statistics {
 
     @Property()
     date: Date | string;
+
+    @Property()
+    country_code: string;
 }
 

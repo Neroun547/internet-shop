@@ -19,6 +19,7 @@ import { ArticlesModuleAdmin } from "./admin/articles/articles.module";
 import {StatisticsModule} from "./admin/statistics/statistics.module";
 import {StatisticsMiddleware} from "../middlewars/statistics.middleware";
 import {StatisticsModuleDb} from "../db/statistics/statistics.module";
+import {CommonModule} from "../common/common.module";
 
 @Module({
   imports: [
@@ -41,6 +42,7 @@ import {StatisticsModuleDb} from "../db/statistics/statistics.module";
       ArticlesModule,
       ArticlesModuleAdmin,
       StatisticsModule,
+      CommonModule,
       MikroOrmModule.forRoot({
           dbName: "internet_shop",
           user: "root",

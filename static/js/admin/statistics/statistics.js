@@ -354,15 +354,24 @@ async function calculatePercentUsers(users) {
     let sumAllUsers = 0;
 
     for(let i = 0; i < users.length; i++) {
-        const api = await fetch(`https://ipapi.co/${users[i].user.replace("::ffff:", "")}/json/`);
-        const data = await api.json();
 
-        if(statsObject[data.country_code]) {
-            statsObject[data.country_code] += 1;
-            sumAllUsers += 1;
+        if(!users[i].country_code) {
+            const api = await fetch(`https://ipapi.co/${users[i].user.replace("::ffff:", "")}/json/`);
+            const data = await api.json();
+
+            if (statsObject[data.country_code]) {
+                statsObject[data.country_code] += 1;
+                sumAllUsers += 1;
+            } else {
+                statsObject[data.country_code] = 1;
+                sumAllUsers += 1;
+            }
         } else {
-            statsObject[data.country_code] = 1;
-            sumAllUsers += 1;
+            if(statsObject[users[i].countryCode]) {
+                statsObject[users[i].countryCode] += 1;
+            } else {
+                statsObject[users[i].countryCode] = 1;
+            }
         }
     }
     for(let key in statsObject) {

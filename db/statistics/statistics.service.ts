@@ -10,8 +10,8 @@ export class StatisticsServiceDb {
     async getDataByUserToday(user: string, date: string | Date) {
         return await this.repository.findOne({ user: user, date: date });
     }
-    async saveData(user: string, date: string | Date) {
-        await this.repository.nativeInsert({ user: user, date: date });
+    async saveData(user: string, date: string | Date, countryCode: string) {
+        await this.repository.nativeInsert({ user: user, date: date, country_code: countryCode});
     }
     async getDataByDateFromAndDateTo(dateFrom: string, dateTo: string) {
         return await
