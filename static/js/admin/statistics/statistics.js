@@ -354,7 +354,7 @@ async function calculatePercentUsers(users) {
     let sumAllUsers = 0;
 
     for(let i = 0; i < users.length; i++) {
-        const api = await fetch("http://ip-api.com/json/" + users[i].user);
+        const api = await fetch("http://ip-api.com/json/" + users[i].user.replace("::ffff:", ""));
         const data = await api.json();
 
         if(statsObject[data.countryCode]) {
