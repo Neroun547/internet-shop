@@ -11,7 +11,10 @@ if(dateToInput.value && dateFromInput.value) {
         .then((res) => {
             return res.json();
         })
-        .then((data) => {
+        .then(async (data) => {
+            for(let i = 0; i < data.length; i++) {
+                data[i].statsUsers = await calculatePercentUsers(data[i].users);
+            }
             drawStats(data);
         });
 }
@@ -22,6 +25,9 @@ dateFromInput.addEventListener("change", async function (e) {
         const api = await fetch("/admin/statistics/data?date_from=" + e.target.value + "&" + "date_to=" + dateToInput.value);
         const res = await api.json();
 
+        for(let i = 0; i < res.length; i++) {
+            res[i].statsUsers = await calculatePercentUsers(res[i].users);
+        }
         drawStats(res);
     }
 });
@@ -32,6 +38,9 @@ dateToInput.addEventListener("change", async function (e) {
         const api = await fetch("/admin/statistics/data?date_from=" + dateFromInput.value + "&" + "date_to=" + e.target.value);
         const res = await api.json();
 
+        for(let i = 0; i < res.length; i++) {
+            res[i].statsUsers = await calculatePercentUsers(res[i].users);
+        }
         drawStats(res);
     }
 });
@@ -53,12 +62,18 @@ function drawStats(data) {
         height = (data[i].countVisits / maxVisits) * 629;
         const rect = drawRectangle(posX, (629 - height) + 30, intervalLinesForY - 10, height, "#456dff");
 
-        rect.setAttribute("date-from", data[i].dateFrom);
-        rect.setAttribute("date-to", data[i].dateTo);
-        rect.setAttribute("count-visits", data[i].countVisits);
+        rect.setAttribute("index", i);
 
         rect.addEventListener("mousemove", function (e) {
-            showModal(e.target.attributes[6].value, e.target.attributes[7].value, e.target.attributes[8].value, e.target.x.baseVal.value, e.target.y.baseVal.value + 20);
+            const index = e.target.attributes[6].value;
+            showModal(
+                data[index].dateFrom,
+                data[index].dateTo,
+                data[index].countVisits,
+                data[index].statsUsers,
+                e.target.x.baseVal.value,
+                e.target.y.baseVal.value + 20
+            );
         });
         window.addEventListener("mousemove", function (e) {
 
@@ -242,18 +257,8 @@ function clearStats() {
     }
 }
 
-function showModal(dateFrom, dateTo, countVisits, cordX, cordY) {
+function showModal(dateFrom, dateTo, countVisits, statsUsers, cordX, cordY) {
     deleteModal();
-
-    const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-
-    rect.setAttribute("x", cordX);
-    rect.setAttribute("y", cordY);
-    rect.setAttribute("width", "230");
-    rect.setAttribute("height", "120");
-    rect.setAttribute("fill", "#f5f5f5");
-    rect.setAttribute("rx", "10");
-    rect.setAttribute("class", "modal-item");
 
     const textDateFrom = document.createElementNS("http://www.w3.org/2000/svg", "text");
 
@@ -285,7 +290,50 @@ function showModal(dateFrom, dateTo, countVisits, cordX, cordY) {
 
     textVisits.innerHTML = "Кількість відвідувань: " + countVisits;
 
+    let cordYPercentText = cordY + 70;
+    let heightModal = 120;
+
+    for(let key in statsUsers) {
+        heightModal += 20;
+    }
+
+    const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+
+    rect.setAttribute("x", cordX);
+    rect.setAttribute("y", cordY);
+    rect.setAttribute("width", "230");
+    rect.setAttribute("height", heightModal);
+    rect.setAttribute("fill", "#f5f5f5");
+    rect.setAttribute("rx", "10");
+    rect.setAttribute("class", "modal-item");
+
     svg.appendChild(rect);
+
+    for(let key in statsUsers) {
+        cordYPercentText += 20;
+
+        const textPercent = document.createElementNS("http://www.w3.org/2000/svg", "text");
+
+        textPercent.setAttribute("fill", "black");
+        textPercent.setAttribute("x", cordX + 40);
+        textPercent.setAttribute("y", cordYPercentText);
+        textPercent.setAttribute("font-size", "14");
+        textPercent.setAttribute("class", "modal-item");
+
+        textPercent.innerHTML = key + ": " + statsUsers[key] + "%";
+
+        const imageFlag = document.createElementNS("http://www.w3.org/2000/svg", "image");
+
+        imageFlag.setAttribute("href", `https://flagsapi.com/${key}/flat/16.png`);
+
+        imageFlag.setAttribute("x", cordX+20);
+        imageFlag.setAttribute("y", cordYPercentText-12);
+        imageFlag.setAttribute("class", "modal-item");
+
+        svg.appendChild(textPercent);
+        svg.appendChild(imageFlag);
+    }
+
     svg.appendChild(textDateFrom);
     svg.appendChild(textDateTo);
     svg.appendChild(textVisits);
@@ -299,4 +347,27 @@ function deleteModal() {
             modalItems[i].remove();
         }
     }
+}
+
+async function calculatePercentUsers(users) {
+    const statsObject = {};
+    let sumAllUsers = 0;
+
+    for(let i = 0; i < users.length; i++) {
+        const api = await fetch("http://ip-api.com/json/" + users[i].user);
+        const data = await api.json();
+
+        if(statsObject[data.countryCode]) {
+            statsObject[data.countryCode] += 1;
+            sumAllUsers += 1;
+        } else {
+            statsObject[data.countryCode] = 1;
+            sumAllUsers += 1;
+        }
+    }
+    for(let key in statsObject) {
+        statsObject[key] = (statsObject[key] / sumAllUsers) * 100;
+    }
+
+    return statsObject;
 }
