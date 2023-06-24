@@ -320,7 +320,7 @@ function showModal(dateFrom, dateTo, countVisits, statsUsers, cordX, cordY) {
         textPercent.setAttribute("font-size", "14");
         textPercent.setAttribute("class", "modal-item");
 
-        textPercent.innerHTML = key + ": " + statsUsers[key] + "%";
+        textPercent.innerHTML = key + ": " + statsUsers[key].toFixed(2) + "%";
 
         const imageFlag = document.createElementNS("http://www.w3.org/2000/svg", "image");
 
