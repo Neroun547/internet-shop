@@ -20,11 +20,10 @@ export class StatisticsMiddleware implements NestMiddleware {
             if (!userInDb) {
 
                 try {
-                    const getDataAboutIp: any = await this.commonService
-                        .promisifyHttpsRequest(`https://ipapi.co/${req.socket.remoteAddress.replace("::ffff:", "")}/json/`);
+                    const getDataAboutIp: any = await this.commonService.promisifyHttpsRequest(`https://api.ipgeolocation.io/ipgeo?apiKey=55ae9312aa994ffaada6439ad5569936&ip=${req.socket.remoteAddress.replace("::ffff:", "")}`);
                     const data = JSON.parse(getDataAboutIp);
 
-                    await this.statisticsServiceDb.saveData(req.socket.remoteAddress, date, data.country_code);
+                    await this.statisticsServiceDb.saveData(req.socket.remoteAddress, date, data.country_code2);
                 } catch(e) {
                     await this.statisticsServiceDb.saveData(req.socket.remoteAddress, date, null);
                 }
