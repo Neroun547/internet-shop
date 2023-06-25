@@ -350,13 +350,16 @@ function deleteModal() {
 }
 
 async function calculatePercentUsers(users) {
+    const apiStatisticToken = await fetch("/admin/statistics/api-token");
+    const apiStatisticTokenData = (await apiStatisticToken.json()).token;
+
     const statsObject = {};
     let sumAllUsers = 0;
 
     for(let i = 0; i < users.length; i++) {
 
         if(!users[i].country_code) {
-            const api = await fetch(`https://api.ipgeolocation.io/ipgeo?apiKey=55ae9312aa994ffaada6439ad5569936&ip=${users[i].user.replace("::ffff:", "")}`);
+            const api = await fetch(`https://api.ipgeolocation.io/ipgeo?apiKey=${apiStatisticTokenData}&ip=${users[i].user.replace("::ffff:", "")}`);
             const data = await api.json();
 
             if (statsObject[data.country_code2]) {

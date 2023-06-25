@@ -25,4 +25,10 @@ export class StatisticsController {
         return await this.statisticsService.getDataByDateFromAndDateTo(date_from, date_to);
     }
 
+    @UseGuards(AuthGuard)
+    @Get("api-token")
+    async getApiToken() {
+        return { token: process.env.API_LOCATION_BY_IP_TOKEN };
+    }
+
 }
