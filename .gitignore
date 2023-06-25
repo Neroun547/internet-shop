@@ -1,3 +1,4 @@
+.env
 # compiled output
 /static/images
 /views/articles/articles
