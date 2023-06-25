@@ -372,8 +372,10 @@ async function calculatePercentUsers(users) {
         } else {
             if(statsObject[users[i].country_code]) {
                 statsObject[users[i].country_code] += 1;
+                sumAllUsers += 1;
             } else {
                 statsObject[users[i].country_code] = 1;
+                sumAllUsers += 1;
             }
         }
     }
