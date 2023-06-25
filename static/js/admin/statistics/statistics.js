@@ -359,10 +359,6 @@ async function calculatePercentUsers(users) {
             const api = await fetch(`https://api.ipgeolocation.io/ipgeo?apiKey=55ae9312aa994ffaada6439ad5569936&ip=${users[i].user.replace("::ffff:", "")}`);
             const data = await api.json();
 
-            console.log(users[i]);
-
-            console.log(data);
-
             if (statsObject[data.country_code2]) {
                 statsObject[data.country_code2] += 1;
                 sumAllUsers += 1;
@@ -371,10 +367,10 @@ async function calculatePercentUsers(users) {
                 sumAllUsers += 1;
             }
         } else {
-            if(statsObject[users[i].countryCode]) {
-                statsObject[users[i].countryCode] += 1;
+            if(statsObject[users[i].country_code]) {
+                statsObject[users[i].country_code] += 1;
             } else {
-                statsObject[users[i].countryCode] = 1;
+                statsObject[users[i].country_code] = 1;
             }
         }
     }
