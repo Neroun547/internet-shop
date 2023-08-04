@@ -88,7 +88,7 @@ if(deleteStatusBtn) {
     deleteStatusBtn.addEventListener("click", function () {
         const idDeleteStatusOrder = deleteStatusBtn.getAttribute("data-idOrder");
 
-        questionModal("Ви точно хочете видалити статус замовлення ?", action);
+        questionModal("Ви точно хочете скинути статус замовлення ?", action);
 
         async function action() {
             await fetch("/admin/orders/status/" + idDeleteStatusOrder, {
