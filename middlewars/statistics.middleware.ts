@@ -12,7 +12,8 @@ export class StatisticsMiddleware implements NestMiddleware {
     ) {}
 
     async use(req: Request, res: Response, next: NextFunction) {
-
+        next();
+/*
         if(!req.originalUrl.includes("admin") && req.socket.remoteAddress) {
             const date = Moment().format("YYYY-MM-DD");
             const userInDb = await this.statisticsServiceDb.getDataByUserToday(req.socket.remoteAddress, date);
@@ -32,5 +33,7 @@ export class StatisticsMiddleware implements NestMiddleware {
         } else {
             next();
         }
+
+ */
     }
 }
