@@ -66,13 +66,25 @@ export class ProductsServiceDb {
     async getCountProductsBiggerNum(num: number) {
         return await this.repository.count({ num: { $gt: num } });
     }
+    async getMaxPriceProductsByType(type: string) {
+        const data = (await this.repository.find({ type: type }, { orderBy: { price: "DESC" }, limit: 1 }))[0];
+
+        return data ? data.price : null;
+    }
+    async getMinPriceProductsByType(type: string) {
+        const data = (await this.repository.find({ type: type }, { orderBy: { price: "ASC" }, limit: 1 }))[0];
+
+        return data ? data.price : null;
+    }
     async getMaxPriceProducts() {
-        return (await this.repository.find({ }, { orderBy: { price: "DESC" }, limit: 1 }))[0]
-            ? (await this.repository.find({ }, { orderBy: { price: "DESC" }, limit: 1 }))[0].price : null;
+        const data = (await this.repository.find({ }, { orderBy: { price: "DESC" }, limit: 1 }))[0];
+
+        return data ? data.price : null;
     }
     async getMinPriceProducts() {
-        return (await this.repository.find({ }, { orderBy: { price: "ASC" }, limit: 1 }))[0]
-            ? (await this.repository.find({ }, { orderBy: { price: "ASC" }, limit: 1 }))[0].price : null;
+        const data = (await this.repository.find({  }, { orderBy: { price: "ASC" }, limit: 1 }))[0];
+
+        return data ? data.price : null;
     }
     async getProductsAndImagesByFilters(take: number, skip: number, priceFrom: number, priceTo: number, type: string, available?) {
         if(available !== undefined) {

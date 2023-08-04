@@ -173,6 +173,14 @@ export class ProductsService {
         }
     }
 
+    async getMaxPriceProductsByType(type: string) {
+        return await this.productsServiceDb.getMaxPriceProductsByType(translateTypeProduct[type]);
+    }
+
+    async getMinPriceProductsByType(type: string) {
+        return await this.productsServiceDb.getMinPriceProductsByType(translateTypeProduct[type]);
+    }
+
     async getMaxPriceProducts() {
         return await this.productsServiceDb.getMaxPriceProducts();
     }
