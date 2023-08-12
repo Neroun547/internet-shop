@@ -39,6 +39,7 @@ filtersForm.addEventListener("submit", async function (e) {
     const response = await fetch(`/products/by-filters?available=${availableProductFilter}&type=${typeProductFilter}&priceFrom=${minPriceProductFilter}&priceTo=${maxPriceProductFilter}`);
     const data = await response.json();
 
+    skip = 8;
     removeAllProducts();
 
     if(data.length) {
