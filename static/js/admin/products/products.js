@@ -40,6 +40,8 @@ filtersForm.addEventListener("submit", async function (e) {
     const data = await response.json();
 
     skip = 8;
+    limitForScroll = 200;
+
     removeAllProducts();
 
     if(data.length) {
