@@ -1,3 +1,8 @@
+#filters__form {
+    display: flex;
+    flex-direction: column;
+}
+
 .wrapper__products {
     display: flex;
     flex-direction: column;
@@ -31,4 +36,42 @@
 .count-products-item {
     margin-top: 50px;
 }
+
+.wrapper__filters {
+    display: flex;
+    flex-direction: column;
+}
+
+.wrapper__filters h2 {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.wrapper__filters select {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+.wrapper__filters-price-inputs {
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+}
+
+.wrapper__filters-price-inputs input {
+    margin-top: 5px;
+}
+
+.filters__form-submit-btn {
+    cursor: pointer;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin-top: 20px;
+}
+
+.no_products-found-logo {
+    margin-top: 20px;
+}
+
 

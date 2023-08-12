@@ -15,6 +15,7 @@ import {FilesInterceptor} from "@nestjs/platform-express";
 import {ProductsService} from "../../products/service/products.service";
 import {ProductsServiceDb} from "../../../db/products/products.service";
 import {HttpExceptionFilter} from "../../../error-filters/error-filter-admin";
+import { translateTypeProduct } from "../../../constants";
 
 @Controller()
 @UseFilters(HttpExceptionFilter)
@@ -33,6 +34,14 @@ export class ProductsController {
         const countProducts = await this.productsServiceDb.getCountProducts();
         const countAvailableProducts = await this.productsServiceDb.getCountAvailableProducts();
 
+        const minProductsPrice = await this.productsServiceDb.getMinPriceProducts();
+        const maxProductsPrice = await this.productsServiceDb.getMaxPriceProducts();
+
+        const arrFiltersType = [];
+
+        for(let key in translateTypeProduct) {
+            arrFiltersType.push({ name: translateTypeProduct[key], value: key });
+        }
         res.render("admin/products/products", {
             auth: true,
             admin: true,
@@ -40,7 +49,10 @@ export class ProductsController {
             countProducts: countProducts,
             countAvailableProducts: countAvailableProducts,
             styles: ["/css/admin/products/products.css"],
-            scripts: ["/js/admin/products/products.js", "/js/admin/products/load-more-products.js"]
+            scripts: ["/js/admin/products/products.js", "/js/admin/products/load-more-products.js"],
+            filtersType: arrFiltersType,
+            minProductsPrice: minProductsPrice,
+            maxProductsPrice: maxProductsPrice
         });
     }
 
