@@ -15,28 +15,33 @@ showDescriptionBtn.addEventListener("click", function () {
   }
 });
 
-arrowLeft.addEventListener("click", function () {
+if(arrowLeft) {
 
-  if(!sliderNumber) {
-    sliderItems[sliderNumber].style.display = "none";
-    sliderNumber = sliderItems.length - 1;
-    sliderItems[sliderNumber].style.display = "block";
-  } else {
-    sliderItems[sliderNumber].style.display = "none";
-    sliderNumber -= 1;
-    sliderItems[sliderNumber].style.display = "block";
-  }
-});
+  arrowLeft.addEventListener("click", function() {
 
-arrowRight.addEventListener("click", function () {
+    if (!sliderNumber) {
+      sliderItems[sliderNumber].style.display = "none";
+      sliderNumber = sliderItems.length - 1;
+      sliderItems[sliderNumber].style.display = "block";
+    } else {
+      sliderItems[sliderNumber].style.display = "none";
+      sliderNumber -= 1;
+      sliderItems[sliderNumber].style.display = "block";
+    }
+  });
+}
 
-  if(sliderNumber === sliderItems.length - 1) {
-    sliderItems[sliderNumber].style.display = "none";
-    sliderNumber = 0;
-    sliderItems[sliderNumber].style.display = "block";
-  } else {
-    sliderItems[sliderNumber].style.display = "none";
-    sliderNumber += 1;
-    sliderItems[sliderNumber].style.display = "block";
-  }
-});
+if(arrowRight) {
+  arrowRight.addEventListener("click", function() {
+
+    if (sliderNumber === sliderItems.length - 1) {
+      sliderItems[sliderNumber].style.display = "none";
+      sliderNumber = 0;
+      sliderItems[sliderNumber].style.display = "block";
+    } else {
+      sliderItems[sliderNumber].style.display = "none";
+      sliderNumber += 1;
+      sliderItems[sliderNumber].style.display = "block";
+    }
+  });
+}

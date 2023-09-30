@@ -207,7 +207,8 @@
     }
 
     .wrapper__content-menu-item {
-        margin-top: 40px;
+        font-size: 14px;
+        margin-top: 35px;
     }
 }
 
