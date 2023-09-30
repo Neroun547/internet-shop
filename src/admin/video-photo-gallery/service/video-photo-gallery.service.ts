@@ -27,6 +27,11 @@ export class VideoPhotoGalleryServiceAdmin {
   }
 
   async deletePublicationById(id: number) {
+    const videoPhotoGalleryFiles = await this.videoPhotoGalleryFilesServiceDb.getByVideoPhotoGalleryId(id);
+
+    for(let i = 0; i < videoPhotoGalleryFiles.length; i++) {
+      await unlink(resolve("static/gallery/" + videoPhotoGalleryFiles[i].file_name));
+    }
     await this.videoPhotoGalleryFilesServiceDb.deleteByVideoPhotoGalleryId(id);
     await this.videoPhotoGalleryServiceDb.deleteById(id);
   }
@@ -38,9 +43,9 @@ export class VideoPhotoGalleryServiceAdmin {
   async editPublicationById(id: number, body: UploadVideoPhotoDto, files: Array<Express.Multer.File>) {
     await this.videoPhotoGalleryServiceDb.updateById(id, body);
 
-    const oldFiles = await this.videoPhotoGalleryFilesServiceDb.getByVideoPhotoGalleryId(id);
-
     if(files && files.length) {
+      const oldFiles = await this.videoPhotoGalleryFilesServiceDb.getByVideoPhotoGalleryId(id);
+
       for(let i = 0; i < oldFiles.length; i++) {
         await unlink(resolve("static/gallery/" + oldFiles[i].file_name));
       }
