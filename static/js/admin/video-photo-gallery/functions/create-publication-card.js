@@ -9,6 +9,7 @@ export function createPublicationCard(previewVideo, fileLink, name, theme, descr
 
   if(previewVideo) {
     const video = document.createElement("video");
+    video.setAttribute("preload", "metadata");
     video.setAttribute("controls", true);
 
     const source = document.createElement("source");

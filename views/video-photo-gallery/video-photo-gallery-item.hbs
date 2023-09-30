@@ -1,7 +1,7 @@
 <div class="wrapper__publication-item">
   {{#each this.files}}
     {{#if (equals this.type "video")}}
-      <video controls class="slider-item">
+      <video controls class="slider-item" preload="metadata">
         <source src="/gallery/{{this.filename}}">
       </video>
     {{/if}}

@@ -5,7 +5,7 @@
         <div class="wrapper__publications-item">
           <div class="wrapper__publications-sub-item">
             {{#if this.previewFileVideo}}
-              <video controls>
+              <video controls preload="metadata">
                 <source src="/gallery/{{this.previewFile}}">
               </video>
             {{else}}
