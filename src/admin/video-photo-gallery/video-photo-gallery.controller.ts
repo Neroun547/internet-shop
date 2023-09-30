@@ -64,6 +64,9 @@ export class VideoPhotoGalleryController {
     }
   }))
   async uploadVideoPhoto(@Body() body: UploadVideoPhotoDto, @UploadedFiles() files: Array<Express.Multer.File>) {
+    if(!files.length) {
+      throw new BadRequestException();
+    }
     await this.videoPhotoGalleryService.savePublication(body, files);
 
     return;
