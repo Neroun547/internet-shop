@@ -61,6 +61,11 @@
     height: 100%;
 }
 
+.wrapper__selected-images video {
+    width: 500px;
+    height: 500px;
+}
+
 .wrapper__selected {
     display: block;
     max-width: 500px;

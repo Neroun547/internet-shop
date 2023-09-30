@@ -1,0 +1,99 @@
+.item-description {
+    display: none;
+}
+
+.show-description-btn {
+    background-color: #f8b71d;
+    border: none;
+    border-radius: 5px;
+    width: 100%;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    cursor: pointer;
+}
+
+.upload__video-photo-btn {
+    text-decoration: none;
+}
+
+.upload__video-photo-btn button {
+    background-color: #f8b71d;
+    color: #000;
+    border-radius: 5px;
+    padding: 10px;
+    border: none;
+    display: block;
+    margin: 0 auto;
+    margin-top: 50px;
+    cursor: pointer;
+}
+
+.wrapper__publications {
+    margin-top: 100px;
+}
+
+.wrapper__publications {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 300px));
+    justify-content: center;
+    grid-gap: 40px;
+}
+
+.wrapper__publications-item {
+    padding-top: 20px;
+    cursor: pointer;
+}
+
+.wrapper__publications-item-buttons {
+    display: flex;
+    flex-direction: column;
+}
+
+.wrapper__publications-item-buttons a {
+    width: 100%;
+}
+.wrapper__publications-item-buttons-edit {
+    width: 100%;
+}
+.wrapper__publications-item-buttons button {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin-top: 10px;
+    border: none;
+    cursor: pointer;
+}
+
+.wrapper__publications-item-buttons-edit {
+    background-color: #f8b71d;
+}
+
+.wrapper__publications-item-buttons-delete {
+    background-color: #e54724;
+    color: #fff;
+}
+
+.wrapper__publications-item h2 {
+    text-align: center;
+    padding-top: 10px;
+}
+
+.wrapper__publications-sub-item {
+    display: block;
+    margin: 0 auto;
+    width: min-content;
+}
+
+.wrapper__publications-item video {
+    max-width: 300px;
+    height: 300px;
+}
+
+.wrapper__publications-item img {
+    max-width: 250px;
+    height: 250px;
+}
+
+.wrapper__publications-item:hover {
+    background-color: #eeeeee;
+}
+

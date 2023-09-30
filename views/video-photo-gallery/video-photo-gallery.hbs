@@ -1,0 +1,24 @@
+{{#if publications}}
+  <div class="wrapper__publications">
+    {{#each publications}}
+      <a href="/video-photo-gallery/{{this.id}}">
+        <div class="wrapper__publications-item">
+          <div class="wrapper__publications-sub-item">
+            {{#if this.previewFileVideo}}
+              <video controls>
+                <source src="/gallery/{{this.previewFile}}">
+              </video>
+            {{else}}
+              <img src="/gallery/{{this.previewFile}}">
+            {{/if}}
+            <h2>{{this.name}}</h2>
+            <p>{{this.theme}}</p>
+          </div>
+        </div>
+      </a>
+    {{/each}}
+  </div>
+
+{{else}}
+  <h2 class="no-content-logo">Поки немає відео чи фото</h2>
+{{/if}}

@@ -20,6 +20,8 @@ import {StatisticsModule} from "./admin/statistics/statistics.module";
 import {StatisticsMiddleware} from "../middlewars/statistics.middleware";
 import {StatisticsModuleDb} from "../db/statistics/statistics.module";
 import {CommonModule} from "../common/common.module";
+import { VideoPhotoGalleryModule } from "./video-photo-gallery/video-photo-gallery.module";
+import { VideoPhotoGalleryModuleAdmin } from "./admin/video-photo-gallery/video-photo-gallery.module";
 
 @Module({
   imports: [
@@ -43,12 +45,14 @@ import {CommonModule} from "../common/common.module";
       ArticlesModuleAdmin,
       StatisticsModule,
       CommonModule,
+      VideoPhotoGalleryModule,
+      VideoPhotoGalleryModuleAdmin,
       MikroOrmModule.forRoot({
-          dbName: "internet_shop",
-          user: "root",
-          password: "root",
+          dbName: process.env.DB_NAME,
+          user: process.env.DB_USER,
+          password: process.env.DB_PASSWORD,
           type: "mysql",
-          port: 3306,
+          port: Number(process.env.DB_PORT),
           entities: [],
           autoLoadEntities: true,
           allowGlobalContext: true
@@ -63,7 +67,8 @@ import {CommonModule} from "../common/common.module";
                 { path: "auth", module: AuthModule },
                 { path: "support", module: SupportChatModuleAdmin },
                 { path: "articles", module: ArticlesModuleAdmin },
-                { path: "statistics", module: StatisticsModule }
+                { path: "statistics", module: StatisticsModule },
+                { path: "video-photo-gallery", module: VideoPhotoGalleryModuleAdmin }
             ]
           },
           {
@@ -89,11 +94,15 @@ import {CommonModule} from "../common/common.module";
           {
               path: "articles",
               module: ArticlesModule
+          },
+          {
+              path: "video-photo-gallery",
+              module: VideoPhotoGalleryModule
           }
       ])
   ],
   controllers: [MainController],
-  providers: [],
+  providers: []
 })
 export class MainModule {
     configure(consumer: MiddlewareConsumer) {
