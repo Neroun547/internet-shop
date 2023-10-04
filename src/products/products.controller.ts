@@ -2,12 +2,14 @@ import {Controller, Get, Param, ParseFloatPipe, ParseIntPipe, Query, Req, Res} f
 import {ProductsService} from "./service/products.service";
 import {Request, Response} from "express";
 import {BasketService} from "../basket/service/basket.service";
+import { TranslateService } from "../translate/service/translate.service";
 
 @Controller()
 export class ProductsController {
     constructor(
         private productsService: ProductsService,
-        private basketService: BasketService
+        private basketService: BasketService,
+        private translateService: TranslateService
     ) {}
 
     @Get("by-filters")
@@ -52,11 +54,15 @@ export class ProductsController {
         const maxProductsPrice = await this.productsService.getMaxPriceProductsByType(type);
         const minProductsPrice = await this.productsService.getMinPriceProductsByType(type);
 
+        const translate = await this.translateService.getTranslateObjectByKeyAndIsoCode("products_page", req.cookies["iso_code_shop"]);
+
         if(!products.length) {
             res.render("root", {
                 products: false,
                 styles: ["/css/root.css"],
-                scripts: ["/js/root.js"]
+                scripts: ["/js/root.js"],
+                activeLanguage: req.cookies["iso_code_shop"],
+                ...translate
             });
         } else {
             res.render("root", {
@@ -65,7 +71,9 @@ export class ProductsController {
                 scripts: ["/js/root.js"],
                 type: type,
                 maxProductsPrice: maxProductsPrice,
-                minProductsPrice: minProductsPrice
+                minProductsPrice: minProductsPrice,
+                activeLanguage: req.cookies["iso_code_shop"],
+                ...translate
             });
         }
     }

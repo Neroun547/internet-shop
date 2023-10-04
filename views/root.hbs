@@ -2,23 +2,23 @@
 <div class="wrapper__filters">
     <form class="wrapper__filters-form">
         <select name="select__available" id="select__available">
-            <option value="all">Всі</option>
-            <option value="available">Які є в наявності</option>
-            <option value="not_available">Яких немає в наявності</option>
+            <option value="all">{{global_all}}</option>
+            <option value="available">{{global_which_available}}</option>
+            <option value="not_available">{{global_which_not_available}}</option>
         </select>
         <div class="wrapper__filters-price-inputs">
-            <span class="wrapper__filters-price-span">Ціна від:</span>
+            <span class="wrapper__filters-price-span">{{global_filters_price_from}}</span>
             <input type="number" placeholder="Від" min="{{minProductsPrice}}" max="{{maxProductsPrice}}" step="0.01" class="wrapper__filters-price-inputs-from" value="{{minProductsPrice}}">
             <input type="range" min="{{minProductsPrice}}" max="{{maxProductsPrice}}" class="wrapper__filters-range-input-from" step="0.01" value="{{minProductsPrice}}">
 
-            <span class="wrapper__filters-price-span">Ціна до:</span>
+            <span class="wrapper__filters-price-span">{{global_filters_price_to}}</span>
             <input type="number" placeholder="До" min="{{minProductsPrice}}" max="{{maxProductsPrice}}" step="0.01" class="wrapper__filters-price-inputs-to" value="{{maxProductsPrice}}">
             <input type="range" min="{{minProductsPrice}}" max="{{maxProductsPrice}}" class="wrapper__filters-range-input-to" step="0.01" value="{{maxProductsPrice}}">
         </div>
-        <button type="submit" class="wrapper__filters-form-submit">Застосувати фільтри</button>
+        <button type="submit" class="wrapper__filters-form-submit">{{global_apply_filters}}</button>
     </form>
 </div>
-<button class="show-filters-btn">Фільтри</button>
+<button class="show-filters-btn">{{global_filters}}</button>
 {{/if}}
 
 <div class="wrapper__products" data-type="{{type}}">
@@ -31,20 +31,20 @@
                         <h2 class="wrapper__products-item-content-name">{{this.name}}</h2>
                         <h4 class="wrapper__products-item-content-name">{{this.type}}</h4>
                         {{#if this.available}}
-                            <h4 class="wrapper__products-item-content-name">Є в наявності</h4>
+                            <h4 class="wrapper__products-item-content-name">{{../global_available}}</h4>
                         {{else}}
-                            <h4 class="wrapper__products-item-content-name">Немає в наявності</h4>
+                            <h4 class="wrapper__products-item-content-name">{{../global_not_available}}</h4>
                         {{/if}}
-                        <p class="wrapper__products-item-content-price">Ціна: <strong>{{this.price}} грн</strong></p>
+                        <p class="wrapper__products-item-content-price">{{../global_price}}: <strong>{{this.price}} грн</strong></p>
                     </div>
                 </a>
                 {{#if this.inBasket}}
                     <button class="wrapper__product-add-to-basket-btn" style="background-color: #fff; color: #000;">
-                        <strong>Вже в кошику</strong>
+                        <strong>{{../main_page_already_in_basket}}</strong>
                     </button>
                 {{else}}
                     <button class="wrapper__product-add-to-basket-btn" data-product="{{id}}">
-                        <strong>Додати до кошика</strong>
+                        <strong>{{../main_page_add_to_basket}}</strong>
                     </button>
                 {{/if}}
             </div>

@@ -1,5 +1,6 @@
 const wrapperMenuBtn = document.querySelector(".wrapper__logo-open-menu");
 const wrapperContentLeftBarMenu = document.querySelector(".wrapper__content-left-bar-menu");
+const languageSelect = document.getElementById("language-select");
 
 let showMenu = false;
 let moveForMenu = wrapperContentLeftBarMenu.clientWidth / 8;
@@ -39,6 +40,14 @@ wrapperMenuBtn.addEventListener("click",  () => {
             }
         }, 10);
     }
+});
+
+languageSelect.addEventListener("change", async function (e) {
+    await fetch("/translate/" + e.target.value, {
+        method: "PATCH"
+    });
+
+    window.location.reload();
 });
 
 

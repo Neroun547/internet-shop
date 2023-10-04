@@ -5,9 +5,10 @@ import {ProductsImagesModuleDb} from "../../db/products-images/products-images.m
 import {ProductsService} from "./service/products.service";
 import {BasketModule} from "../basket/basket.module";
 import {OrdersModuleDb} from "../../db/orders/orders.module";
+import { TranslateModule } from "../translate/translate.module";
 
 @Module({
-   imports: [BasketModule, ProductsModuleDb, ProductsImagesModuleDb, OrdersModuleDb],
+   imports: [BasketModule, ProductsModuleDb, ProductsImagesModuleDb, OrdersModuleDb, TranslateModule],
    controllers: [ProductsController],
    providers: [ProductsService],
    exports: [ProductsService]

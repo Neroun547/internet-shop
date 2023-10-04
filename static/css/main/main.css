@@ -1,3 +1,12 @@
+#language-select {
+    background-color: transparent;
+    position: absolute;
+    right: 290px;
+    top: 10px;
+    height: 27px;
+    cursor: pointer;
+}
+
 .wrapper__logo {
     display: flex;
     justify-content: center;
@@ -172,4 +181,5 @@
 .no-content-logo {
     margin-top: 100px;
 }
+
 

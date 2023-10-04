@@ -12,25 +12,25 @@
     {{else}}
         <div class="wrapper__content">
             <div class="wrapper__content-left-bar-menu">
-                <a href="/" class="wrapper__content-menu-item">Всі товари</a>
-                <a href="/products/by-type/earrings" class="wrapper__content-menu-item">Сережки</a>
-                <a href="/products/by-type/dukachi" class="wrapper__content-menu-item">Дукачі</a>
-                <a href="/products/by-type/suspensions" class="wrapper__content-menu-item">Підвіски</a>
-                <a href="/products/by-type/bracelets" class="wrapper__content-menu-item">Браслети</a>
-                <a href="/products/by-type/sets" class="wrapper__content-menu-item">Комплекти</a>
-                <a href="/products/by-type/another" class="wrapper__content-menu-item">Інше</a>
-                <a href="/basket" class="wrapper__content-menu-item">Кошик</a>
-                <a href="/video-photo-gallery" class="wrapper__content-menu-item">Галерея</a>
-                <a href="/articles" class="wrapper__content-menu-item">Статті</a>
-                <a href="/support" class="wrapper__content-menu-item">Підтримка</a>
+                <a href="/" class="wrapper__content-menu-item">{{global_all_products}}</a>
+                <a href="/products/by-type/earrings" class="wrapper__content-menu-item">{{global_earrings}}</a>
+                <a href="/products/by-type/dukachi" class="wrapper__content-menu-item">{{global_dukachi}}</a>
+                <a href="/products/by-type/suspensions" class="wrapper__content-menu-item">{{global_suspensions}}</a>
+                <a href="/products/by-type/bracelets" class="wrapper__content-menu-item">{{global_bracelets}}</a>
+                <a href="/products/by-type/sets" class="wrapper__content-menu-item">{{global_sets}}</a>
+                <a href="/products/by-type/another" class="wrapper__content-menu-item">{{global_another}}</a>
+                <a href="/basket" class="wrapper__content-menu-item">{{global_basket}}</a>
+                <a href="/video-photo-gallery" class="wrapper__content-menu-item">{{global_gallery}}</a>
+                <a href="/articles" class="wrapper__content-menu-item">{{global_articles}}</a>
+                <a href="/support" class="wrapper__content-menu-item">{{global_support}}</a>
             </div>
             <div class="wrapper__content-content">{{{body}}}</div>
         </div>
     {{/if}}
     <div class="wrapper__cookie-info">
-                <span>Цей сайт використовує файли Cookie для роботи.
-                    <a href="https://uk.wikipedia.org/wiki/%D0%9A%D1%83%D0%BA%D0%B8">Детальніше про файли Cookie</a>
-                </span>
+      <span>Цей сайт використовує файли Cookie для роботи.
+        <a href="https://uk.wikipedia.org/wiki/%D0%9A%D1%83%D0%BA%D0%B8">Детальніше про файли Cookie</a>
+      </span>
     </div>
 </div>
 {{#if admin}}
