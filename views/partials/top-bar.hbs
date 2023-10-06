@@ -11,15 +11,15 @@
             <div class="wrapper__logo-open-menu-decoration-3"></div>
         </button>
         <h2 class="main-logo">Zolotar</h2>
-        {{#if (equals activeLanguage "uk")}}
+        {{#if (equals activeLanguage "en")}}
           <select name="language-select" id="language-select">
-            <option value="uk" selected>Ukrainian</option>
-            <option value="en">English</option>
+            <option value="uk">Ukrainian</option>
+            <option value="en" selected>English</option>
           </select>
         {{else}}
           <select name="language-select" id="language-select">
             <option value="uk" selected>Ukrainian</option>
-            <option value="en" selected>English</option>
+            <option value="en">English</option>
           </select>
         {{/if}}
         <a href="/basket">
