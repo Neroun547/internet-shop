@@ -1,18 +1,26 @@
-import { Controller, Get, Param, ParseIntPipe, Query, Res } from "@nestjs/common";
-import { Response } from "express";
+import { Controller, Get, Param, ParseIntPipe, Query, Req, Res } from "@nestjs/common";
+import { Response, Request } from "express";
 import { VideoPhotoGalleryService } from "./service/video-photo-gallery.service";
+import { TranslateService } from "../translate/service/translate.service";
 
 @Controller()
 export class VideoPhotoGalleryController {
-  constructor(private videoPhotoGalleryService: VideoPhotoGalleryService) {}
+  constructor(
+    private videoPhotoGalleryService: VideoPhotoGalleryService,
+    private translateService: TranslateService
+  ) {}
 
   @Get()
-  async videoPhotoGalleryPage(@Res() res: Response) {
+  async videoPhotoGalleryPage(@Req() req: Request, @Res() res: Response) {
     const publications = await this.videoPhotoGalleryService.getPublications(12, 0);
+    const translate = await this.translateService.getTranslateObjectByKeyAndIsoCode("video_photo_gallery_page", req.cookies["iso_code_shop"]);
+
     res.render("video-photo-gallery/video-photo-gallery", {
       publications: publications,
       styles: ["/css/video-photo-gallery/video-photo-gallery.css"],
-      scripts: ["/js/video-photo-gallery/video-photo-gallery.js"]
+      scripts: ["/js/video-photo-gallery/video-photo-gallery.js"],
+      activeLanguage: req.cookies["iso_code_shop"],
+      ...translate
     });
   }
 
@@ -27,8 +35,9 @@ export class VideoPhotoGalleryController {
   }
 
   @Get(":id")
-  async getPublicationById(@Param("id", new ParseIntPipe()) id: number, @Res() res: Response) {
+  async getPublicationById(@Req() req: Request, @Param("id", new ParseIntPipe()) id: number, @Res() res: Response) {
     const publicationAndFiles = await this.videoPhotoGalleryService.getPublicationById(id);
+    const translate = await this.translateService.getTranslateObjectByKeyAndIsoCode("video_photo_gallery_page", req.cookies["iso_code_shop"]);
 
     res.render("video-photo-gallery/video-photo-gallery-item", {
       name: publicationAndFiles.name,
@@ -36,7 +45,9 @@ export class VideoPhotoGalleryController {
       description: publicationAndFiles.description,
       files: publicationAndFiles.videoPhotoGalleryFiles,
       styles: ["/css/video-photo-gallery/video-photo-gallery-item.css"],
-      scripts: ["/js/video-photo-gallery/video-photo-gallery-item.js"]
+      scripts: ["/js/video-photo-gallery/video-photo-gallery-item.js"],
+      activeLanguage: req.cookies["iso_code_shop"],
+      ...translate
     });
   }
 }

@@ -1,17 +1,25 @@
-import {Body, Controller, Get, Post, Res} from "@nestjs/common";
+import { Body, Controller, Get, Post, Req, Res } from "@nestjs/common";
 import {CreateUserDto} from "./dto/create-user.dto";
 import {SupportChatSignupService} from "./service/support-chat-signup.service";
-import {Response} from "express";
+import {Response, Request} from "express";
+import { TranslateService } from "../../translate/service/translate.service";
 
 @Controller()
 export class SupportChatSignupController {
-    constructor(private chatSignupService: SupportChatSignupService) {}
+    constructor(
+      private chatSignupService: SupportChatSignupService,
+      private translateService: TranslateService
+    ) {}
 
     @Get()
-    signupChatPage(@Res() res: Response) {
+    async signupChatPage(@Req() req: Request, @Res() res: Response) {
+        const translate = await this.translateService.getTranslateObjectByKeyAndIsoCode("support_chat_signup_page", req.cookies["iso_code_shop"]);
+
         res.render("support-chat/signup", {
             styles: ["/css/admin/auth/auth.css", "/css/chat/auth.css"],
-            scripts: ["/js/chat/signup/signup.js"]
+            scripts: ["/js/chat/signup/signup.js"],
+            activeLanguage: req.cookies["iso_code_shop"],
+            ...translate
         });
     }
 

@@ -1,26 +1,32 @@
 import {Controller, Delete, Get, Param, ParseIntPipe, Post, Req, Res} from "@nestjs/common";
 import { Response, Request } from "express";
 import {BasketService} from "./service/basket.service";
+import { TranslateService } from "../translate/service/translate.service";
 
 @Controller()
 export class BasketController {
-    constructor(private basketService: BasketService) {}
+    constructor(private basketService: BasketService, private translateService: TranslateService) {}
 
     @Get()
     async getBasketPage(@Req() req: Request, @Res() res: Response) {
         const parseData = await this.basketService.getBasketProducts(req.cookies["basket_in_shop"]);
+        const translate = await this.translateService.getTranslateObjectByKeyAndIsoCode("basket_page", req.cookies["iso_code_shop"]);
 
         if(parseData) {
             res.render("basket/basket", {
                 products: parseData.data,
                 styles: ["/css/basket/basket.css", "/css/buy/buy.css"],
                 scripts: ["/js/basket/basket.js", "/js/buy/buy.js"],
-                sum: parseData.sum.toFixed(2)
+                sum: parseData.sum.toFixed(2),
+                activeLanguage: req.cookies["iso_code_shop"],
+                ...translate
             });
         } else {
             res.render("basket/basket", {
                 products: false,
-                styles: ["/css/basket/basket.css"]
+                styles: ["/css/basket/basket.css"],
+                activeLanguage: req.cookies["iso_code_shop"],
+                ...translate
             });
         }
     }

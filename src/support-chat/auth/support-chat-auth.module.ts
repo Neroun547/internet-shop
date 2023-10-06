@@ -3,9 +3,11 @@ import { SupportChatUsersModuleDb } from "../../../db/support-chats/support-chat
 import {SupportChatAuthController} from "./support-chat-auth.controller";
 import {SupportChatAuthService} from "./service/support-chat-auth.service";
 import {JwtModule} from "@nestjs/jwt";
+import { TranslateModule } from "../../translate/translate.module";
 
 @Module({
     imports: [
+        TranslateModule,
         SupportChatUsersModuleDb,
         JwtModule.register({
             secret: "skjlvxfksnf234#23&",

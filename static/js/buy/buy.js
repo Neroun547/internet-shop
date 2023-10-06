@@ -93,12 +93,21 @@ buyForm.addEventListener("submit", async function (e) {
            });
 
            if (api.ok) {
-               showModal("Замовлення зроблено успішно. З вами зв'яжиться менеджер", "/");
+               const response = await api.json();
+               showModal(response.buy_page_success, "/");
            } else {
-               showModal("Помилка, спробуйте ще раз")
+               const response = await api.json();
+               showModal(response.buy_page_error)
            }
        } else {
-           showModal("Введіть коректний номер телефону");
+           const api = await fetch("/translate/active-language");
+           const isoCode = (await api.json()).iso_code;
+
+           if(!isoCode || isoCode === "uk") {
+               showModal("Введіть коректний номер телефону");
+           } else {
+               showModal("Write correct phone number");
+           }
        }
    } else if(email.trim()) {
        const api = await fetch("/buy", {
@@ -115,10 +124,12 @@ buyForm.addEventListener("submit", async function (e) {
            })
        });
 
-       if(api.ok) {
-           showModal("Замовлення зроблено успішно. З вами зв'яжиться менеджер", "/");
+       if (api.ok) {
+           const response = await api.json();
+           showModal(response.buy_page_success, "/");
        } else {
-           showModal("Помилка, спробуйте ще раз");
+           const response = await api.json();
+           showModal(response.buy_page_error)
        }
    } else if(another.trim()) {
        const api = await fetch("/buy", {
@@ -135,10 +146,12 @@ buyForm.addEventListener("submit", async function (e) {
            })
        });
 
-       if(api.ok) {
-           showModal("Замовлення зроблено успішно. З вами зв'яжиться менеджер", "/");
+       if (api.ok) {
+           const response = await api.json();
+           showModal(response.buy_page_success, "/");
        } else {
-           showModal("Помилка, спробуйте ще раз");
+           const response = await api.json();
+           showModal(response.buy_page_error)
        }
    }
 });

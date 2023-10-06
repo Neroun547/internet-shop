@@ -1,26 +1,35 @@
-import {Controller, Get, Param, ParseIntPipe, Query, Res} from "@nestjs/common";
-import { Response } from "express";
+import { Controller, Get, Param, ParseIntPipe, Query, Req, Res } from "@nestjs/common";
+import { Response, Request } from "express";
 import {ArticlesService} from "./service/articles.service";
+import { TranslateService } from "../translate/service/translate.service";
 
 @Controller()
 export class ArticlesController {
-    constructor(private articlesService: ArticlesService) {}
+    constructor(
+      private articlesService: ArticlesService,
+      private translateService: TranslateService
+    ) {}
 
     @Get()
-    async getArticlesPage(@Res() res: Response) {
+    async getArticlesPage(@Req() req: Request, @Res() res: Response) {
         const articles = await this.articlesService.getArticles(10, 0);
+        const translate = await this.translateService.getTranslateObjectByKeyAndIsoCode("articles_page", req.cookies["iso_code_shop"]);
 
         if(articles.length) {
             res.render("articles/articles", {
                 articles: articles,
                 styles: ["/css/articles/articles.css"],
                 scripts: ["/js/articles/articles.js"],
-                loadMore: articles.length === 10
+                loadMore: articles.length === 10,
+                activeLanguage: req.cookies["iso_code_shop"],
+                ...translate
             });
         } else {
             res.render("articles/articles", {
                 articles: false,
-                styles: ["/css/articles/articles.css"]
+                styles: ["/css/articles/articles.css"],
+                activeLanguage: req.cookies["iso_code_shop"],
+                ...translate
             });
         }
     }
@@ -31,7 +40,12 @@ export class ArticlesController {
     }
 
     @Get(":article")
-    async getArticleByFileName(@Param("article") article, @Res() res: Response) {
-        res.render("articles/articles/" + article);
+    async getArticleByFileName(@Param("article") article, @Req() req: Request, @Res() res: Response) {
+        const translate = await this.translateService.getTranslateObjectByKeyAndIsoCode("article_page", req.cookies["iso_code_shop"]);
+
+        res.render("articles/articles/" + article, {
+            activeLanguage: req.cookies["iso_code_shop"],
+            ...translate
+        });
     }
 }

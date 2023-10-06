@@ -48,7 +48,7 @@ export class ProductsController {
 
     @Get("by-type/:type")
     async getProductsByType(@Param("type") type: string, @Req() req: Request, @Res() res: Response) {
-        const products = await this.productsService.getProductsByType(8, 0, type);
+        const products = await this.productsService.getProductsByType(8, 0, type, req.cookies["iso_code_shop"]);
         const parseProducts = this.productsService.parseProductsForLoadCards(products, req.cookies["basket_in_shop"]);
 
         const maxProductsPrice = await this.productsService.getMaxPriceProductsByType(type);
@@ -81,6 +81,7 @@ export class ProductsController {
     @Get(":id")
     async getProductById(@Param("id", new ParseIntPipe()) id, @Req() req: Request, @Res() res: Response) {
         const productData = await this.productsService.getProductAndImageByProductId(id);
+        const translate = await this.translateService.getTranslateObjectByKeyAndIsoCode("product_page", req.cookies["iso_code_shop"]);
 
         if(req.cookies["basket_in_shop"]) {
             const inBasket = this.basketService.parseProductsCookie(req.cookies["basket_in_shop"]).find(el => el === String(productData.id));
@@ -89,14 +90,18 @@ export class ProductsController {
                 styles: ["/css/products/product.css"],
                 scripts: ["/js/products/product.js"],
                 inBasket: inBasket ? true : false,
-                ...productData
+                activeLanguage: req.cookies["iso_code_shop"],
+                ...productData,
+                ...translate
             });
         } else {
             res.render("products/product", {
                 styles: ["/css/products/product.css"],
                 scripts: ["/js/products/product.js"],
                 inBasket: false,
-                ...productData
+                activeLanguage: req.cookies["iso_code_shop"],
+                ...productData,
+                ...translate
             });
         }
     }

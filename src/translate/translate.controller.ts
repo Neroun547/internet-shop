@@ -1,5 +1,5 @@
-import { Controller, Param, Patch, Res } from "@nestjs/common";
-import { Response } from "express";
+import { Controller, Get, Param, Patch, Req, Res } from "@nestjs/common";
+import { Response, Request } from "express";
 
 @Controller()
 export class TranslateController {
@@ -8,5 +8,10 @@ export class TranslateController {
     res.cookie("iso_code_shop", isoCode);
 
     res.sendStatus(200);
+  }
+
+  @Get("active-language")
+  getActiveLanguage(@Req() req: Request, @Res() res: Response) {
+    res.send({ iso_code: req.cookies["iso_code_shop"] });
   }
 }

@@ -1,10 +1,10 @@
 <form action="" class="auth__form" id="chat-auth-form">
-    <h3 class="auth__form-logo">Авторизація</h3>
-    <input type="text" placeholder="Ім'я користувача:"  id="chat-auth-username">
-    <input type="password" placeholder="Пароль:" id="chat-auth-password">
-    <button type="submit">Увійти</button>
+    <h3 class="auth__form-logo">{{global_auth}}</h3>
+    <input type="text" placeholder="{{global_username}}:"  id="chat-auth-username">
+    <input type="password" placeholder="{{global_password}}:" id="chat-auth-password">
+    <button type="submit">{{global_entry}}</button>
 </form>
-<p class="auth__form-description">Щоб зв'язатися зі службою підтримки вам треба авторизуватися</p>
-<a href="/support/signup" class="auth__form-link-signup">Створити аккаунт</a>
+<p class="auth__form-description">{{support_chat_auth_page_description}}</p>
+<a href="/support/signup" class="auth__form-link-signup">{{global_create_account}}</a>
 
 

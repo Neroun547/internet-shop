@@ -8,6 +8,7 @@ import { translateTypeProduct } from "../../../constants";
 import {OrdersServiceDb} from "../../../db/orders/orders.service";
 import { unlink } from "fs/promises";
 import { resolve } from "path";
+import { CommonService } from "../../../common/common.service";
 
 @Injectable()
 export class ProductsService {
@@ -15,7 +16,8 @@ export class ProductsService {
         private productsServiceDb: ProductsServiceDb,
         private productsImagesServiceDb: ProductsImagesServiceDb,
         private basketService: BasketService,
-        private ordersServiceDb: OrdersServiceDb
+        private ordersServiceDb: OrdersServiceDb,
+        private commonService: CommonService
     ) {}
 
     parseProductsForLoadCards(productsAndImages, basket?: string) {
@@ -49,11 +51,33 @@ export class ProductsService {
         }
     }
 
-    async getProductsByType(take: number, skip: number, type?: string) {
+    async getProductsByType(take: number, skip: number, type?: string, iso_code?: string) {
         if(!type) {
-            return await this.productsServiceDb.getProductsAndImages(take, skip);
+            if(iso_code && iso_code === "en") {
+                const serializedData = JSON.parse(JSON.stringify(await this.productsServiceDb.getProductsAndImages(take, skip)));
+
+                return serializedData.map(el => {
+                    return {
+                        ...el,
+                        type: this.commonService.getTypeProductByValue(el.type).key
+                    }
+                });
+            } else {
+                return await this.productsServiceDb.getProductsAndImages(take, skip);
+            }
         }
-        return await this.productsServiceDb.getProductsAndImagesByType(take, skip, translateTypeProduct[type]);
+        if(iso_code && iso_code === "en") {
+            const serializedData = JSON.parse(JSON.stringify(await this.productsServiceDb.getProductsAndImagesByType(take, skip, translateTypeProduct[type])));
+
+            return serializedData.map(el => {
+                return {
+                    ...el,
+                    type: this.commonService.getTypeProductByValue(el.type).key
+                }
+            });
+        } else {
+            return await this.productsServiceDb.getProductsAndImagesByType(take, skip, translateTypeProduct[type]);
+        }
     }
 
     async uploadProduct(product: ProductsInterface, files: Array<Express.Multer.File>) {

@@ -1,8 +1,8 @@
 <form class="auth__form" id="chat-signup-form">
-    <h3 class="auth__form-logo">Реєстрація</h3>
-    <input type="text" placeholder="Ім'я користувача" id="chat-signup-username">
-    <input type="password" placeholder="Пароль" id="chat-signup-password">
-    <button type="submit">Створити аккаунт</button>
+    <h3 class="auth__form-logo">{{global_signup}}</h3>
+    <input type="text" placeholder="{{global_username}}:" id="chat-signup-username">
+    <input type="password" placeholder="{{global_password}}:" id="chat-signup-password">
+    <button type="submit">{{global_create_account}}</button>
 </form>
-<p class="auth__form-description">Вже є аккаунт ?</p>
-<a href="/support/auth" class="auth__form-link-signup">Авторизуватися</a>
+<p class="auth__form-description">{{support_chat_signup_page_have_account}}</p>
+<a href="/support/auth" class="auth__form-link-signup">{{support_chat_signup_page_auth}}</a>

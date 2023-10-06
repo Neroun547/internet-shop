@@ -54,6 +54,13 @@
     }
 }
 
+@media screen and (max-width: 895px) {
+    #language-select {
+        right: 5px;
+        top: 54px;
+    }
+}
+
 @media screen and (max-width: 850px) {
     .arrow-right {
         width: 50px;
