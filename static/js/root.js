@@ -5,6 +5,7 @@ const wrapperFiltersInputTo = document.querySelector(".wrapper__filters-price-in
 const wrapperFiltersInputFromRange = document.querySelector(".wrapper__filters-range-input-from")
 const wrapperFiltersInputToRange = document.querySelector(".wrapper__filters-range-input-to");
 const wrapperFiltersForm = document.querySelector(".wrapper__filters-form");
+const selectLanguage = document.getElementById("language-select");
 
 const addToBasketBtn = document.querySelectorAll(".wrapper__product-add-to-basket-btn");
 
@@ -29,8 +30,12 @@ for(let i = 0; i < addToBasketBtn.length; i++) {
             if (api.ok) {
                 addToBasketBtn[i].style.backgroundColor = "#fff";
                 addToBasketBtn[i].style.color = "#000";
-                addToBasketBtn[i].getElementsByTagName("strong")[0].innerHTML = "Вже в кошику";
 
+                if(selectLanguage.value === "en") {
+                    addToBasketBtn[i].getElementsByTagName("strong")[0].innerHTML = "Already in basket";
+                } else {
+                    addToBasketBtn[i].getElementsByTagName("strong")[0].innerHTML = "Вже в кошику";
+                }
                 addToBasketBtn[i].setAttribute("data-product", "");
             }
         }
