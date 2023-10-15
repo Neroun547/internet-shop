@@ -23,6 +23,7 @@ import {CommonModule} from "../common/common.module";
 import { VideoPhotoGalleryModule } from "./video-photo-gallery/video-photo-gallery.module";
 import { VideoPhotoGalleryModuleAdmin } from "./admin/video-photo-gallery/video-photo-gallery.module";
 import { TranslateModule } from "./translate/translate.module";
+import { SettingsModule } from "./admin/settings/settings.module";
 
 @Module({
   imports: [
@@ -49,6 +50,7 @@ import { TranslateModule } from "./translate/translate.module";
       VideoPhotoGalleryModule,
       VideoPhotoGalleryModuleAdmin,
       TranslateModule,
+      SettingsModule,
       MikroOrmModule.forRoot({
           dbName: process.env.DB_NAME,
           user: process.env.DB_USER,
@@ -70,7 +72,8 @@ import { TranslateModule } from "./translate/translate.module";
                 { path: "support", module: SupportChatModuleAdmin },
                 { path: "articles", module: ArticlesModuleAdmin },
                 { path: "statistics", module: StatisticsModule },
-                { path: "video-photo-gallery", module: VideoPhotoGalleryModuleAdmin }
+                { path: "video-photo-gallery", module: VideoPhotoGalleryModuleAdmin },
+                { path: "settings", module: SettingsModule }
             ]
           },
           {
