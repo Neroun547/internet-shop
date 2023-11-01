@@ -3,13 +3,16 @@ import {ProductsServiceDb} from "../../../db/products/products.service";
 import {BasketService} from "../../basket/service/basket.service";
 import {AddOrderDto} from "../dto/add-order.dto";
 import {OrdersServiceDb} from "../../../db/orders/orders.service";
+import { SettingsServiceDb } from "../../../db/settings/settings.service";
+const webPush = require("web-push");
 
 @Injectable()
 export class BuyService {
     constructor(
         private productsServiceDb: ProductsServiceDb,
         private basketService: BasketService,
-        private ordersServiceDb: OrdersServiceDb
+        private ordersServiceDb: OrdersServiceDb,
+        private settingsServiceDb: SettingsServiceDb
     ) {}
 
 
@@ -29,6 +32,27 @@ export class BuyService {
                 admin_note: ""
             });
         }
+        console.log(process.env.PUSH_MESSAGES_PUBLIC_KEY)
+        webPush.setVapidDetails(
+          "https://zolotar.shop/",
+          process.env.PUSH_MESSAGES_PUBLIC_KEY,
+          process.env.PUSH_MESSAGES_PRIVATE_KEY
+        );
+        const subscription = JSON.parse((await this.settingsServiceDb.getSettingByKey("push_messages_subscription")).setting_value);
+
+        setTimeout(() => {
+            const payload = null;
+            const options = {
+                TTL: 20,
+            };
+            webPush.sendNotification(subscription, payload, options)
+              .then(success => {
+                  console.log(success)
+              })
+              .catch(e => {
+                  console.log(e)
+              })
+        }, 10000);
     }
 }
 

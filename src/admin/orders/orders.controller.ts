@@ -35,7 +35,7 @@ export class OrdersController {
                 auth: true,
                 admin: true,
                 styles: ["/css/admin/orders/orders.css"],
-                scripts: ["/js/admin/orders/orders.js"]
+                scripts: ["/js/admin/orders/orders.js", "/js/admin/orders/push-messages.main.js"]
             });
         } else {
             res.render("admin/orders/orders", {
