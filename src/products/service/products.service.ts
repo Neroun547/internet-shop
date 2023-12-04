@@ -24,18 +24,21 @@ export class ProductsService {
         const parseArr = [];
 
         for(let i = 0; i < productsAndImages.length; i++) {
-            if(basket && this.basketService.parseProductsCookie(basket).find(el => el === String(productsAndImages[i].id))) {
-                parseArr.push({
-                    ...productsAndImages[i],
-                    file_name: productsAndImages[i].productsImages[0].file_name,
-                    inBasket: true
-                });
-            } else {
-                parseArr.push({
-                    ...productsAndImages[i],
-                    file_name: productsAndImages[i].productsImages[0].file_name,
-                    inBasket: false
-                });
+            if(productsAndImages[i]) {
+
+                if (basket && this.basketService.parseProductsCookie(basket).find(el => el === String(productsAndImages[i].id))) {
+                    parseArr.push({
+                        ...productsAndImages[i],
+                        file_name: productsAndImages[i].productsImages[0] ? productsAndImages[i].productsImages[0].file_name : null,
+                        inBasket: true
+                    });
+                } else {
+                    parseArr.push({
+                        ...productsAndImages[i],
+                        file_name: productsAndImages[i].productsImages[0] ? productsAndImages[i].productsImages[0].file_name : null,
+                        inBasket: false
+                    });
+                }
             }
         }
         return parseArr;
