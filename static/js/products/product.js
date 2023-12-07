@@ -1,49 +1,66 @@
 const wrapperProductImagesImage = document.querySelectorAll(".wrapper__product-images-image");
 const arrowRight = document.querySelector(".arrow-right");
 const arrowLeft = document.querySelector(".arrow-left");
-const wrapperProductDescription = document.querySelector(".wrapper__product-description");
-const showDescriptionBtn = document.querySelector(".wrapper__product-description-btn");
 const addToBasketBtn = document.getElementById("add-to-basket-btn");
+const wrapperSubImagesItems = document.querySelectorAll(".wrapper__sub-images-item");
 
 let activeImage = wrapperProductImagesImage[0];
 let currentIndexImage = 0;
 
-activeImage.style.display = "block";
+activeImage.style.left = "50%";
+
+wrapperSubImagesItems[currentIndexImage].style.backgroundColor = "#ccc";
+wrapperSubImagesItems[currentIndexImage].style.border = "1px solid #f8b71d";
 
 if(wrapperProductImagesImage.length === 1) {
     arrowRight.style.display = "none";
     arrowLeft.style.display = "none";
 }
 
-showDescriptionBtn.addEventListener("click", function () {
-    console.log(wrapperProductDescription.style.display)
-    if(wrapperProductDescription.style.display === "none" || !wrapperProductDescription.style.display) {
-        wrapperProductDescription.style.display = "block";
-    } else {
-        wrapperProductDescription.style.display = "none";
-    }
-});
-
 arrowLeft.addEventListener("click", function () {
-    hideImage(currentIndexImage);
 
     if(currentIndexImage === 0) {
-       currentIndexImage = wrapperProductImagesImage.length - 1;
+        hideImage(currentIndexImage, false);
+
+        wrapperSubImagesItems[currentIndexImage].style.backgroundColor = "#fff";
+        wrapperSubImagesItems[currentIndexImage].style.border = "1px solid #000";
+
+        currentIndexImage = wrapperProductImagesImage.length - 1;
     } else {
+        hideImage(currentIndexImage, false);
+
+        wrapperSubImagesItems[currentIndexImage].style.backgroundColor = "#fff";
+        wrapperSubImagesItems[currentIndexImage].style.border = "1px solid #000";
+
         currentIndexImage -= 1;
     }
-    displayImage(currentIndexImage);
+    wrapperSubImagesItems[currentIndexImage].style.backgroundColor = "#ccc";
+    wrapperSubImagesItems[currentIndexImage].style.border = "1px solid #f8b71d";
+
+    displayImage(currentIndexImage, false);
 });
 
 arrowRight.addEventListener("click", function () {
-    hideImage(currentIndexImage);
 
     if(currentIndexImage === wrapperProductImagesImage.length - 1) {
+        hideImage(currentIndexImage, true);
+
+        wrapperSubImagesItems[currentIndexImage].style.backgroundColor = "#fff";
+        wrapperSubImagesItems[currentIndexImage].style.border = "1px solid #000";
+
         currentIndexImage = 0;
     } else {
+        hideImage(currentIndexImage, true);
+
+        wrapperSubImagesItems[currentIndexImage].style.backgroundColor = "#fff";
+        wrapperSubImagesItems[currentIndexImage].style.border = "1px solid #000";
+
         currentIndexImage += 1;
     }
-    displayImage(currentIndexImage);
+    wrapperSubImagesItems[currentIndexImage].style.backgroundColor = "#ccc";
+    wrapperSubImagesItems[currentIndexImage].style.border = "1px solid #f8b71d";
+
+    displayImage(currentIndexImage, true);
 });
 
 addToBasketBtn.addEventListener("click", async function () {
@@ -64,10 +81,65 @@ addToBasketBtn.addEventListener("click", async function () {
     }
 });
 
-function displayImage (index) {
-    wrapperProductImagesImage[index].style.display = "block";
+function displayImage (index, left) {
+    wrapperProductImagesImage[index].style.transform = "translateX(-50%)";
+
+    if(!left) {
+        let left = -50;
+
+        const interval = setInterval(() => {
+            left += 3;
+            wrapperProductImagesImage[index].style.left = left + "%";
+
+            if(left >= 50) {
+                wrapperProductImagesImage[index].style.left = 50 + "%";
+                clearInterval(interval);
+            }
+        }, 10);
+    } else {
+        let left = 150;
+
+        const interval = setInterval(() => {
+            left -= 3;
+
+            wrapperProductImagesImage[index].style.left = left + "%";
+
+            if(left <= 50) {
+                wrapperProductImagesImage[index].style.left = 50 + "%";
+                clearInterval(interval);
+            }
+        }, 10);
+    }
 }
 
-function hideImage (index) {
-    wrapperProductImagesImage[index].style.display = "none";
+function hideImage (index, left) {
+
+    if(left) {
+        let left = 50;
+
+        const interval = setInterval(() => {
+            left -= 3;
+            wrapperProductImagesImage[index].style.left = left + "%";
+
+            if(left <= -50) {
+                wrapperProductImagesImage[index].style.left = -50 + "%";
+
+                clearInterval(interval);
+            }
+        }, 10);
+    } else {
+        let left = 50;
+
+        const interval = setInterval(() => {
+            left += 3;
+
+            wrapperProductImagesImage[index].style.left = left + "%";
+
+            if(left >= 150) {
+                wrapperProductImagesImage[index].style.left = 150 + "%";
+
+                clearInterval(interval);
+            }
+        }, 10);
+    }
 }
