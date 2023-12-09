@@ -4,6 +4,7 @@
     padding-top: 100px;
     grid-column-gap: 30px;
     grid-row-gap: 30px;
+    justify-content: center;
 }
 
 .wrapper__products-item {

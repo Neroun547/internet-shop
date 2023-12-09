@@ -17,6 +17,28 @@ if(wrapperProductImagesImage.length === 1) {
     arrowLeft.style.display = "none";
 }
 
+for(let i = 0; i < wrapperSubImagesItems.length; i++) {
+    wrapperSubImagesItems[i].addEventListener("click", function () {
+        if(i !== currentIndexImage) {
+            wrapperSubImagesItems[currentIndexImage].style.backgroundColor = "#fff";
+            wrapperSubImagesItems[currentIndexImage].style.border = "1px solid #000";
+            if (i > currentIndexImage) {
+                hideImage(currentIndexImage, true);
+                displayImage(i, true);
+
+                currentIndexImage = i;
+            } else {
+                hideImage(currentIndexImage, false);
+                displayImage(i, false);
+
+                currentIndexImage = i;
+            }
+            wrapperSubImagesItems[currentIndexImage].style.backgroundColor = "#ccc";
+            wrapperSubImagesItems[currentIndexImage].style.border = "1px solid #f8b71d";
+        }
+    });
+}
+
 arrowLeft.addEventListener("click", function () {
 
     if(currentIndexImage === 0) {

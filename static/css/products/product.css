@@ -30,14 +30,15 @@
 .wrapper__product-images {
     position: relative;
     overflow: hidden;
-    width: 45%;
+    width: 50%;
+    height: 400px;
 }
 
 .wrapper__product-images img {
     position: absolute;
     left: -100%;
     transform: translateX(-50%);
-    max-width: 500px;
+    max-width: 300px;
     height: 100%;
 }
 
@@ -52,17 +53,6 @@
     margin-top: 20px;
 }
 
-.wrapper__product-description-btn {
-    border: none;
-    max-width: 500px;
-    height: 50px;
-    width: 100%;
-    display: block;
-    margin-top: 50px;
-    background-color: #f8b71d;
-    cursor: pointer;
-}
-
 .wrapper__product-add-to-basket-btn {
     border: none;
     max-width: 500px;
@@ -71,13 +61,12 @@
     cursor: pointer;
     background-color: #69B904FF;
     color: #fff;
-    margin-top: 50px;
+    margin-top: 166px;
 }
 
 .wrapper__product-description {
     margin-top: 20px;
     overflow-wrap: break-word;
-    width: 45%;
 }
 
 .wrapper__sub-images {
@@ -101,6 +90,60 @@
 
 .wrapper__sub-images-item:hover {
     background-color: #F5F5F5;
+}
+
+@media screen and (max-width: 900px) {
+    .wrapper__product {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    .wrapper__product-images {
+        height: 400px;
+    }
+    .wrapper__sub-images {
+        margin: 0 auto;
+    }
+    .wrapper__product-description {
+        width: 100%;
+    }
+    .wrapper__product-images {
+        width: 100%;
+    }
+    .wrapper__product-content {
+        width: 100%;
+    }
+    .wrapper__product-add-to-basket-btn {
+        display: block;
+        margin: 0 auto;
+        margin-top: 40px;
+    }
+    .wrapper__product-content-item {
+        text-align: center;
+    }
+    .wrapper__product-images img {
+        width: 75%;
+    }
+}
+
+@media screen and (max-width: 560px) {
+    .wrapper__product-images {
+        height: 300px;
+    }
+    .wrapper__product-content-item {
+        font-size: 18px;
+    }
+    .wrapper__sub-images img {
+        width: 35px;
+        height: 35px;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    .wrapper__product-images {
+        height: 250px;
+    }
 }
 
 
