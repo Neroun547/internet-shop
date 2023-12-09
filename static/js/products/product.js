@@ -2,6 +2,7 @@ const wrapperProductImagesImage = document.querySelectorAll(".wrapper__product-i
 const arrowRight = document.querySelector(".arrow-right");
 const arrowLeft = document.querySelector(".arrow-left");
 const addToBasketBtn = document.getElementById("add-to-basket-btn");
+const buyNowBtn = document.getElementById("buy-now-btn");
 const wrapperSubImagesItems = document.querySelectorAll(".wrapper__sub-images-item");
 
 let activeImage = wrapperProductImagesImage[0];
@@ -88,17 +89,33 @@ arrowRight.addEventListener("click", function () {
 addToBasketBtn.addEventListener("click", async function () {
     const productId = addToBasketBtn.getAttribute("data-product");
 
+    buyNowBtn.remove();
+
     if(productId) {
         const api = await fetch("/basket/" + productId, {
             method: "POST"
         });
 
         if (api.ok) {
-            addToBasketBtn.style.backgroundColor = "#fff";
+            addToBasketBtn.style.backgroundColor = "#eee";
             addToBasketBtn.style.color = "#000";
             addToBasketBtn.getElementsByTagName("strong")[0].innerHTML = "Вже в кошику";
 
             addToBasketBtn.setAttribute("data-product", "");
+        }
+    }
+});
+
+buyNowBtn.addEventListener("click", async function () {
+    const productId = buyNowBtn.getAttribute("data-product");
+
+    if(productId) {
+        const api = await fetch("/basket/" + productId, {
+            method: "POST"
+        });
+
+        if(api.ok) {
+            window.location.href = "/basket/";
         }
     }
 });

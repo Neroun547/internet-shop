@@ -61,7 +61,18 @@
     cursor: pointer;
     background-color: #69B904FF;
     color: #fff;
-    margin-top: 166px;
+    margin-top: 85px;
+}
+
+.wrapper__product-buy-now-btn {
+    border: none;
+    max-width: 500px;
+    height: 50px;
+    width: 100%;
+    cursor: pointer;
+    color: #fff;
+    margin-top: 30px;
+    background-color: #1da6f8;;
 }
 
 .wrapper__product-description {
