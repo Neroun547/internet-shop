@@ -3,8 +3,12 @@
     {{#each images}}
       <img src="/images/{{this}}" alt="Зображення" class="wrapper__product-images-image">
     {{/each}}
-    <button class="arrow-left">&#8592;</button>
-    <button class="arrow-right">&#8594;</button>
+    <button class="arrow-left">
+      <span style="text-align: center;">&#8592;</span>
+    </button>
+    <button class="arrow-right">
+      <span style="text-align: center;">&#8594;</span>
+    </button>
   </div>
   <div class="wrapper__product-content">
     <h2 class="wrapper__product-content-item">{{global_price}}: {{price}} грн</h2>
