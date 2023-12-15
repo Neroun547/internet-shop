@@ -10,6 +10,16 @@
     cursor: pointer;
 }
 
+.arrow-left span {
+    text-align: center;
+    color: #000;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+}
+
 .arrow-right {
     position: absolute;
     top: 50%;
@@ -21,6 +31,16 @@
     width: 30px;
     cursor: pointer;
 }
+
+.arrow-right span {
+    text-align: center;
+    color: #000;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
 .wrapper__product {
     display: flex;
     justify-content: space-between;
