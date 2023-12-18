@@ -6,6 +6,7 @@ const wrapperFiltersInputFromRange = document.querySelector(".wrapper__filters-r
 const wrapperFiltersInputToRange = document.querySelector(".wrapper__filters-range-input-to");
 const wrapperFiltersForm = document.querySelector(".wrapper__filters-form");
 const selectLanguage = document.getElementById("language-select");
+const moveUpButton = document.querySelector(".move-up-button");
 
 const addToBasketBtn = document.querySelectorAll(".wrapper__product-add-to-basket-btn");
 
@@ -263,3 +264,29 @@ function deleteAllElementsFromHTML(elements) {
         elements[i].remove();
     }
 }
+
+window.addEventListener("scroll", function (e) {
+    if(window.scrollY > 1000) {
+        moveUpButton.style.opacity = "1";
+    } else {
+        moveUpButton.style.opacity = "0";
+    }
+});
+
+moveUpButton.addEventListener("click", function () {
+    let scrollTop = window.scrollY;
+    let intervalForScroll = window.scrollY / 30;
+
+    const interval = setInterval(function () {
+        scrollTop -= intervalForScroll;
+
+        document.body.scrollTop = scrollTop; // For Safari
+        document.documentElement.scrollTop = scrollTop; // For Chrome, Firefox, IE and Opera
+
+        if(scrollTop <= 0) {
+            clearInterval(interval);
+        }
+    }, 10);
+});
+
+

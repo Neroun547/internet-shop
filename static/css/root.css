@@ -113,4 +113,19 @@
     width: max-content;
 }
 
+.move-up-button {
+    position: fixed;
+    bottom: 40px;
+    right: 10px;
+    width: 45px;
+    height: 30px;
+    border: none;
+    background-color: #f8b71d;
+    border-radius: 5px;
+    color: #fff;
+    cursor: pointer;
+    opacity: 0;
+    transition: .3s;
+}
+
 
