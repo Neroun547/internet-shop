@@ -58,8 +58,6 @@
     border: none;
     border-radius: 5px;
     padding: 10px;
-    margin-bottom: 20px;
-    margin-top: 50px;
     cursor: pointer;
     width: 100%;
 }
@@ -81,7 +79,6 @@
     border: none;
     border-radius: 5px;
     padding: 10px;
-    margin-top: 20px;
     cursor: pointer;
     width: 100%;
 }
@@ -100,7 +97,6 @@
     border: none;
     border-radius: 5px;
     padding: 10px;
-    margin-top: 20px;
     cursor: pointer;
     width: 100%;
 }

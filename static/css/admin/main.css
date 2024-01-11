@@ -41,3 +41,15 @@
     text-decoration: none;
     color: #000000;
 }
+
+.mt-20 {
+    margin-top: 20px;
+}
+
+.mt-50 {
+    margin-top: 50px;
+}
+
+.mb-50 {
+    margin-bottom: 50px;
+}

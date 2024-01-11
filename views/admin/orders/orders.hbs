@@ -3,7 +3,7 @@
     {{#if orders}}
         <select name="sort" id="sort-select">
             <option value="">Всі замовлення</option>
-            <option value="in_process">В процессі</option>
+            <option value="in_process">В процесі</option>
             <option value="returned">Повернені</option>
             <option value="completed">Виконані</option>
             <option value="not_completed">Не виконані</option>
@@ -20,7 +20,7 @@
                         <span style="color: #000;">Повернено клієнтом</span>
                     {{/if}}
                     {{#if (equals this.status "in_process")}}
-                        <span style="color: #000;">В процессі</span>
+                        <span style="color: #000;">В процесі</span>
                     {{/if}}
                     {{#if (isNotStatus this.status)}}
                         <span>Не виконано</span>
