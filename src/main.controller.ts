@@ -2,12 +2,14 @@ import {Controller, Get, Query, Req, Res} from '@nestjs/common';
 import { Request, Response } from "express";
 import {ProductsService} from "./products/service/products.service";
 import { TranslateService } from "./translate/service/translate.service";
+import { TranslateServiceDb } from "../db/translate/translate.service";
 
 @Controller()
 export class MainController {
   constructor(
     private productsService: ProductsService,
-    private translateService: TranslateService
+    private translateService: TranslateService,
+    private translateServiceDb: TranslateServiceDb
   ) {}
 
   @Get()
@@ -17,8 +19,21 @@ export class MainController {
       @Res() res: Response) {
       const translate = await this.translateService.getTranslateObjectByKeyAndIsoCode("main_page", req.cookies["iso_code_shop"]);
       const productsAndImages = await this.productsService.getProductsByType(8, 0, type, req.cookies["iso_code_shop"]);
-      const parseData = this.productsService.parseProductsForLoadCards(productsAndImages, req.cookies["basket_in_shop"]);
+      let parseData;
 
+      if(req.cookies["iso_code_shop"] === "en") {
+        parseData = await Promise.all(this.productsService.parseProductsForLoadCards(productsAndImages, req.cookies["basket_in_shop"])
+          .map(async product => {
+            const translateTitle = await this.translateServiceDb.getTranslateByKeyAndIsoCode("product_translate_" + product.id, "en");
+
+            return {
+              ...product,
+              translateTitle: translateTitle ? translateTitle.value : ""
+            }
+          }));
+      } else {
+        parseData = parseData = this.productsService.parseProductsForLoadCards(productsAndImages, req.cookies["basket_in_shop"]);
+      }
       const maxProductsPrice = await this.productsService.getMaxPriceProducts();
       const minProductsPrice = await this.productsService.getMinPriceProducts();
 

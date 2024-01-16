@@ -74,7 +74,8 @@ wrapperFiltersForm.addEventListener("submit", async function (e) {
                     response[i].type,
                     response[i].available,
                     response[i].price,
-                    response[i].inBasket
+                    response[i].inBasket,
+                    response[i].translateTitle
                 )
             )
         }
@@ -150,7 +151,8 @@ window.addEventListener("scroll", async function () {
                         response[i].type,
                         response[i].available,
                         response[i].price,
-                        response[i].inBasket
+                        response[i].inBasket,
+                        response[i].translateTitle
                     )
                 )
             }
@@ -161,7 +163,7 @@ window.addEventListener("scroll", async function () {
     }
 });
 
-function createProductCard(id, filename, alt, name, type, available, price, inBasket) {
+function createProductCard(id, filename, alt, name, type, available, price, inBasket, translateTitle) {
     const wrapperProductItem = document.createElement("div");
     wrapperProductItem.classList.add("wrapper__products-item");
 
@@ -183,7 +185,12 @@ function createProductCard(id, filename, alt, name, type, available, price, inBa
     wrapperProductItem.appendChild(link);
 
     const wrapperProductsItemContentName = document.createElement("h2");
-    wrapperProductsItemContentName.innerHTML = name;
+
+    if(translateTitle) {
+        wrapperProductsItemContentName.innerHTML = translateTitle;
+    } else {
+        wrapperProductsItemContentName.innerHTML = name;
+    }
     wrapperProductsItemContentName.classList.add("wrapper__products-item-content-name");
 
     wrapperProductsItemContent.appendChild(wrapperProductsItemContentName);

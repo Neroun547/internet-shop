@@ -7,9 +7,18 @@ import {BasketModule} from "../basket/basket.module";
 import {OrdersModuleDb} from "../../db/orders/orders.module";
 import { TranslateModule } from "../translate/translate.module";
 import { CommonModule } from "../../common/common.module";
+import { TranslateModuleDb } from "../../db/translate/translate.module";
 
 @Module({
-   imports: [BasketModule, ProductsModuleDb, ProductsImagesModuleDb, OrdersModuleDb, TranslateModule, CommonModule],
+   imports: [
+     BasketModule,
+      ProductsModuleDb,
+      ProductsImagesModuleDb,
+      OrdersModuleDb,
+      TranslateModule,
+      CommonModule,
+      TranslateModuleDb
+   ],
    controllers: [ProductsController],
    providers: [ProductsService],
    exports: [ProductsService]

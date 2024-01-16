@@ -1,6 +1,6 @@
 import { Injectable} from "@nestjs/common";
 import {ProductsImagesServiceDb} from "../../../db/products-images/products-images.service";
-import {LoadProductsBasketInterface} from "../../interfaces/load-products-basket.interface";
+import {LoadProductsBasketInterface} from "../interfaces/load-products-basket.interface";
 
 @Injectable()
 export class BasketService {

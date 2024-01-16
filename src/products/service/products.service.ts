@@ -1,7 +1,6 @@
 import {Injectable, NotFoundException} from "@nestjs/common";
 import { ProductsServiceDb } from "../../../db/products/products.service";
 import {ProductsImagesServiceDb} from "../../../db/products-images/products-images.service";
-import {ProductsInterface} from "../../../db/products/interfaces/products.interface";
 import { rename } from "fs/promises";
 import {BasketService} from "../../basket/service/basket.service";
 import { translateTypeProduct } from "../../../constants";
@@ -9,6 +8,8 @@ import {OrdersServiceDb} from "../../../db/orders/orders.service";
 import { unlink } from "fs/promises";
 import { resolve } from "path";
 import { CommonService } from "../../../common/common.service";
+import { UploadProductInterface } from "../interfaces/upload-product.interface";
+import { TranslateServiceDb } from "../../../db/translate/translate.service";
 
 @Injectable()
 export class ProductsService {
@@ -17,7 +18,8 @@ export class ProductsService {
         private productsImagesServiceDb: ProductsImagesServiceDb,
         private basketService: BasketService,
         private ordersServiceDb: OrdersServiceDb,
-        private commonService: CommonService
+        private commonService: CommonService,
+        private translateServiceDb: TranslateServiceDb
     ) {}
 
     parseProductsForLoadCards(productsAndImages, basket?: string) {
@@ -83,7 +85,7 @@ export class ProductsService {
         }
     }
 
-    async uploadProduct(product: ProductsInterface, files: Array<Express.Multer.File>) {
+    async uploadProduct(product: UploadProductInterface, files: Array<Express.Multer.File>) {
         const lastProduct = (await this.productsServiceDb.getLastProductByNum());
         const savedProduct = await this.productsServiceDb.saveProductAndReturn({...product, num: lastProduct ? lastProduct.num + 1 : 1});
 
@@ -110,9 +112,10 @@ export class ProductsService {
                 });
             }
         }
+        await this.translateServiceDb.saveTranslate("product_translate_" + savedProduct.id, product.translate, product.translate_language);
     }
 
-    async updateProductById(id: number, product: ProductsInterface, files: Array<Express.Multer.File>) {
+    async updateProductById(id: number, product: UploadProductInterface, files: Array<Express.Multer.File>) {
         const productInDbWithSimilarNum = JSON.parse(JSON.stringify(await this.productsServiceDb.getProductByNum(product.num)));
 
         if(productInDbWithSimilarNum) {
@@ -122,7 +125,14 @@ export class ProductsService {
 
             await this.productsServiceDb.updateProductById(productInDbWithSimilarNum.id, { ...productInDbWithSimilarNum, num: updatedProductInDb.num });
         }
-        await this.productsServiceDb.updateProductById(id, product);
+        await this.productsServiceDb.updateProductById(id, {
+            name: product.name,
+            description: product.description,
+            price: product.price,
+            available: product.available,
+            type: product.type,
+            num: product.num
+        });
 
         if(files.length) {
             const productImages = await this.productsImagesServiceDb.getProductImagesByProductId(id);
@@ -154,6 +164,13 @@ export class ProductsService {
                     });
                 }
             }
+        }
+        const translateProductTitleInDb = await this.translateServiceDb.getTranslateByKeyAndIsoCode("product_translate_" + id, "en");
+
+        if(translateProductTitleInDb) {
+            await this.translateServiceDb.updateTranslateByKeyAndIsoCode("product_translate_" + id, product.translate, product.translate_language);
+        } else if(!translateProductTitleInDb && product.translate && product.translate.length) {
+            await this.translateServiceDb.saveTranslate("product_translate_" + id, product.translate, product.translate_language);
         }
     }
 
