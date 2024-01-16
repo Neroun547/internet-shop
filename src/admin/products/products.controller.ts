@@ -16,13 +16,15 @@ import {ProductsService} from "../../products/service/products.service";
 import {ProductsServiceDb} from "../../../db/products/products.service";
 import {HttpExceptionFilter} from "../../../error-filters/error-filter-admin";
 import { translateTypeProduct } from "../../../constants";
+import { TranslateServiceDb } from "../../../db/translate/translate.service";
 
 @Controller()
 @UseFilters(HttpExceptionFilter)
 export class ProductsController {
     constructor(
         private productsService: ProductsService,
-        private productsServiceDb: ProductsServiceDb
+        private productsServiceDb: ProductsServiceDb,
+        private translateServiceDb: TranslateServiceDb
     ) {}
 
     @UseGuards(AuthGuard)
@@ -91,11 +93,13 @@ export class ProductsController {
     @Get("edit/:id")
     async getEditPage(@Param("id", new ParseIntPipe()) id: number, @Res() res: Response) {
         const product = await this.productsService.getProductAndImageByProductId(id);
+        const translateTitle = await this.translateServiceDb.getTranslateByKeyAndIsoCode("product_translate_" + product.id, "en");
 
         res.render("admin/products/product", {
             admin: true,
             auth: true,
             product: product,
+            translateTitle: translateTitle ? translateTitle.value : "",
             styles: ["/css/admin/products/upload-product.css"],
             scripts: ["/js/admin/products/edit-product.js"]
         });

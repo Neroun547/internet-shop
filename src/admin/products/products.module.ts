@@ -4,12 +4,14 @@ import {ProductsModuleDb} from "../../../db/products/products.module";
 import {MulterModule} from "@nestjs/platform-express";
 import { ProductsImagesModuleDb } from "../../../db/products-images/products-images.module";
 import { ProductsModule } from "../../products/products.module";
+import { TranslateModuleDb } from "../../../db/translate/translate.module";
 
 @Module({
     imports: [
         ProductsModuleDb,
         ProductsImagesModuleDb,
         ProductsModule,
+        TranslateModuleDb,
         MulterModule.register({
             dest: 'static/images',
         })

@@ -28,7 +28,11 @@
                 <a href="/products/{{this.id}}" class="wrapper__products-item-link">
                     <div class="wrapper__products-item-content">
                         <img src="/images/{{this.file_name}}" alt="Зображення">
-                        <h2 class="wrapper__products-item-content-name">{{this.name}}</h2>
+                        {{#if this.translateTitle}}
+                          <h2 class="wrapper__products-item-content-name">{{this.translateTitle}}</h2>
+                        {{else}}
+                          <h2 class="wrapper__products-item-content-name">{{this.name}}</h2>
+                        {{/if}}
                         <h4 class="wrapper__products-item-content-name">{{this.type}}</h4>
                         {{#if this.available}}
                             <h4 class="wrapper__products-item-content-name">{{../global_available}}</h4>
