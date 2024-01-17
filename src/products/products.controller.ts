@@ -134,6 +134,11 @@ export class ProductsController {
         const productData = await this.productsService.getProductAndImageByProductId(id);
         const translate = await this.translateService.getTranslateObjectByKeyAndIsoCode("product_page", req.cookies["iso_code_shop"]);
 
+        let translateDescription;
+
+        if(req.cookies["iso_code_shop"] === "en") {
+            translateDescription = await this.translateServiceDb.getTranslateByKeyAndIsoCode("product_translate_description_" + id, "en");
+        }
         if(req.cookies["basket_in_shop"]) {
             const inBasket = this.basketService.parseProductsCookie(req.cookies["basket_in_shop"]).find(el => el === String(productData.id));
 
@@ -143,7 +148,8 @@ export class ProductsController {
                 inBasket: !!inBasket,
                 activeLanguage: req.cookies["iso_code_shop"],
                 ...productData,
-                ...translate
+                ...translate,
+                translateDescription: translateDescription ? translateDescription.value : ""
             });
         } else {
             res.render("products/product", {
@@ -152,7 +158,8 @@ export class ProductsController {
                 inBasket: false,
                 activeLanguage: req.cookies["iso_code_shop"],
                 ...productData,
-                ...translate
+                ...translate,
+                translateDescription: translateDescription ? translateDescription.value : ""
             });
         }
     }
