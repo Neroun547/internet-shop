@@ -43,7 +43,11 @@
 {{#if description}}
   <div class="wrapper__description">
       <div class="wrapper__product-description">
-        {{description}}
+        {{#if translateDescription}}
+          {{translateDescription}}
+        {{else}}
+          {{description}}
+        {{/if}}
       </div>
   </div>
 {{/if}}

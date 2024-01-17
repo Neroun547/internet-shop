@@ -67,15 +67,16 @@ uploadProductForm.addEventListener("submit", async function (e) {
     for(let i = 0; i < files.length; i++) {
         formData.append("files", files[i]);
     }
-
     formData.append("num", e.target[1].value);
     formData.append("name", e.target[2].value);
     formData.append("description", e.target[3].value);
     formData.append("price", e.target[4].value);
     formData.append("translate_language", e.target[5].value);
     formData.append("translate", e.target[6].value);
-    formData.append("type", e.target[7].value);
-    formData.append("available", e.target[8].checked);
+    formData.append("translate_language_description", e.target[7].value);
+    formData.append("translate_description", e.target[8].value);
+    formData.append("type", e.target[9].value);
+    formData.append("available", e.target[10].checked);
 
     const api = await fetch("/admin/products/" + productId, {
         method: "PATCH",
