@@ -62,8 +62,10 @@ uploadProductForm.addEventListener("submit", async function (e) {
    formData.append("price", e.target[3].value);
    formData.append("translate_language", e.target[4].value);
    formData.append("translate", e.target[5].value);
-   formData.append("type", e.target[6].value);
-   formData.append("available", e.target[7].checked);
+   formData.append("translate_language_description", e.target[6].value);
+   formData.append("translate_description", e.target[7].value);
+   formData.append("type", e.target[8].value);
+   formData.append("available", e.target[9].checked);
 
    const api = await fetch("/admin/products", {
       method: "POST",

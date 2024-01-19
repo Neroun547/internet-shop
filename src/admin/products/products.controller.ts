@@ -94,12 +94,14 @@ export class ProductsController {
     async getEditPage(@Param("id", new ParseIntPipe()) id: number, @Res() res: Response) {
         const product = await this.productsService.getProductAndImageByProductId(id);
         const translateTitle = await this.translateServiceDb.getTranslateByKeyAndIsoCode("product_translate_" + product.id, "en");
+        const translateDescription = await this.translateServiceDb.getTranslateByKeyAndIsoCode("product_translate_description_" + product.id, "en");
 
         res.render("admin/products/product", {
             admin: true,
             auth: true,
             product: product,
             translateTitle: translateTitle ? translateTitle.value : "",
+            translateDescription: translateDescription ? translateDescription.value : "",
             styles: ["/css/admin/products/upload-product.css"],
             scripts: ["/js/admin/products/edit-product.js"]
         });
