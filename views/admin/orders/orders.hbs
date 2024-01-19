@@ -9,6 +9,7 @@
             <option value="not_completed">Не виконані</option>
         </select>
     {{/if}}
+    <h2 class="mt-50">Кількість замовлень: <span id="count-orders">{{countOrders}}</span></h2>
     {{#if orders}}
         {{#each orders}}
             <div class="wrapper__orders-item">

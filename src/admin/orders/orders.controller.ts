@@ -17,32 +17,39 @@ import {AuthGuard} from "../auth/guards/auth.guard";
 import {ChangeStatusDto} from "./dto/change-status.dto";
 import {HttpExceptionFilter} from "../../../error-filters/error-filter-admin";
 import {AddAdminNoteDto} from "./dto/add-admin-note.dto";
+import { OrdersServiceDb } from "../../../db/orders/orders.service";
 
 @Controller()
 @UseFilters(HttpExceptionFilter)
 export class OrdersController {
-    constructor(private ordersService: OrdersService) {}
+    constructor(
+      private ordersService: OrdersService,
+      private ordersServiceDb: OrdersServiceDb
+    ) {}
 
     @UseGuards(AuthGuard)
     @Get()
     async getOrdersPage(@Res() res: Response) {
-        let orders = await this.ordersService.getOrders(10, 0);
+        const orders = await this.ordersService.getOrders(10, 0);
 
         if(orders.length) {
+            const countOrders = await this.ordersServiceDb.getCountOrdersByStatus("");
 
             res.render("admin/orders/orders", {
                 orders: orders,
                 auth: true,
                 admin: true,
                 styles: ["/css/admin/orders/orders.css"],
-                scripts: ["/js/admin/orders/orders.js"]
+                scripts: ["/js/admin/orders/orders.js"],
+                countOrders: countOrders
             });
         } else {
             res.render("admin/orders/orders", {
                 orders: false,
                 auth: true,
                 admin: true,
-                styles: ["/css/admin/orders/orders.css"]
+                styles: ["/css/admin/orders/orders.css"],
+                countOrders: 0
             });
         }
     }
@@ -55,12 +62,18 @@ export class OrdersController {
         @Query("status") status: string
     ) {
         if(status && status === "not_completed") {
-            return await this.ordersService.getOrdersByStatus(take, skip, null);
+            return {
+                orders: await this.ordersService.getOrdersByStatus(take, skip, null),
+                countOrders: await this.ordersServiceDb.getCountOrdersByStatus("not_completed")
+            };
         }
         if(status && status !== "not_completed") {
-            return await this.ordersService.getOrdersByStatus(take, skip, status);
+            return {
+                orders: await this.ordersService.getOrdersByStatus(take, skip, status),
+                countOrders: await this.ordersServiceDb.getCountOrdersByStatus(status)
+            };
         }
-        return await this.ordersService.getOrders(take, skip);
+        return { orders: await this.ordersService.getOrders(take, skip), countOrders: await this.ordersServiceDb.getCountOrdersByStatus("") };
     }
 
     @UseGuards(AuthGuard)
