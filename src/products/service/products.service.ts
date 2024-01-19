@@ -113,6 +113,7 @@ export class ProductsService {
             }
         }
         await this.translateServiceDb.saveTranslate("product_translate_" + savedProduct.id, product.translate, product.translate_language);
+        await this.translateServiceDb.saveTranslate("product_translate_description_" + savedProduct.id, product.translate_description, product.translate_language_description)
     }
 
     async updateProductById(id: number, product: UploadProductInterface, files: Array<Express.Multer.File>) {
@@ -171,6 +172,13 @@ export class ProductsService {
             await this.translateServiceDb.updateTranslateByKeyAndIsoCode("product_translate_" + id, product.translate, product.translate_language);
         } else if(!translateProductTitleInDb && product.translate && product.translate.length) {
             await this.translateServiceDb.saveTranslate("product_translate_" + id, product.translate, product.translate_language);
+        }
+        const translateProductDescriptionInDb = await this.translateServiceDb.getTranslateByKeyAndIsoCode("product_translate_description_" + id, product.translate_language);
+
+        if(translateProductDescriptionInDb) {
+            await this.translateServiceDb.updateTranslateByKeyAndIsoCode("product_translate_description_" + id, product.translate_description, product.translate_language_description);
+        } else if(!translateProductDescriptionInDb && product.translate_description && product.translate_description.length) {
+            await this.translateServiceDb.saveTranslate("product_translate_description_" + id, product.translate_description, product.translate_language_description);
         }
     }
 
