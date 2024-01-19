@@ -64,4 +64,14 @@ export class OrdersServiceDb {
     async addAdminNoteByIdOrder(idOrder: string, note: string) {
         await this.repository.nativeUpdate({ id_order: idOrder }, { admin_note: note });
     }
+    async getCountOrdersByStatus(status: string) {
+
+        if(status && status !== "not_completed") {
+            return (await this.em.execute("SELECT COUNT(DISTINCT id_order) AS 'value' FROM orders WHERE status = ?", [status]))[0].value;
+        }
+        if(status && status === "not_completed") {
+            return (await this.em.execute("SELECT COUNT(DISTINCT id_order) AS 'value' FROM orders WHERE status IS NULL"))[0].value;
+        }
+        return (await this.em.execute("SELECT COUNT(DISTINCT id_order) AS 'value' FROM orders"))[0].value;
+    }
 }

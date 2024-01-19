@@ -1,6 +1,7 @@
 const wrapperOrders = document.querySelector(".wrapper__orders");
 const loadMoreOrdersBtn = document.querySelector(".load-more-orders-btn");
 const sortSelect = document.getElementById("sort-select");
+const countOrdersSpan = document.getElementById("count-orders");
 
 let skip = 10;
 let status = "";
@@ -14,16 +15,16 @@ sortSelect.addEventListener("change", async function (e) {
 
     skip = 0;
 
-    let products;
+    let response;
 
     if(status === "all") {
-        products = await fetch("/admin/orders/load-more?take=10&skip=0");
+        response = await fetch("/admin/orders/load-more?take=10&skip=0");
     } else {
-        products = await fetch("/admin/orders/load-more?take=10&skip=0&status=" + status);
+        response = await fetch("/admin/orders/load-more?take=10&skip=0&status=" + status);
     }
-    const response = await products.json();
+    const { orders, countOrders } = await response.json();
 
-    if(response.length) {
+    if(orders.length) {
         let notOrdersLogo = document.querySelector(".not-orders-logo");
 
         if(notOrdersLogo) {
@@ -33,31 +34,31 @@ sortSelect.addEventListener("change", async function (e) {
 
         const loadMoreOrdersBtn = document.querySelector(".load-more-orders-btn");
 
-        for (let i = 0; i < response.length; i++) {
+        for (let i = 0; i < orders.length; i++) {
             if(loadMoreOrdersBtn) {
                 wrapperOrders.insertBefore(
                     createOrderCard(
-                        response[i].id_order,
-                        response[i].status,
-                        response[i].created_at
+                        orders[i].id_order,
+                        orders[i].status,
+                        orders[i].created_at
                     ),
                     loadMoreOrdersBtn
                 )
             } else {
                 wrapperOrders.appendChild(
                     createOrderCard(
-                        response[i].id_order,
-                        response[i].status,
-                        response[i].created_at
+                        orders[i].id_order,
+                        orders[i].status,
+                        orders[i].created_at
                     )
                 )
             }
         }
     }
-    if(response.length === 10) {
+    if(orders.length === 10) {
         skip = 10;
     }
-    if(response.length === 10 && !document.querySelector(".load-more-orders-btn")) {
+    if(orders.length === 10 && !document.querySelector(".load-more-orders-btn")) {
         const loadMoreOrdersBtn = document.createElement("button");
         loadMoreOrdersBtn.classList.add("load-more-orders-btn");
         loadMoreOrdersBtn.innerText = "Завантажити ще замовленн";
@@ -68,7 +69,7 @@ sortSelect.addEventListener("change", async function (e) {
             await loadMoreOrdersAction();
         });
     }
-    if(response.length < 10) {
+    if(orders.length < 10) {
         const loadMoreOrdersBtn = document.querySelector(".load-more-orders-btn");
         skip = 0;
 
@@ -76,7 +77,7 @@ sortSelect.addEventListener("change", async function (e) {
             loadMoreOrdersBtn.remove();
         }
     }
-    if(!response.length) {
+    if(!orders.length) {
         deleteAllWrapperOrdersItems();
         let notOrdersLogo = document.querySelector(".not-orders-logo");
 
@@ -88,44 +89,45 @@ sortSelect.addEventListener("change", async function (e) {
             wrapperOrders.appendChild(h2);
         }
     }
+    countOrdersSpan.innerText = countOrders;
 });
 
 async function loadMoreOrdersAction() {
 
     if(skip) {
         skip += 10;
-        let products;
+        let response;
 
         if(status && status !== "all") {
-            products = await fetch("/admin/orders/load-more?take=10&skip=" + (skip - 10) + "&status=" + status);
+            response = await fetch("/admin/orders/load-more?take=10&skip=" + (skip - 10) + "&status=" + status);
         } else {
-            products = await fetch("/admin/orders/load-more?take=10&skip=" + (skip - 10));
+            response = await fetch("/admin/orders/load-more?take=10&skip=" + (skip - 10));
         }
-        const response = await products.json();
+        const { orders } = await response.json();
 
-        if (response.length) {
+        if (orders.length) {
             const loadMoreOrdersBtn = document.querySelector(".load-more-orders-btn");
 
-            for (let i = 0; i < response.length; i++) {
+            for (let i = 0; i < orders.length; i++) {
                 if(loadMoreOrdersBtn) {
                     wrapperOrders.insertBefore(
                         createOrderCard(
-                            response[i].id_order,
-                            response[i].status,
-                            response[i].created_at
+                            orders[i].id_order,
+                            orders[i].status,
+                            orders[i].created_at
                         ),
                         loadMoreOrdersBtn
                     );
                 } else {
                     wrapperOrders.appendChild(createOrderCard(
-                        response[i].id_order,
-                        response[i].status,
-                        response[i].created_at
+                        orders[i].id_order,
+                        orders[i].status,
+                        orders[i].created_at
                     ));
                 }
             }
         }
-        if (response.length < 10) {
+        if (orders.length < 10) {
             const loadMoreOrdersBtn = document.querySelector(".load-more-orders-btn");
             skip = 0;
 
