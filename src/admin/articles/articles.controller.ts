@@ -12,12 +12,11 @@ import {
     UseGuards,
     UseInterceptors
 } from "@nestjs/common";
-import { Response } from "express";
+import { Response, Request } from "express";
 import {AuthGuard} from "../auth/guards/auth.guard";
 import {SaveArticleDto} from "./dto/save-article.dto";
 import {ArticlesService} from "./service/articles.service";
 import {FileInterceptor} from "@nestjs/platform-express";
-import { Request } from "express";
 import {HttpExceptionFilter} from "../../../error-filters/error-filter-admin";
 
 @Controller()
@@ -52,8 +51,8 @@ export class ArticlesController {
 
     @UseGuards(AuthGuard)
     @Post()
-    async saveArticle(@Body() body: SaveArticleDto, @Res() res: Response) {
-        await this.articlesService.saveArticle(body.content, body.authors, body.name, body.theme);
+    async saveArticle(@Req() req: Request, @Body() body: SaveArticleDto, @Res() res: Response) {
+        await this.articlesService.saveArticle(body.content, body.authors, body.name, body.theme, req["user"].id);
 
         res.redirect("/admin/articles");
     }

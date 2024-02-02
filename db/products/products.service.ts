@@ -42,6 +42,9 @@ export class ProductsServiceDb {
     async getProductsAndImages(take: number, skip: number) {
         return await this.repository.find({  }, { limit: take, offset: skip, populate: ["productsImages"], orderBy: { num: "ASC" } });
     }
+    async getProductsAndImagesByUserId(take: number, skip: number, userId: number) {
+        return await this.repository.find({ user_id: userId }, { limit: take, offset: skip, populate: ["productsImages"], orderBy: { num: "ASC" } });
+    }
     async deleteProductById(id: number) {
         await this.repository.nativeDelete( { id: id });
     }
@@ -51,8 +54,14 @@ export class ProductsServiceDb {
     async getCountAvailableProducts() {
         return await this.repository.count({ available: true });
     }
+    async getCountAvailableProductsByUserId(userId: number) {
+        return await this.repository.count({ user_id: userId, available: true });
+    }
     async getCountProducts() {
         return await this.repository.count();
+    }
+    async getCountProductsByUserId(userId: number) {
+        return await this.repository.count({ user_id: userId });
     }
     async getLastProductByNum() {
         return (await this.repository.find({}, { orderBy: { num: "DESC" }, limit: 1 }))[0];
@@ -81,8 +90,18 @@ export class ProductsServiceDb {
 
         return data ? data.price : null;
     }
+    async getMaxPriceProductsByUserId(userId: number) {
+        const data = (await this.repository.find({ user_id: userId }, { orderBy: { price: "DESC" }, limit: 1 }))[0];
+
+        return data ? data.price : null;
+    }
     async getMinPriceProducts() {
         const data = (await this.repository.find({  }, { orderBy: { price: "ASC" }, limit: 1 }))[0];
+
+        return data ? data.price : null;
+    }
+    async getMinPriceProductsByUserId(userId: number) {
+        const data = (await this.repository.find({ user_id: userId }, { orderBy: { price: "ASC" }, limit: 1 }))[0];
 
         return data ? data.price : null;
     }

@@ -6,4 +6,5 @@ export interface ArticlesInterface {
     updated_at: string;
     name: string;
     theme: string;
+    user_id: number;
 }

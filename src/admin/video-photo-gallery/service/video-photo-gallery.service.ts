@@ -16,8 +16,8 @@ export class VideoPhotoGalleryServiceAdmin {
     @Inject(forwardRef(() => VideoPhotoGalleryService)) private videoPhotoGalleryService: VideoPhotoGalleryService
   ) {}
 
-  async savePublication(body: UploadVideoPhotoDto, files: Array<Express.Multer.File>) {
-    const publication = await this.videoPhotoGalleryServiceDb.saveAndReturn(body);
+  async savePublication(body: UploadVideoPhotoDto, files: Array<Express.Multer.File>, userId: number) {
+    const publication = await this.videoPhotoGalleryServiceDb.saveAndReturn({ ...body, user_id: userId });
 
     await this.saveFiles(files, publication.id);
   }
@@ -40,8 +40,8 @@ export class VideoPhotoGalleryServiceAdmin {
     return await this.videoPhotoGalleryServiceDb.getPublicationById(id);
   }
 
-  async editPublicationById(id: number, body: UploadVideoPhotoDto, files: Array<Express.Multer.File>) {
-    await this.videoPhotoGalleryServiceDb.updateById(id, body);
+  async editPublicationById(id: number, body: UploadVideoPhotoDto, files: Array<Express.Multer.File>, userId: number) {
+    await this.videoPhotoGalleryServiceDb.updateById(id, { ...body, user_id: userId });
 
     if(files && files.length) {
       const oldFiles = await this.videoPhotoGalleryFilesServiceDb.getByVideoPhotoGalleryId(id);

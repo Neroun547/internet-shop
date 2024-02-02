@@ -11,4 +11,7 @@ export class Users implements UserInterface {
 
     @Property({ nullable: false })
     password: string;
+
+    @Property()
+    role: "admin" | "partner";
 }

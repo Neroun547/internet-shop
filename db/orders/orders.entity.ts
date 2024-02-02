@@ -36,4 +36,7 @@ export class Orders implements OrdersInterface {
 
     @Property()
     admin_note: string;
+
+    @Property()
+    user_id: number;
 }

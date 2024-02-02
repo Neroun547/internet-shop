@@ -10,4 +10,10 @@ export class UsersServiceDb {
     async getUserByName(name: string) {
         return await this.usersRepository.findOne({ name: name });
     }
+    async getUserById(id: number) {
+        return await this.usersRepository.findOne({ id: id });
+    }
+    async getUsers() {
+        return await this.usersRepository.find({  });
+    }
 }

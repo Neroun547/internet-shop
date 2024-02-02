@@ -17,6 +17,7 @@ import {ProductsServiceDb} from "../../../db/products/products.service";
 import {HttpExceptionFilter} from "../../../error-filters/error-filter-admin";
 import { translateTypeProduct } from "../../../constants";
 import { TranslateServiceDb } from "../../../db/translate/translate.service";
+import { ProductsServiceAdmin } from "./service/products.service";
 
 @Controller()
 @UseFilters(HttpExceptionFilter)
@@ -24,20 +25,21 @@ export class ProductsController {
     constructor(
         private productsService: ProductsService,
         private productsServiceDb: ProductsServiceDb,
-        private translateServiceDb: TranslateServiceDb
+        private translateServiceDb: TranslateServiceDb,
+        private productsServiceAdmin: ProductsServiceAdmin
     ) {}
 
     @UseGuards(AuthGuard)
     @Get()
     async getProductsPage(@Req() req: Request, @Res() res: Response) {
-        const productsAndImages = await this.productsService.getProductsByType(8, 0);
+        const productsAndImages = await this.productsServiceAdmin.getProductsAndImagesByUserId(8, 0, req["user"].id);
         const parseProductsAndImages = this.productsService.parseProductsForLoadCards(productsAndImages, "");
 
-        const countProducts = await this.productsServiceDb.getCountProducts();
-        const countAvailableProducts = await this.productsServiceDb.getCountAvailableProducts();
+        const countProducts = await this.productsServiceDb.getCountProductsByUserId(req["user"].id);
+        const countAvailableProducts = await this.productsServiceDb.getCountAvailableProductsByUserId(req["user"].id);
 
-        const minProductsPrice = await this.productsServiceDb.getMinPriceProducts();
-        const maxProductsPrice = await this.productsServiceDb.getMaxPriceProducts();
+        const minProductsPrice = await this.productsServiceDb.getMinPriceProductsByUserId(req["user"].id);
+        const maxProductsPrice = await this.productsServiceDb.getMaxPriceProductsByUserId(req["user"].id);
 
         const arrFiltersType = [];
 
@@ -127,11 +129,11 @@ export class ProductsController {
         }
     }))
     @Patch(":id")
-    async updateProductById(@Param("id", new ParseIntPipe()) id: number, @UploadedFiles() files: Array<Express.Multer.File>, @Body() body) {
+    async updateProductById(@Param("id", new ParseIntPipe()) id: number, @Req() req: Request, @UploadedFiles() files: Array<Express.Multer.File>, @Body() body) {
         body.available = body.available === "true" ? true : false;
         body.num = Number(body.num);
 
-        await this.productsService.updateProductById(id, body, files);
+        await this.productsService.updateProductById(id, body, files, req["user"].id);
 
         return;
     }

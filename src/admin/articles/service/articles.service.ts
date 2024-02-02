@@ -10,7 +10,7 @@ import {SaveArticleDto} from "../dto/save-article.dto";
 export class ArticlesService {
     constructor(private commonService: CommonService, private articlesServiceDb: ArticlesServiceDb) {}
 
-    async saveArticle(content: string, authors: string, name: string, theme: string) {
+    async saveArticle(content: string, authors: string, name: string, theme: string, userId: number) {
         const localMoment = Moment();
         localMoment.locale("uk");
 
@@ -25,7 +25,8 @@ export class ArticlesService {
             updated_at: null,
             authors: authors,
             name: name,
-            theme: theme
+            theme: theme,
+            user_id: userId
         };
 
         await this.articlesServiceDb.saveArticle(saveArticle);

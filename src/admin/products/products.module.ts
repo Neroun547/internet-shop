@@ -5,6 +5,8 @@ import {MulterModule} from "@nestjs/platform-express";
 import { ProductsImagesModuleDb } from "../../../db/products-images/products-images.module";
 import { ProductsModule } from "../../products/products.module";
 import { TranslateModuleDb } from "../../../db/translate/translate.module";
+import { ProductsServiceAdmin } from "./service/products.service";
+import { CommonModule } from "../../../common/common.module";
 
 @Module({
     imports: [
@@ -12,11 +14,12 @@ import { TranslateModuleDb } from "../../../db/translate/translate.module";
         ProductsImagesModuleDb,
         ProductsModule,
         TranslateModuleDb,
+        CommonModule,
         MulterModule.register({
             dest: 'static/images',
         })
     ],
     controllers: [ProductsController],
-    providers: []
+    providers: [ProductsServiceAdmin]
 })
 export class ProductsModuleAdmin {}

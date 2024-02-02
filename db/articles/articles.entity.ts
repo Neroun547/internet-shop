@@ -23,5 +23,8 @@ export class Articles implements ArticlesInterface {
 
     @Property()
     theme: string;
+
+    @Property()
+    user_id: number;
 }
 

@@ -116,7 +116,7 @@ export class ProductsService {
         await this.translateServiceDb.saveTranslate("product_translate_description_" + savedProduct.id, product.translate_description, product.translate_language_description)
     }
 
-    async updateProductById(id: number, product: UploadProductInterface, files: Array<Express.Multer.File>) {
+    async updateProductById(id: number, product: UploadProductInterface, files: Array<Express.Multer.File>, userId: number) {
         const productInDbWithSimilarNum = JSON.parse(JSON.stringify(await this.productsServiceDb.getProductByNum(product.num)));
 
         if(productInDbWithSimilarNum) {
@@ -132,7 +132,8 @@ export class ProductsService {
             price: product.price,
             available: product.available,
             type: product.type,
-            num: product.num
+            num: product.num,
+            user_id: userId
         });
 
         if(files.length) {

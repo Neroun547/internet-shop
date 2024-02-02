@@ -12,4 +12,5 @@ export interface OrdersInterface {
     first_name: string;
     last_name: string;
     admin_note: string;
+    user_id: number;
 }
