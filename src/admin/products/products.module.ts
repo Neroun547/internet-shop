@@ -7,9 +7,11 @@ import { ProductsModule } from "../../products/products.module";
 import { TranslateModuleDb } from "../../../db/translate/translate.module";
 import { ProductsServiceAdmin } from "./service/products.service";
 import { CommonModule } from "../../../common/common.module";
+import { OrdersModuleDb } from "../../../db/orders/orders.module";
 
 @Module({
     imports: [
+        OrdersModuleDb,
         ProductsModuleDb,
         ProductsImagesModuleDb,
         ProductsModule,

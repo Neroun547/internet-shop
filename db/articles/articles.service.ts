@@ -24,4 +24,10 @@ export class ArticlesServiceDb {
     async deleteArticleByFilename(filename: string) {
         await this.repository.nativeDelete({ filename: filename });
     }
+    async getArticlesByUserId(count: number, skip: number, userId: number) {
+        return await this.repository.find({ user_id: userId }, { limit: count, offset: skip });
+    }
+    async getAllArticlesByUserId(userId: number) {
+        return await this.repository.find({ user_id: userId });
+    }
 }

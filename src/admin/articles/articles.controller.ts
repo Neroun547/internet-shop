@@ -1,5 +1,4 @@
 import {
-    BadRequestException,
     Body,
     Controller,
     Delete,
@@ -9,14 +8,12 @@ import {
     Post,
     Req,
     Res, UseFilters,
-    UseGuards,
-    UseInterceptors
+    UseGuards
 } from "@nestjs/common";
 import { Response, Request } from "express";
 import {AuthGuard} from "../auth/guards/auth.guard";
 import {SaveArticleDto} from "./dto/save-article.dto";
 import {ArticlesService} from "./service/articles.service";
-import {FileInterceptor} from "@nestjs/platform-express";
 import {HttpExceptionFilter} from "../../../error-filters/error-filter-admin";
 
 @Controller()

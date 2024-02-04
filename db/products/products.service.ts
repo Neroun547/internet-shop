@@ -3,7 +3,6 @@ import {InjectRepository} from "@mikro-orm/nestjs";
 import {Products} from "./products.entity";
 import {EntityRepository} from "@mikro-orm/core";
 import {ProductsInterface} from "./interfaces/products.interface";
-import {limits} from "argon2";
 
 @Injectable()
 export class ProductsServiceDb {
@@ -18,6 +17,7 @@ export class ProductsServiceDb {
         productModel.price = product.price;
         productModel.type = product.type;
         productModel.num = product.num;
+        productModel.user_id = product.user_id;
 
         await this.repository.persistAndFlush(productModel);
 
@@ -65,6 +65,12 @@ export class ProductsServiceDb {
     }
     async getLastProductByNum() {
         return (await this.repository.find({}, { orderBy: { num: "DESC" }, limit: 1 }))[0];
+    }
+    async getLastProductByNumAndByUserId(userId: number) {
+        return (await this.repository.find({ user_id: userId }, { orderBy: { num: "DESC" }, limit: 1 }))[0];
+    }
+    async getProductByIdAndUserId(id: number, userId: number) {
+        return await this.repository.findOne({ id: id, user_id: userId });
     }
     async getProductByNum(num: number) {
         return await this.repository.findOne({ num: num });
@@ -137,5 +143,52 @@ export class ProductsServiceDb {
                 }
             }, {limit: take, offset: skip, populate: ["productsImages"], orderBy: {num: "ASC"}});
         }
+    }
+    async getProductsAndImagesByFiltersAndUserId(take: number, skip: number, priceFrom: number, priceTo: number, type: string, userId: number, available?) {
+        if(available !== undefined) {
+            if(type) {
+                return await this.repository.find({
+                    price: {
+                        $gte: priceFrom,
+                        $lte: priceTo
+                    }, available: available, type: type, user_id: userId
+                }, {limit: take, offset: skip, populate: ["productsImages"], orderBy: {num: "ASC"}});
+            }
+            return await this.repository.find({
+                price: {
+                    $gte: priceFrom,
+                    $lte: priceTo
+                }, available: available, user_id: userId
+            }, {limit: take, offset: skip, populate: ["productsImages"], orderBy: {num: "ASC"}});
+        } else {
+            if(type) {
+                return await this.repository.find({
+                    price: {
+                        $gte: priceFrom,
+                        $lte: priceTo
+                    }, type: type, user_id: userId
+                }, {limit: take, offset: skip, populate: ["productsImages"], orderBy: {num: "ASC"}});
+            }
+            return await this.repository.find({
+                price: {
+                    $gte: priceFrom,
+                    $lte: priceTo
+                }, user_id: userId
+            }, {limit: take, offset: skip, populate: ["productsImages"], orderBy: {num: "ASC"}});
+        }
+    }
+    async getProductByNumAndUserId(num: number, userId: number) {
+        return await this.repository.findOne({ num: num, user_id: userId });
+    }
+
+    async getProductsAndImagesByTypeAndUserId(take: number, skip: number, type: string, userId: number) {
+        return await this.repository.find({ type: type, user_id: userId }, { limit: take, offset: skip, populate: ["productsImages"], orderBy: { num: "ASC" } });
+    }
+
+    async getAllProductsAndImagesByUserId(userId: number) {
+        return await this.repository.find({ user_id: userId }, { populate: ["productsImages"] });
+    }
+    async deleteProductsByUserId(userId: number) {
+        await this.repository.nativeDelete({ user_id: userId });
     }
 }

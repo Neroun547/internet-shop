@@ -12,7 +12,7 @@ export class OrdersServiceDb {
         ) {}
 
     async saveOrder(order: OrdersInterface) {
-        const orderModel = new Orders;
+        const orderModel = new Orders();
 
         orderModel.product = order.product;
         orderModel.count = order.count;
@@ -23,6 +23,7 @@ export class OrdersServiceDb {
         orderModel.first_name = order.first_name;
         orderModel.last_name = order.last_name;
         orderModel.admin_note = order.admin_note;
+        orderModel.user_id = order.user_id;
 
         await this.repository.persistAndFlush(orderModel);
     }
@@ -32,6 +33,11 @@ export class OrdersServiceDb {
             [take, skip]);
     }
 
+    async getOrdersByUserId(take: number, skip: number, userId: number) {
+        return await this.em.execute("SELECT DISTINCT id_order, created_at, status FROM orders WHERE user_id = ? ORDER BY created_at DESC LIMIT ? OFFSET ?",
+          [userId, take, skip]);
+    }
+
     async getOrdersByStatus(take: number, skip: number, status: string | null) {
         if(status === null) {
             return await this.em.execute("SELECT DISTINCT id_order, created_at, status FROM orders WHERE status IS NULL ORDER BY created_at DESC LIMIT ? OFFSET ?",
@@ -39,6 +45,16 @@ export class OrdersServiceDb {
         } else {
             return await this.em.execute("SELECT DISTINCT id_order, created_at, status FROM orders WHERE status = ? ORDER BY created_at DESC LIMIT ? OFFSET ?",
                 [status, take, skip]);
+        }
+    }
+
+    async getOrdersByStatusAndUserId(take: number, skip: number, status: string | null, userId: number) {
+        if(status === null) {
+            return await this.em.execute("SELECT DISTINCT id_order, created_at, status, user_id FROM orders WHERE user_id = ? AND status IS NULL ORDER BY created_at DESC LIMIT ? OFFSET ?",
+              [userId, take, skip]);
+        } else {
+            return await this.em.execute("SELECT DISTINCT id_order, created_at, status, user_id FROM orders WHERE status = ? AND user_id = ? ORDER BY created_at DESC LIMIT ? OFFSET ?",
+              [status, userId, take, skip]);
         }
     }
 
@@ -73,5 +89,19 @@ export class OrdersServiceDb {
             return (await this.em.execute("SELECT COUNT(DISTINCT id_order) AS 'value' FROM orders WHERE status IS NULL"))[0].value;
         }
         return (await this.em.execute("SELECT COUNT(DISTINCT id_order) AS 'value' FROM orders"))[0].value;
+    }
+
+    async getCountOrdersByStatusAndUserId(status: string, userId: number) {
+        if(status && status !== "not_completed") {
+            return (await this.em.execute("SELECT COUNT(DISTINCT id_order, user_id) AS 'value' FROM orders WHERE status = ? AND user_id = ?", [status, userId]))[0].value;
+        }
+        if(status && status === "not_completed") {
+            return (await this.em.execute("SELECT COUNT(DISTINCT id_order, user_id) AS 'value' FROM orders WHERE status IS NULL AND user_id = ?", [userId]))[0].value;
+        }
+        return (await this.em.execute("SELECT COUNT(DISTINCT id_order, user_id) AS 'value' FROM orders WHERE user_id = ?", [userId]))[0].value;
+    }
+
+    async deleteOrdersByUserId(userId: number) {
+        await this.repository.nativeDelete({ user_id: userId });
     }
 }

@@ -1,15 +1,10 @@
-import {Injectable, NotFoundException} from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import { ProductsServiceDb } from "../../../db/products/products.service";
 import {ProductsImagesServiceDb} from "../../../db/products-images/products-images.service";
-import { rename } from "fs/promises";
 import {BasketService} from "../../basket/service/basket.service";
 import { translateTypeProduct } from "../../../constants";
 import {OrdersServiceDb} from "../../../db/orders/orders.service";
-import { unlink } from "fs/promises";
-import { resolve } from "path";
 import { CommonService } from "../../../common/common.service";
-import { UploadProductInterface } from "../interfaces/upload-product.interface";
-import { TranslateServiceDb } from "../../../db/translate/translate.service";
 
 @Injectable()
 export class ProductsService {
@@ -18,8 +13,7 @@ export class ProductsService {
         private productsImagesServiceDb: ProductsImagesServiceDb,
         private basketService: BasketService,
         private ordersServiceDb: OrdersServiceDb,
-        private commonService: CommonService,
-        private translateServiceDb: TranslateServiceDb
+        private commonService: CommonService
     ) {}
 
     parseProductsForLoadCards(productsAndImages, basket?: string) {
@@ -44,16 +38,6 @@ export class ProductsService {
             }
         }
         return parseArr;
-    }
-
-    async deleteProductImages(productImages) {
-        for(let i = 0; i < productImages.length; i++) {
-            try {
-                await unlink(resolve("static/images/" + productImages[i].file_name));
-            } catch {
-
-            }
-        }
     }
 
     async getProductsByType(take: number, skip: number, type?: string, iso_code?: string) {
@@ -85,104 +69,6 @@ export class ProductsService {
         }
     }
 
-    async uploadProduct(product: UploadProductInterface, files: Array<Express.Multer.File>) {
-        const lastProduct = (await this.productsServiceDb.getLastProductByNum());
-        const savedProduct = await this.productsServiceDb.saveProductAndReturn({...product, num: lastProduct ? lastProduct.num + 1 : 1});
-
-        for(let i = 0; i < files.length; i++) {
-            if(files[i].mimetype === "image/jpeg") {
-                await rename(files[i].path, "static/images/" + files[i].filename + ".jpeg");
-                await this.productsImagesServiceDb.saveProductImage({
-                    file_name: files[i].filename + ".jpeg",
-                    product: savedProduct.id
-                });
-            }
-            if(files[i].mimetype === "image/png") {
-                await rename(files[i].path, "static/images/" + files[i].filename + ".png");
-                await this.productsImagesServiceDb.saveProductImage({
-                    file_name: files[i].filename + ".png",
-                    product: savedProduct.id
-                });
-            }
-            if(files[i].mimetype === "image/jpg") {
-                await rename(files[i].path, "static/images/" + files[i].filename + ".jpg");
-                await this.productsImagesServiceDb.saveProductImage({
-                    file_name: files[i].filename + ".jpg",
-                    product: savedProduct.id
-                });
-            }
-        }
-        await this.translateServiceDb.saveTranslate("product_translate_" + savedProduct.id, product.translate, product.translate_language);
-        await this.translateServiceDb.saveTranslate("product_translate_description_" + savedProduct.id, product.translate_description, product.translate_language_description)
-    }
-
-    async updateProductById(id: number, product: UploadProductInterface, files: Array<Express.Multer.File>, userId: number) {
-        const productInDbWithSimilarNum = JSON.parse(JSON.stringify(await this.productsServiceDb.getProductByNum(product.num)));
-
-        if(productInDbWithSimilarNum) {
-            const updatedProductInDb = await this.productsServiceDb.getProductById(id);
-
-            delete productInDbWithSimilarNum.productsImages;
-
-            await this.productsServiceDb.updateProductById(productInDbWithSimilarNum.id, { ...productInDbWithSimilarNum, num: updatedProductInDb.num });
-        }
-        await this.productsServiceDb.updateProductById(id, {
-            name: product.name,
-            description: product.description,
-            price: product.price,
-            available: product.available,
-            type: product.type,
-            num: product.num,
-            user_id: userId
-        });
-
-        if(files.length) {
-            const productImages = await this.productsImagesServiceDb.getProductImagesByProductId(id);
-
-            await this.deleteProductImages(productImages);
-
-            await this.productsImagesServiceDb.deleteProductImagesByProductId(id);
-
-            for(let i = 0; i < files.length; i++) {
-                if(files[i].mimetype === "image/jpeg") {
-                    await rename(files[i].path, "static/images/" + files[i].filename + ".jpeg");
-                    await this.productsImagesServiceDb.saveProductImage({
-                        file_name: files[i].filename + ".jpeg",
-                        product: id
-                    });
-                }
-                if(files[i].mimetype === "image/png") {
-                    await rename(files[i].path, "static/images/" + files[i].filename + ".png");
-                    await this.productsImagesServiceDb.saveProductImage({
-                        file_name: files[i].filename + ".png",
-                        product: id
-                    });
-                }
-                if(files[i].mimetype === "image/jpg") {
-                    await rename(files[i].path, "static/images/" + files[i].filename + ".jpg");
-                    await this.productsImagesServiceDb.saveProductImage({
-                        file_name: files[i].filename + ".jpg",
-                        product: id
-                    });
-                }
-            }
-        }
-        const translateProductTitleInDb = await this.translateServiceDb.getTranslateByKeyAndIsoCode("product_translate_" + id, "en");
-
-        if(translateProductTitleInDb) {
-            await this.translateServiceDb.updateTranslateByKeyAndIsoCode("product_translate_" + id, product.translate, product.translate_language);
-        } else if(!translateProductTitleInDb && product.translate && product.translate.length) {
-            await this.translateServiceDb.saveTranslate("product_translate_" + id, product.translate, product.translate_language);
-        }
-        const translateProductDescriptionInDb = await this.translateServiceDb.getTranslateByKeyAndIsoCode("product_translate_description_" + id, product.translate_language);
-
-        if(translateProductDescriptionInDb) {
-            await this.translateServiceDb.updateTranslateByKeyAndIsoCode("product_translate_description_" + id, product.translate_description, product.translate_language_description);
-        } else if(!translateProductDescriptionInDb && product.translate_description && product.translate_description.length) {
-            await this.translateServiceDb.saveTranslate("product_translate_description_" + id, product.translate_description, product.translate_language_description);
-        }
-    }
-
     async getProductAndImageByProductId(id: number) {
        const productAndImages = await this.productsServiceDb.getProductAndImagesById(id);
 
@@ -198,32 +84,6 @@ export class ProductsService {
            available: productAndImages.available,
            images: [...productAndImages.productsImages].map((el) => el.file_name)
        }
-    }
-
-    async deleteProductById(id: number) {
-        const productAndImages = await this.productsServiceDb.getProductAndImagesById(id);
-
-        if(productAndImages && productAndImages.productsImages.length) {
-            await this.deleteProductImages(productAndImages.productsImages);
-            await this.productsImagesServiceDb.deleteProductImagesByProductId(id);
-            await this.ordersServiceDb.deleteOrdersByProductId(id);
-            await this.productsServiceDb.deleteProductById(id);
-            await this.calculateNumsProductsAfterDeleteProduct(productAndImages.num);
-        } else {
-            throw new NotFoundException();
-        }
-    }
-
-    async calculateNumsProductsAfterDeleteProduct(numDeleteProduct: number) {
-        let numDeleteProductIncremented = numDeleteProduct;
-        const productsCountAfterNum = await this.productsServiceDb.getCountProductsBiggerNum(numDeleteProduct);
-
-        if(productsCountAfterNum > 0) {
-            for(let i = 0; i < productsCountAfterNum; i++) {
-                await this.productsServiceDb.updateProductsNumToPrev(numDeleteProductIncremented);
-                numDeleteProductIncremented += 1;
-            }
-        }
     }
 
     async getMaxPriceProductsByType(type: string) {

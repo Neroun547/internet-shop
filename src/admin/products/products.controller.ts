@@ -1,20 +1,27 @@
 import {
     BadRequestException,
     Body,
-    Controller, Delete,
-    Get, Param, ParseIntPipe, Patch,
-    Post, Req,
+    Controller,
+    Delete,
+    Get,
+    Param,
+    ParseIntPipe,
+    Patch,
+    Post,
+    Query,
+    Req,
     Res,
-    UploadedFiles, UseFilters,
+    UploadedFiles,
+    UseFilters,
     UseGuards,
     UseInterceptors
 } from "@nestjs/common";
-import { Response, Request } from "express";
-import {AuthGuard} from "../auth/guards/auth.guard";
-import {FilesInterceptor} from "@nestjs/platform-express";
-import {ProductsService} from "../../products/service/products.service";
-import {ProductsServiceDb} from "../../../db/products/products.service";
-import {HttpExceptionFilter} from "../../../error-filters/error-filter-admin";
+import { Request, Response } from "express";
+import { AuthGuard } from "../auth/guards/auth.guard";
+import { FilesInterceptor } from "@nestjs/platform-express";
+import { ProductsService } from "../../products/service/products.service";
+import { ProductsServiceDb } from "../../../db/products/products.service";
+import { HttpExceptionFilter } from "../../../error-filters/error-filter-admin";
 import { translateTypeProduct } from "../../../constants";
 import { TranslateServiceDb } from "../../../db/translate/translate.service";
 import { ProductsServiceAdmin } from "./service/products.service";
@@ -61,6 +68,24 @@ export class ProductsController {
     }
 
     @UseGuards(AuthGuard)
+    @Get("load-more")
+    async loadMoreProducts(
+      @Query("take", new ParseIntPipe()) take: number,
+      @Query("skip", new ParseIntPipe()) skip: number,
+      @Query("type") type: string,
+      @Query("available") available: string,
+      @Query("priceFrom") priceFrom: number,
+      @Query("priceTo") priceTo: number,
+      @Req() req: Request
+    ) {
+        if(available && priceFrom && priceTo) {
+            return await this.productsServiceAdmin.getProductsByFiltersAndUserId(take, skip, available, Number(priceFrom), Number(priceTo), type, req["user"].id)
+        } else {
+            return await this.productsServiceAdmin.getProductsByTypeAndUserId(take, skip, type, req["user"].id);
+        }
+    }
+
+    @UseGuards(AuthGuard)
     @Get("upload-product")
     getUploadProductPage(@Res() res: Response) {
         res.render("admin/products/upload-product", {
@@ -83,10 +108,10 @@ export class ProductsController {
         }
     }))
     @Post()
-    async uploadProduct(@Body() body, @UploadedFiles() files: Array<Express.Multer.File>, @Res() res: Response) {
+    async uploadProduct(@Req() req: Request, @Body() body, @UploadedFiles() files: Array<Express.Multer.File>, @Res() res: Response) {
         body.available = body.available === "true" ? true : false;
 
-        await this.productsService.uploadProduct(body, files);
+        await this.productsServiceAdmin.uploadProduct({ ...body, user_id: req["user"].id }, files);
 
         res.sendStatus(200);
     }
@@ -112,7 +137,7 @@ export class ProductsController {
     @UseGuards(AuthGuard)
     @Delete(":id")
     async deleteProductById(@Param("id", new ParseIntPipe()) id: number) {
-        await this.productsService.deleteProductById(id);
+        await this.productsServiceAdmin.deleteProductById(id);
 
         return;
     }
@@ -133,7 +158,7 @@ export class ProductsController {
         body.available = body.available === "true" ? true : false;
         body.num = Number(body.num);
 
-        await this.productsService.updateProductById(id, body, files, req["user"].id);
+        await this.productsServiceAdmin.updateProductById(id, body, files, req["user"].id);
 
         return;
     }

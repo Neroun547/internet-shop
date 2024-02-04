@@ -14,6 +14,7 @@ export class VideoPhotoGalleryServiceDb {
     model.name = data.name;
     model.theme = data.theme;
     model.description = data.description;
+    model.user_id = data.user_id;
 
     await this.repository.persistAndFlush(model);
 
@@ -54,5 +55,18 @@ export class VideoPhotoGalleryServiceDb {
 
   async updateById(id: number, data: VideoPhotoGalleryInterface) {
     await this.repository.nativeUpdate({ id: id }, data);
+  }
+
+  async getPublicationAndFilesByUserId(userId: number) {
+    return await this.repository
+      .createQueryBuilder("publication")
+      .select("*")
+      .joinAndSelect("videoPhotoGalleryFiles", "files")
+      .where("publication.user_id = ?", [userId])
+      .getResult()
+  }
+
+  async deleteByUserId(userId: number) {
+    await this.repository.nativeDelete({ user_id: userId });
   }
 }

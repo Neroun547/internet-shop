@@ -77,9 +77,9 @@ window.addEventListener("scroll", async function () {
         let products;
 
         if(availableProductFilter && minPriceProductFilter && maxPriceProductFilter && typeProductFilter) {
-            products = await fetch(`/products/load-more?take=8&skip=${skip - 8}&available=${availableProductFilter}&type=${typeProductFilter}&priceFrom=${minPriceProductFilter}&priceTo=${maxPriceProductFilter}`);
+            products = await fetch(`/admin/products/load-more?take=8&skip=${skip - 8}&available=${availableProductFilter}&type=${typeProductFilter}&priceFrom=${minPriceProductFilter}&priceTo=${maxPriceProductFilter}`);
         } else {
-            products = await fetch(`/products/load-more?take=8&skip=${skip - 8}`);
+            products = await fetch(`/admin/products/load-more?take=8&skip=${skip - 8}`);
         }
         const response = await products.json();
 
@@ -88,7 +88,7 @@ window.addEventListener("scroll", async function () {
                 wrapperProducts.appendChild(
                   createProductCard(
                     response[i].id,
-                    response[i].file_name,
+                    response[i].productsImages && response[i].productsImages[0] ? response[i].productsImages[0].file_name : "",
                     "Зображення",
                     response[i].name,
                     response[i].type,

@@ -16,8 +16,8 @@ import { TranslateModuleDb } from "../../db/translate/translate.module";
       ProductsImagesModuleDb,
       OrdersModuleDb,
       TranslateModule,
-      CommonModule,
-      TranslateModuleDb
+      TranslateModuleDb,
+      CommonModule
    ],
    controllers: [ProductsController],
    providers: [ProductsService],
