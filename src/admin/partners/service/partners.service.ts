@@ -94,4 +94,19 @@ export class PartnersService {
     }
     await this.usersServiceDb.deleteUserById(id);
   }
+  async getPartnerById(id: number) {
+    return await this.usersServiceDb.getUserById(id);
+  }
+  async updatePartnerNameById(id: number, name: string) {
+    await this.usersServiceDb.updateUserNameById(name, id);
+  }
+
+  async generateNewPasswordById(id: number) {
+    const newPassword = this.commonService.generateRandomPassword();
+    const newPasswordHash = await argon.hash(newPassword);
+
+    await this.usersServiceDb.updateUserPasswordById(newPasswordHash, id);
+
+    return newPassword;
+  }
 }

@@ -23,4 +23,10 @@ export class UsersServiceDb {
     async deleteUserById(id: number) {
         await this.usersRepository.nativeDelete({ id: id });
     }
+    async updateUserNameById(name: string, id: number) {
+        await this.usersRepository.nativeUpdate({ id: id }, { name: name });
+    }
+    async updateUserPasswordById(password: string, id: number) {
+        await this.usersRepository.nativeUpdate({ id: id }, { password: password });
+    }
 }
