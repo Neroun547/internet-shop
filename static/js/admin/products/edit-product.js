@@ -3,14 +3,16 @@ import { showModal } from "../../common/show-modal.js";
 const uploadProductForm = document.querySelector(".upload__product-form");
 const wrapperMessageForm = document.querySelector(".wrapper__message-form ");
 const filesInput = document.getElementById("files__input");
-const selectUploadProductForm = document.getElementById("select-upload-product-form");
+const productTypeSelect = document.getElementById("product-type");
+const selectRubric = document.getElementById("rubrics-select");
 const wrapperSelectedImages = document.querySelector(".wrapper__selected-images");
 const wrapperSelectedLeft = document.querySelector(".wrapper__selected-left");
 const wrapperSelectedRight = document.querySelector(".wrapper__selected-right");
+const availableCheckBox = document.getElementById("available");
 
-for(let i = 0; i < selectUploadProductForm.children.length; i++) {
-    if(selectUploadProductForm.children[i].value === selectUploadProductForm.getAttribute("data-type")) {
-        selectUploadProductForm.children[i].setAttribute("selected", true);
+for(let i = 0; i < productTypeSelect.children.length; i++) {
+    if(productTypeSelect.children[i].value === productTypeSelect.getAttribute("data-type")) {
+        productTypeSelect.children[i].setAttribute("selected", "true");
     }
 }
 
@@ -61,22 +63,35 @@ filesInput.addEventListener("change", function (e) {
 uploadProductForm.addEventListener("submit", async function (e) {
     e.preventDefault();
 
+    const num = e.target[1].value;
+    const name = e.target[2].value;
+    const description = e.target[3].value;
+    const price = e.target[4].value;
+    const translateLanguage = e.target[5].value;
+    const translate = e.target[6].value;
+    const translateLanguageDescription = e.target[7].value;
+    const translateDescription = e.target[8].value;
+    const rubric = e.target[9].value;
+    const type = e.target[10].value;
+    const available = e.target[11].checked;
+
     const formData = new FormData();
     const files = filesInput.files;
 
     for(let i = 0; i < files.length; i++) {
         formData.append("files", files[i]);
     }
-    formData.append("num", e.target[1].value);
-    formData.append("name", e.target[2].value);
-    formData.append("description", e.target[3].value);
-    formData.append("price", e.target[4].value);
-    formData.append("translate_language", e.target[5].value);
-    formData.append("translate", e.target[6].value);
-    formData.append("translate_language_description", e.target[7].value);
-    formData.append("translate_description", e.target[8].value);
-    formData.append("type", e.target[9].value);
-    formData.append("available", e.target[10].checked);
+    formData.append("num", num);
+    formData.append("name", name);
+    formData.append("description", description);
+    formData.append("price", price);
+    formData.append("translate_language", translateLanguage);
+    formData.append("translate", translate);
+    formData.append("translate_language_description", translateLanguageDescription);
+    formData.append("translate_description", translateDescription);
+    formData.append("type", type);
+    formData.append("available", available);
+    formData.append("rubric_id", rubric);
 
     const api = await fetch("/admin/products/" + productId, {
         method: "PATCH",
@@ -93,6 +108,22 @@ uploadProductForm.addEventListener("submit", async function (e) {
         wrapperMessageForm.style.display = "none";
         clearTimeout(timeout);
     }, 4000);
+});
+
+selectRubric.addEventListener("change", async function (e) {
+    const response = await fetch("/admin/rubrics/" + e.target.value + "/rubric-types");
+    const data = await response.json();
+
+    productTypeSelect.innerHTML = "";
+
+    for(let i = 0; i < data.length; i++) {
+        const option = document.createElement("option");
+
+        option.innerText = data[i].name;
+        option.setAttribute("value", data[i].name);
+
+        productTypeSelect.appendChild(option);
+    }
 });
 
 function createImageInWrapperSelectedImages(file) {

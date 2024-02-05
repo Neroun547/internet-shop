@@ -18,6 +18,11 @@
     {{else}}
       <h2 class="wrapper__product-content-item">{{global_not_available}}</h2>
     {{/if}}
+    {{#if partner}}
+      <strong class="product-from-partner-or-admin mt-20">Товар від партнера Zolotar</strong>
+    {{else}}
+      <strong class="product-from-partner-or-admin mt-20">Товар від Zolotar</strong>
+    {{/if}}
     {{#if inBasket}}
       <button class="wrapper__product-add-to-basket-btn" style="background-color: #eee; color: #000; cursor: initial;">
         <strong>{{global_already_in_basket}}</strong>

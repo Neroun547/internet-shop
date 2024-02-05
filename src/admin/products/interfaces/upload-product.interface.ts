@@ -1,4 +1,4 @@
-import { ProductsInterface } from "../../../db/products/interfaces/products.interface";
+import { ProductsInterface } from "../../../../db/products/interfaces/products.interface";
 
 export interface UploadProductInterface extends ProductsInterface {
   translate: string;

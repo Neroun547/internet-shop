@@ -18,6 +18,7 @@ export class ProductsServiceDb {
         productModel.type = product.type;
         productModel.num = product.num;
         productModel.user_id = product.user_id;
+        productModel.rubric_id = product.rubric_id;
 
         await this.repository.persistAndFlush(productModel);
 
@@ -27,13 +28,8 @@ export class ProductsServiceDb {
     async getProductById(id: number) {
         return await this.repository.findOne({ id: id });
     }
-
     async getProductAndImagesById(id: number) {
         return await this.repository.findOne({ id: id }, { populate: ["productsImages"] });
-    }
-
-    async getProductsById(productsId: Array<number>) {
-        return await this.repository.find({ id: { $in: productsId } });
     }
 
     async getProductsAndImagesByType(take: number, skip: number, type: string) {
@@ -51,29 +47,17 @@ export class ProductsServiceDb {
     async updateProductById(id: number, product: ProductsInterface) {
         await this.repository.nativeUpdate({ id: id }, product);
     }
-    async getCountAvailableProducts() {
-        return await this.repository.count({ available: true });
-    }
     async getCountAvailableProductsByUserId(userId: number) {
         return await this.repository.count({ user_id: userId, available: true });
     }
-    async getCountProducts() {
-        return await this.repository.count();
-    }
     async getCountProductsByUserId(userId: number) {
         return await this.repository.count({ user_id: userId });
-    }
-    async getLastProductByNum() {
-        return (await this.repository.find({}, { orderBy: { num: "DESC" }, limit: 1 }))[0];
     }
     async getLastProductByNumAndByUserId(userId: number) {
         return (await this.repository.find({ user_id: userId }, { orderBy: { num: "DESC" }, limit: 1 }))[0];
     }
     async getProductByIdAndUserId(id: number, userId: number) {
         return await this.repository.findOne({ id: id, user_id: userId });
-    }
-    async getProductByNum(num: number) {
-        return await this.repository.findOne({ num: num });
     }
     async updateProductsNumToPrev(num: number) {
         await this.repository.nativeUpdate({ num: num + 1 }, { num });

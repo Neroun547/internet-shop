@@ -25,6 +25,7 @@ import { HttpExceptionFilter } from "../../../error-filters/error-filter-admin";
 import { translateTypeProduct } from "../../../constants";
 import { TranslateServiceDb } from "../../../db/translate/translate.service";
 import { ProductsServiceAdmin } from "./service/products.service";
+import { RubricsServiceDb } from "../../../db/rubrics/rubrics.service";
 
 @Controller()
 @UseFilters(HttpExceptionFilter)
@@ -33,14 +34,15 @@ export class ProductsController {
         private productsService: ProductsService,
         private productsServiceDb: ProductsServiceDb,
         private translateServiceDb: TranslateServiceDb,
-        private productsServiceAdmin: ProductsServiceAdmin
+        private productsServiceAdmin: ProductsServiceAdmin,
+        private rubricsServiceDb: RubricsServiceDb
     ) {}
 
     @UseGuards(AuthGuard)
     @Get()
     async getProductsPage(@Req() req: Request, @Res() res: Response) {
         const productsAndImages = await this.productsServiceAdmin.getProductsAndImagesByUserId(8, 0, req["user"].id);
-        const parseProductsAndImages = this.productsService.parseProductsForLoadCards(productsAndImages, "");
+        const parseProductsAndImages = await this.productsService.parseProductsForLoadCards(productsAndImages, "");
 
         const countProducts = await this.productsServiceDb.getCountProductsByUserId(req["user"].id);
         const countAvailableProducts = await this.productsServiceDb.getCountAvailableProductsByUserId(req["user"].id);
@@ -87,12 +89,16 @@ export class ProductsController {
 
     @UseGuards(AuthGuard)
     @Get("upload-product")
-    getUploadProductPage(@Res() res: Response) {
+    async getUploadProductPage(@Res() res: Response) {
+        const rubrics = await this.rubricsServiceDb.getAllRubrics();
+
         res.render("admin/products/upload-product", {
             auth: true,
             admin: true,
             styles: ["/css/admin/products/upload-product.css"],
-            scripts: ["/js/admin/products/upload-product.js"]
+            scripts: ["/js/admin/products/upload-product.js"],
+            rubrics: rubrics.filter(el => el.selected_default !== 1),
+            selectedRubric: rubrics.find(el => el.selected_default === 1)
         });
     }
 
@@ -109,7 +115,7 @@ export class ProductsController {
     }))
     @Post()
     async uploadProduct(@Req() req: Request, @Body() body, @UploadedFiles() files: Array<Express.Multer.File>, @Res() res: Response) {
-        body.available = body.available === "true" ? true : false;
+        body.available = body.available === "true";
 
         await this.productsServiceAdmin.uploadProduct({ ...body, user_id: req["user"].id }, files);
 
@@ -122,13 +128,17 @@ export class ProductsController {
         const product = await this.productsService.getProductAndImageByProductId(id);
         const translateTitle = await this.translateServiceDb.getTranslateByKeyAndIsoCode("product_translate_" + product.id, "en");
         const translateDescription = await this.translateServiceDb.getTranslateByKeyAndIsoCode("product_translate_description_" + product.id, "en");
+        const rubricTypes = await this.rubricsServiceDb.getRubricsWithTypesByRubricId(product.rubric_id);
+        const rubrics = await this.rubricsServiceDb.getAllRubrics();
 
         res.render("admin/products/product", {
             admin: true,
-            auth: true,
             product: product,
             translateTitle: translateTitle ? translateTitle.value : "",
             translateDescription: translateDescription ? translateDescription.value : "",
+            rubricTypes: rubricTypes.rubricTypes,
+            rubrics: rubrics.filter(el => el.id !== product.rubric_id),
+            selectedRubric: rubrics.find(el => el.id === product.rubric_id),
             styles: ["/css/admin/products/upload-product.css"],
             scripts: ["/js/admin/products/edit-product.js"]
         });
@@ -157,6 +167,7 @@ export class ProductsController {
     async updateProductById(@Param("id", new ParseIntPipe()) id: number, @Req() req: Request, @UploadedFiles() files: Array<Express.Multer.File>, @Body() body) {
         body.available = body.available === "true" ? true : false;
         body.num = Number(body.num);
+        body.rubric_id = Number(body.rubric_id);
 
         await this.productsServiceAdmin.updateProductById(id, body, files, req["user"].id);
 

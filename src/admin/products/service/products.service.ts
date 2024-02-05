@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from "@nestjs/common";
 import { ProductsServiceDb } from "../../../../db/products/products.service";
 import { CommonService } from "../../../../common/common.service";
 import { translateTypeProduct } from "../../../../constants";
-import { UploadProductInterface } from "../../../products/interfaces/upload-product.interface";
+import { UploadProductInterface } from "../interfaces/upload-product.interface";
 import { rename, unlink } from "fs/promises";
 import { resolve } from "path";
 import { TranslateServiceDb } from "../../../../db/translate/translate.service";
@@ -75,7 +75,8 @@ export class ProductsServiceAdmin {
       available: product.available,
       type: product.type,
       num: product.num,
-      user_id: userId
+      user_id: userId,
+      rubric_id: product.rubric_id
     });
 
     if(files.length) {

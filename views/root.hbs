@@ -42,6 +42,11 @@
                         <p class="wrapper__products-item-content-price">{{../global_price}}: <strong>{{this.price}} грн</strong></p>
                     </div>
                 </a>
+              {{#if this.partner}}
+                <strong class="product-from-partner-or-admin text-center">Товар від партнера Zolotar</strong>
+              {{else}}
+                <strong class="product-from-partner-or-admin text-center">Товар від Zolotar</strong>
+              {{/if}}
                 {{#if this.inBasket}}
                     <button class="wrapper__product-add-to-basket-btn" style="background-color: #fff; color: #000;">
                         <strong>{{../global_already_in_basket}}</strong>

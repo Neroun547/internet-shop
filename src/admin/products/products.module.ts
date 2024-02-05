@@ -8,6 +8,7 @@ import { TranslateModuleDb } from "../../../db/translate/translate.module";
 import { ProductsServiceAdmin } from "./service/products.service";
 import { CommonModule } from "../../../common/common.module";
 import { OrdersModuleDb } from "../../../db/orders/orders.module";
+import { RubricsModuleDb } from "../../../db/rubrics/rubrics.module";
 
 @Module({
     imports: [
@@ -17,6 +18,7 @@ import { OrdersModuleDb } from "../../../db/orders/orders.module";
         ProductsModule,
         TranslateModuleDb,
         CommonModule,
+        RubricsModuleDb,
         MulterModule.register({
             dest: 'static/images',
         })

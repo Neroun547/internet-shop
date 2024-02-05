@@ -8,6 +8,7 @@ import {OrdersModuleDb} from "../../db/orders/orders.module";
 import { TranslateModule } from "../translate/translate.module";
 import { CommonModule } from "../../common/common.module";
 import { TranslateModuleDb } from "../../db/translate/translate.module";
+import { UsersModuleDb } from "../../db/users/users.module";
 
 @Module({
    imports: [
@@ -17,7 +18,8 @@ import { TranslateModuleDb } from "../../db/translate/translate.module";
       OrdersModuleDb,
       TranslateModule,
       TranslateModuleDb,
-      CommonModule
+      CommonModule,
+      UsersModuleDb
    ],
    controllers: [ProductsController],
    providers: [ProductsService],

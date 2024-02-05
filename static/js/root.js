@@ -152,7 +152,8 @@ window.addEventListener("scroll", async function () {
                         response[i].available,
                         response[i].price,
                         response[i].inBasket,
-                        response[i].translateTitle
+                        response[i].translateTitle,
+                        response[i].partner
                     )
                 )
             }
@@ -163,7 +164,7 @@ window.addEventListener("scroll", async function () {
     }
 });
 
-function createProductCard(id, filename, alt, name, type, available, price, inBasket, translateTitle) {
+function createProductCard(id, filename, alt, name, type, available, price, inBasket, translateTitle, partner) {
     const wrapperProductItem = document.createElement("div");
     wrapperProductItem.classList.add("wrapper__products-item");
 
@@ -219,6 +220,17 @@ function createProductCard(id, filename, alt, name, type, available, price, inBa
     wrapperProductsItemContentPrice.innerHTML = "Ціна: " + "<strong>" + price + "грн" + "</strong>";
 
     wrapperProductsItemContent.appendChild(wrapperProductsItemContentPrice);
+
+    const wrapperProductsItemContentPartner = document.createElement("strong");
+    wrapperProductsItemContentPartner.classList.add("product-from-partner-or-admin");
+    wrapperProductsItemContentPartner.classList.add("text-center");
+
+    if(partner) {
+        wrapperProductsItemContentPartner.innerText = "Товар від партнера Zolotar";
+    } else {
+        wrapperProductsItemContentPartner.innerText = "Товар від Zolotar";
+    }
+    wrapperProductsItemContent.appendChild(wrapperProductsItemContentPartner);
 
     if(inBasket) {
         const wrapperProductAddToBasketBtn = document.createElement("button");

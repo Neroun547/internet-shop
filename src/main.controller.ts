@@ -22,7 +22,7 @@ export class MainController {
       let parseData;
 
       if(req.cookies["iso_code_shop"] === "en") {
-        parseData = await Promise.all(this.productsService.parseProductsForLoadCards(productsAndImages, req.cookies["basket_in_shop"])
+        parseData = await Promise.all((await this.productsService.parseProductsForLoadCards(productsAndImages, req.cookies["basket_in_shop"]))
           .map(async product => {
             const translateTitle = await this.translateServiceDb.getTranslateByKeyAndIsoCode("product_translate_" + product.id, "en");
 
@@ -32,7 +32,7 @@ export class MainController {
             }
           }));
       } else {
-        parseData = parseData = this.productsService.parseProductsForLoadCards(productsAndImages, req.cookies["basket_in_shop"]);
+        parseData = parseData = await this.productsService.parseProductsForLoadCards(productsAndImages, req.cookies["basket_in_shop"]);
       }
       const maxProductsPrice = await this.productsService.getMaxPriceProducts();
       const minProductsPrice = await this.productsService.getMinPriceProducts();

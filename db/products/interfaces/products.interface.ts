@@ -7,4 +7,5 @@ export interface ProductsInterface {
     type: string;
     num: number;
     user_id: number;
+    rubric_id: number;
 }

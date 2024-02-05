@@ -5,6 +5,7 @@ import {BasketService} from "../../basket/service/basket.service";
 import { translateTypeProduct } from "../../../constants";
 import {OrdersServiceDb} from "../../../db/orders/orders.service";
 import { CommonService } from "../../../common/common.service";
+import { UsersServiceDb } from "../../../db/users/users.service";
 
 @Injectable()
 export class ProductsService {
@@ -13,10 +14,11 @@ export class ProductsService {
         private productsImagesServiceDb: ProductsImagesServiceDb,
         private basketService: BasketService,
         private ordersServiceDb: OrdersServiceDb,
-        private commonService: CommonService
+        private commonService: CommonService,
+        private usersServiceDb: UsersServiceDb
     ) {}
 
-    parseProductsForLoadCards(productsAndImages, basket?: string) {
+    async parseProductsForLoadCards(productsAndImages, basket?: string) {
         const parseArr = [];
 
         for(let i = 0; i < productsAndImages.length; i++) {
@@ -26,13 +28,15 @@ export class ProductsService {
                     parseArr.push({
                         ...productsAndImages[i],
                         file_name: productsAndImages[i].productsImages[0] ? productsAndImages[i].productsImages[0].file_name : null,
-                        inBasket: true
+                        inBasket: true,
+                        partner: (await this.usersServiceDb.getUserById(productsAndImages[i].user_id)).role === "partner"
                     });
                 } else {
                     parseArr.push({
                         ...productsAndImages[i],
                         file_name: productsAndImages[i].productsImages[0] ? productsAndImages[i].productsImages[0].file_name : null,
-                        inBasket: false
+                        inBasket: false,
+                        partner: (await this.usersServiceDb.getUserById(productsAndImages[i].user_id)).role === "partner"
                     });
                 }
             }
@@ -82,7 +86,9 @@ export class ProductsService {
            type: productAndImages.type,
            description: productAndImages.description,
            available: productAndImages.available,
-           images: [...productAndImages.productsImages].map((el) => el.file_name)
+           images: [...productAndImages.productsImages].map((el) => el.file_name),
+           role: (await this.usersServiceDb.getUserById(productAndImages.user_id)).role === "partner",
+           rubric_id: productAndImages.rubric_id
        }
     }
 

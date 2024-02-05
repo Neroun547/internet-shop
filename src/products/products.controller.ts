@@ -25,7 +25,7 @@ export class ProductsController {
         const productsAndImages = await this.productsService.getProductsByFilters(8, 0, available, priceFrom, priceTo, type);
 
         if(req.cookies["iso_code_shop"] === "en") {
-            return await Promise.all(this.productsService.parseProductsForLoadCards(productsAndImages, req.cookies["basket_in_shop"])
+            return await Promise.all((await this.productsService.parseProductsForLoadCards(productsAndImages, req.cookies["basket_in_shop"]))
               .map(async product => {
                   const translateTitle = (await this.translateServiceDb.getTranslateByKeyAndIsoCode("product_translate_" + product.id, "en"));
 
@@ -35,7 +35,7 @@ export class ProductsController {
                   }
               }));
         } else {
-            return this.productsService.parseProductsForLoadCards(productsAndImages, req.cookies["basket_in_shop"]);
+            return await this.productsService.parseProductsForLoadCards(productsAndImages, req.cookies["basket_in_shop"]);
         }
     }
 
@@ -53,7 +53,7 @@ export class ProductsController {
             const productsAndImages = await this.productsService.getProductsByFilters(take, skip, available, Number(priceFrom), Number(priceTo), type);
 
             if(req.cookies["iso_code_shop"] === "en") {
-                return await Promise.all(this.productsService.parseProductsForLoadCards(productsAndImages, req.cookies["basket_in_shop"])
+                return await Promise.all((await this.productsService.parseProductsForLoadCards(productsAndImages, req.cookies["basket_in_shop"]))
                   .map(async product => {
                       const translateTitle = await this.translateServiceDb.getTranslateByKeyAndIsoCode("product_translate_" + product.id, "en");
 
@@ -63,13 +63,13 @@ export class ProductsController {
                       }
                   }));
             } else {
-                return this.productsService.parseProductsForLoadCards(productsAndImages, req.cookies["basket_in_shop"]);
+                return await this.productsService.parseProductsForLoadCards(productsAndImages, req.cookies["basket_in_shop"]);
             }
         } else {
             const productsAndImages = await this.productsService.getProductsByType(take, skip, type);
 
             if(req.cookies["iso_code_shop"] === "en") {
-                return await Promise.all(this.productsService.parseProductsForLoadCards(productsAndImages, req.cookies["basket_in_shop"])
+                return await Promise.all((await this.productsService.parseProductsForLoadCards(productsAndImages, req.cookies["basket_in_shop"]))
                   .map(async product => {
                       const translateTitle = await this.translateServiceDb.getTranslateByKeyAndIsoCode("product_translate_" + product.id, "en");
 
@@ -79,7 +79,7 @@ export class ProductsController {
                       }
                   }));
             } else {
-                return this.productsService.parseProductsForLoadCards(productsAndImages, req.cookies["basket_in_shop"]);
+                return await this.productsService.parseProductsForLoadCards(productsAndImages, req.cookies["basket_in_shop"]);
             }
         }
     }
@@ -90,7 +90,7 @@ export class ProductsController {
         let parseProducts;
 
         if(req.cookies["iso_code_shop"] === "en") {
-            parseProducts = await Promise.all(this.productsService.parseProductsForLoadCards(products, req.cookies["basket_in_shop"])
+            parseProducts = await Promise.all((await this.productsService.parseProductsForLoadCards(products, req.cookies["basket_in_shop"]))
               .map(async product => {
                   const translateTitle = (await this.translateServiceDb.getTranslateByKeyAndIsoCode("product_translate_" + product.id, "en"));
 
@@ -100,7 +100,7 @@ export class ProductsController {
                   }
               }));
         } else {
-            parseProducts = this.productsService.parseProductsForLoadCards(products, req.cookies["basket_in_shop"]);
+            parseProducts = await this.productsService.parseProductsForLoadCards(products, req.cookies["basket_in_shop"]);
         }
         const maxProductsPrice = await this.productsService.getMaxPriceProductsByType(type);
         const minProductsPrice = await this.productsService.getMinPriceProductsByType(type);

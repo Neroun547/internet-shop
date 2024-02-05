@@ -30,14 +30,21 @@
     </select>
     <input type="text" placeholder="Переклад опису:" value="{{translateDescription}}">
 
-    <select name="type" id="select-upload-product-form" data-type="{{product.type}}">
-        <option value="Сережки">Сережки</option>
-        <option value="Підвіски">Підвіски</option>
-        <option value="Дукачі">Дукачі</option>
-        <option value="Браслети">Браслети</option>
-        <option value="Комплекти">Комплекти</option>
-        <option value="Інше">Інше</option>
+    <label for="rubrics-select" class="mt-20">Рубрика товару:</label>
+    <select type="text" id="rubrics-select">
+      <option value="{{selectedRubric.id}}" selected>{{selectedRubric.name}}</option>
+      {{#each rubrics}}
+        <option value="{{this.id}}">{{this.name}}</option>
+      {{/each}}
     </select>
+
+    <label for="product-type" class="mt-20">Тип товару:</label>
+    <select name="type" id="product-type" data-type="{{product.type}}">
+      {{#each rubricTypes}}
+        <option value="{{this.name}}">{{this.name}}</option>
+      {{/each}}
+    </select>
+
     <label for="available" style="margin-top: 50px">Є в наявності ?</label>
     {{#if product.available}}
         <input type="checkbox" id="available" style="margin: 0; width: min-content;" name="available" checked>
