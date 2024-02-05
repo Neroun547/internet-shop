@@ -51,8 +51,7 @@ export class ProductsService {
 
                 return serializedData.map(el => {
                     return {
-                        ...el,
-                        type: this.commonService.getTypeProductByValue(el.type).key
+                        ...el
                     }
                 });
             } else {
@@ -64,8 +63,7 @@ export class ProductsService {
 
             return serializedData.map(el => {
                 return {
-                    ...el,
-                    type: this.commonService.getTypeProductByValue(el.type).key
+                    ...el
                 }
             });
         } else {

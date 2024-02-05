@@ -6,7 +6,7 @@ import {
   Get,
   Param,
   ParseIntPipe, Patch,
-  Post,
+  Post, Query,
   Req,
   Res,
   UseGuards
@@ -16,10 +16,16 @@ import { AuthGuard } from "../auth/guards/auth.guard";
 import { PartnersService } from "./service/partners.service";
 import { CreatePartnerDto } from "./dto/create-partner.dto";
 import { UpdatePartnerNameDto } from "./dto/update-partner-name.dto";
+import { OrdersServiceDb } from "../../../db/orders/orders.service";
+import { OrdersService } from "../orders/service/orders.service";
 
 @Controller()
 export class PartnersController {
-  constructor(private partnersService: PartnersService) {}
+  constructor(
+    private partnersService: PartnersService,
+    private ordersServiceDb: OrdersServiceDb,
+    private ordersService: OrdersService
+  ) {}
 
   @UseGuards(AuthGuard)
   @Get()
@@ -87,6 +93,47 @@ export class PartnersController {
     } else {
       throw new ForbiddenException();
     }
+  }
+
+  @UseGuards(AuthGuard)
+  @Get("info-page/:id/orders")
+  async getPartnerOrdersPage(@Req() req: Request, @Param("id", new ParseIntPipe()) id: number, @Res() res: Response) {
+    if(req["user"].role === "admin") {
+      const orders = await this.partnersService.getOrdersByUserId(id, 10, 0);
+
+      if(!orders.length) {
+        res.render("admin/partners/partner-orders", {
+          admin: true,
+          orders: false,
+          countOrders: 0,
+          styles: ["/css/admin/orders/orders.css"],
+          scripts: ["/js/admin/partners/partner-orders.js"]
+        });
+      } else {
+        const countOrders = await this.ordersServiceDb.getCountOrdersByStatusAndUserId("", id);
+
+        res.render("admin/partners/partner-orders", {
+          admin: true,
+          orders: orders,
+          countOrders: countOrders,
+          userId: id,
+          styles: ["/css/admin/orders/orders.css"],
+          scripts: ["/js/admin/partners/partner-orders.js"]
+        });
+      }
+    } else {
+      throw new ForbiddenException();
+    }
+  }
+
+  @UseGuards(AuthGuard)
+  @Get("info-page/:id/orders/load-more")
+  async loadMoreOrders(
+    @Param("id", new ParseIntPipe()) userId: number,
+    @Query("take", new ParseIntPipe()) take: number,
+    @Query("skip", new ParseIntPipe()) skip: number) {
+
+    return { orders: await this.partnersService.getOrdersByUserId(userId, take, skip) };
   }
 
   @UseGuards(AuthGuard)

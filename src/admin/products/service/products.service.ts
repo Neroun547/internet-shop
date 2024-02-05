@@ -34,8 +34,7 @@ export class ProductsServiceAdmin {
 
     return serializedProductsAndImages.map(el => {
       return {
-        ...el,
-        type: this.commonService.getTypeProductByValue(el.type).value
+        ...el
       }
     });
   }

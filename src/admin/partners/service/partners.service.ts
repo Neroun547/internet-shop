@@ -11,6 +11,9 @@ import { ArticlesServiceDb } from "../../../../db/articles/articles.service";
 import { ProductsServiceDb } from "../../../../db/products/products.service";
 import { ProductsImagesServiceDb } from "../../../../db/products-images/products-images.service";
 import { unlink } from "fs/promises";
+const Moment = require("moment");
+
+Moment.locale("uk");
 
 @Injectable()
 export class PartnersService {
@@ -108,5 +111,30 @@ export class PartnersService {
     await this.usersServiceDb.updateUserPasswordById(newPasswordHash, id);
 
     return newPassword;
+  }
+
+  async getOrdersByUserId(userId: number, take: number, skip: number) {
+    const orders = await this.ordersServiceDb.getOrdersAndProductsByUserId(take, skip, userId);
+    const objectWithOrders = {};
+
+    for(let i = 0; i < orders.length; i++) {
+      if(objectWithOrders[orders[i].id_order]) {
+        // @ts-ignore
+        objectWithOrders[orders[i].id_order].sum += orders[i].product.price;
+      } else {
+        objectWithOrders[orders[i].id_order] = {
+          ...orders[i],
+          created_at: new Moment(orders[i].created_at).format("LLLL"),
+          // @ts-ignore
+          sum: orders[i].product.price
+        };
+      }
+    }
+    const parseArr = [];
+
+    for(const key in objectWithOrders) {
+      parseArr.push(objectWithOrders[key]);
+    }
+    return parseArr;
   }
 }

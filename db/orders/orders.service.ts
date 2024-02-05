@@ -104,4 +104,8 @@ export class OrdersServiceDb {
     async deleteOrdersByUserId(userId: number) {
         await this.repository.nativeDelete({ user_id: userId });
     }
+
+    async getOrdersAndProductsByUserId(take: number, skip: number, userId: number) {
+        return await this.repository.find({ user_id: userId }, { limit: take, offset: skip, populate: ["product"] });
+    }
 }
