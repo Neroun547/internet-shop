@@ -228,4 +228,11 @@ export class ProductsServiceDb {
           }, {limit: take, offset: skip, populate: ["productsImages"], orderBy: {num: "ASC"}});
       }
   }
+  async deleteProductsByRubricId(rubricId: number) {
+        await this.repository.nativeDelete({ rubric_id: rubricId });
+  }
+
+  async getProductsByRubricId(rubricId: number) {
+        return await this.repository.find({ rubric_id: rubricId });
+  }
 }

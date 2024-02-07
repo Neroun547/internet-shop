@@ -24,8 +24,8 @@ export class OrdersService {
         await this.ordersServiceDb.deleteOrderByOrderId(idOrder);
     }
 
-    async changeStatusByOrderId(idOrder: string, status: string) {
-        await this.ordersServiceDb.changeStatusByOrderId(idOrder, status);
+    async changeStatusByOrderIdAndUserId(idOrder: string, status: string, userId: number) {
+        await this.ordersServiceDb.changeStatusByOrderIdAndUserId(idOrder, status, userId);
     }
 
     async deleteStatusByOrderId(idOrder: string) {

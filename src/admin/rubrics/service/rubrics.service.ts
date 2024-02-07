@@ -1,12 +1,18 @@
 import { BadRequestException, Injectable } from "@nestjs/common";
 import { RubricsServiceDb } from "../../../../db/rubrics/rubrics.service";
 import { RubricsTypesServiceDb } from "../../../../db/rubrics-types/rubrics-types.service";
+import { ProductsServiceDb } from "../../../../db/products/products.service";
+import { OrdersServiceDb } from "../../../../db/orders/orders.service";
+import { ProductsImagesServiceDb } from "../../../../db/products-images/products-images.service";
 
 @Injectable()
 export class RubricsService {
   constructor(
     private rubricsServiceDb: RubricsServiceDb,
-    private rubricsTypesServiceDb: RubricsTypesServiceDb
+    private rubricsTypesServiceDb: RubricsTypesServiceDb,
+    private productsServiceDb: ProductsServiceDb,
+    private ordersServiceDb: OrdersServiceDb,
+    private productImagesServiceDb: ProductsImagesServiceDb
   ) {}
 
   async createRubricAndReturnId(name: string, types: Array<string>): Promise<number> {
@@ -26,6 +32,13 @@ export class RubricsService {
     return rubricId;
   }
   async deleteRubricById(rubricId: number) {
+    const products = await this.productsServiceDb.getProductsByRubricId(rubricId);
+
+    for(let i = 0; i < products.length; i++) {
+      await this.ordersServiceDb.deleteOrdersByProductId(products[i].id);
+      await this.productImagesServiceDb.deleteProductImagesByProductId(products[i].id);
+    }
+    await this.productsServiceDb.deleteProductsByRubricId(rubricId);
     await this.rubricsTypesServiceDb.deleteRubricTypesByRubricId(rubricId);
     await this.rubricsServiceDb.deleteRubricById(rubricId);
   }

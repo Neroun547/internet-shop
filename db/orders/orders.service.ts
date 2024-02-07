@@ -28,24 +28,9 @@ export class OrdersServiceDb {
         await this.repository.persistAndFlush(orderModel);
     }
 
-    async getOrders(take: number, skip: number) {
-        return await this.em.execute("SELECT DISTINCT id_order, created_at, status FROM orders ORDER BY created_at DESC LIMIT ? OFFSET ?",
-            [take, skip]);
-    }
-
     async getOrdersByUserId(take: number, skip: number, userId: number) {
         return await this.em.execute("SELECT DISTINCT id_order, created_at, status FROM orders WHERE user_id = ? ORDER BY created_at DESC LIMIT ? OFFSET ?",
           [userId, take, skip]);
-    }
-
-    async getOrdersByStatus(take: number, skip: number, status: string | null) {
-        if(status === null) {
-            return await this.em.execute("SELECT DISTINCT id_order, created_at, status FROM orders WHERE status IS NULL ORDER BY created_at DESC LIMIT ? OFFSET ?",
-                [take, skip]);
-        } else {
-            return await this.em.execute("SELECT DISTINCT id_order, created_at, status FROM orders WHERE status = ? ORDER BY created_at DESC LIMIT ? OFFSET ?",
-                [status, take, skip]);
-        }
     }
 
     async getOrdersByStatusAndUserId(take: number, skip: number, status: string | null, userId: number) {
@@ -57,12 +42,6 @@ export class OrdersServiceDb {
               [status, userId, take, skip]);
         }
     }
-
-    async getOrderAndProductByOrderId(orderId: string) {
-        return await this.repository.find({ id_order: orderId }, { populate: ["product"] })
-    }
-
-
     async deleteOrderByOrderId(orderId: string) {
         await this.repository.nativeDelete({ id_order: orderId });
     }
@@ -70,25 +49,11 @@ export class OrdersServiceDb {
     async deleteOrdersByProductId(productId: number) {
         await this.repository.nativeDelete({ product: productId });
     }
-
-    async changeStatusByOrderId(orderId: string, status: string) {
-        await this.repository.nativeUpdate({ id_order: orderId }, { status: status });
-    }
     async deleteStatusByOrderId(orderId: string) {
         await this.repository.nativeUpdate({ id_order: orderId }, { status: null });
     }
     async addAdminNoteByIdOrder(idOrder: string, note: string) {
         await this.repository.nativeUpdate({ id_order: idOrder }, { admin_note: note });
-    }
-    async getCountOrdersByStatus(status: string) {
-
-        if(status && status !== "not_completed") {
-            return (await this.em.execute("SELECT COUNT(DISTINCT id_order) AS 'value' FROM orders WHERE status = ?", [status]))[0].value;
-        }
-        if(status && status === "not_completed") {
-            return (await this.em.execute("SELECT COUNT(DISTINCT id_order) AS 'value' FROM orders WHERE status IS NULL"))[0].value;
-        }
-        return (await this.em.execute("SELECT COUNT(DISTINCT id_order) AS 'value' FROM orders"))[0].value;
     }
 
     async getCountOrdersByStatusAndUserId(status: string, userId: number) {
@@ -109,7 +74,11 @@ export class OrdersServiceDb {
         return await this.repository.find({ user_id: userId }, { limit: take, offset: skip, populate: ["product"], orderBy: { created_at: "DESC" } });
     }
 
-  async getOrderAndProductByOrderIdAndUserId(orderId: string, userId: number) {
-      return await this.repository.find({ id_order: orderId, user_id: userId }, { populate: ["product"] })
-  }
+    async getOrderAndProductByOrderIdAndUserId(orderId: string, userId: number) {
+          return await this.repository.find({ id_order: orderId, user_id: userId }, { populate: ["product"] })
+    }
+
+    async changeStatusByOrderIdAndUserId(idOrder: string, status: string, userId: number) {
+        await this.repository.nativeUpdate({ id_order: idOrder, user_id: userId }, { status: status });
+    }
 }

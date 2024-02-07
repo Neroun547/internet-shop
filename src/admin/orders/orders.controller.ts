@@ -103,8 +103,8 @@ export class OrdersController {
 
     @UseGuards(AuthGuard)
     @Patch("/change-status/:idOrder")
-    async changeStatusOrderByOrderId(@Param("idOrder") idOrder: string, @Body() body: ChangeStatusDto) {
-        await this.ordersService.changeStatusByOrderId(idOrder, body.status);
+    async changeStatusOrderByOrderId(@Req() req: Request, @Param("idOrder") idOrder: string, @Body() body: ChangeStatusDto) {
+        await this.ordersService.changeStatusByOrderIdAndUserId(idOrder, body.status, req["user"].id);
 
         return;
     }

@@ -1,4 +1,5 @@
 import { createRubricItem } from "./create-rubric-item.js";
+import { questionModal } from "../../common/question-modal.js";
 
 const addRubricForm = document.getElementById("add-rubric-form");
 const wrapperRubricsFormMessage = document.querySelector(".wrapper__add-rubrics-form-message");
@@ -70,10 +71,13 @@ addTypeToRubricBtn.addEventListener("click", function () {
 
 for(let i = 0; i < deleteRubricsButtons.length; i++) {
   deleteRubricsButtons[i].addEventListener("click", async function () {
-    deleteRubricsButtons[i].parentElement.remove();
+    async function removeRubric() {
+      deleteRubricsButtons[i].parentElement.remove();
 
-    await fetch("/admin/rubrics/" + deleteRubricsButtons[i].parentElement.getAttribute("id"), {
-      method: "DELETE"
-    });
+      await fetch("/admin/rubrics/" + deleteRubricsButtons[i].parentElement.getAttribute("id"), {
+        method: "DELETE"
+      });
+    }
+    questionModal("Ви дійсно хочете видалити цю рубрику ? Всі товари з цієї рубрики, замовлення буде видалено.", removeRubric, false);
   });
 }
