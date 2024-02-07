@@ -148,4 +148,13 @@
     transition: .3s;
 }
 
+@media screen and (max-width: 500px) {
+    .wrapper__rubrics-btn {
+        font-size: 14px;
+    }
+    .wrapper__rubrics-btn-active {
+        font-size: 14px;
+    }
+}
+
 

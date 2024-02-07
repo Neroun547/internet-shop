@@ -5,8 +5,6 @@ import {BasketService} from "../basket/service/basket.service";
 import { TranslateService } from "../translate/service/translate.service";
 import { TranslateServiceDb } from "../../db/translate/translate.service";
 import { RubricsTypesServiceDb } from "../../db/rubrics-types/rubrics-types.service";
-import { RubricsServiceDb } from "../../db/rubrics/rubrics.service";
-import { translateTypeProduct } from "../../constants";
 
 @Controller()
 export class ProductsController {
@@ -15,8 +13,7 @@ export class ProductsController {
         private basketService: BasketService,
         private translateService: TranslateService,
         private translateServiceDb: TranslateServiceDb,
-        private rubricsTypesServiceDb: RubricsTypesServiceDb,
-        private rubricsServiceDb: RubricsServiceDb
+        private rubricsTypesServiceDb: RubricsTypesServiceDb
     ) {}
 
     @Get("by-filters")
