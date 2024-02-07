@@ -147,9 +147,9 @@ export class ProductsController {
         let products;
 
         if(rubricId === 0) {
-            products = await this.productsService.getProductsByType(10, 0, "", req.cookies["iso_code_shop"]);
+            products = await this.productsService.getProductsByType(8, 0, "", req.cookies["iso_code_shop"]);
         } else {
-            products = await this.productsService.getProductsByRubricId(rubricId, 10, 0);
+            products = await this.productsService.getProductsByRubricId(rubricId, 8, 0);
         }
         let parseProducts;
 
