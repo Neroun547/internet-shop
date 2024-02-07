@@ -17,4 +17,7 @@ export class RubricsTypesServiceDb {
   async deleteRubricTypesByRubricId(rubricId: number) {
     await this.rubricsTypesRepository.nativeDelete({ rubric_id: rubricId });
   }
+  async getTypeById(id: number) {
+    return await this.rubricsTypesRepository.findOne({ id: id });
+  }
 }

@@ -80,7 +80,7 @@ export class OrdersController {
     @UseGuards(AuthGuard)
     @Get(":idOrder")
     async getOrderPage(@Req() req: Request, @Param("idOrder") idOrder: string, @Res() res: Response) {
-        const order = await this.ordersService.getOrderAndProductByOrderId(idOrder);
+        const order = await this.ordersService.getOrderAndProductByOrderIdAndUserId(idOrder, req["user"].id);
 
         res.render("admin/orders/order", {
             auth: true,

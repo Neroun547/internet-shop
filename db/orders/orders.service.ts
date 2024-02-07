@@ -108,4 +108,8 @@ export class OrdersServiceDb {
     async getOrdersAndProductsByUserId(take: number, skip: number, userId: number) {
         return await this.repository.find({ user_id: userId }, { limit: take, offset: skip, populate: ["product"] });
     }
+
+  async getOrderAndProductByOrderIdAndUserId(orderId: string, userId: number) {
+      return await this.repository.find({ id_order: orderId, user_id: userId }, { populate: ["product"] })
+  }
 }

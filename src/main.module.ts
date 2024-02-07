@@ -26,6 +26,7 @@ import { TranslateModule } from "./translate/translate.module";
 import { TranslateModuleDb } from "../db/translate/translate.module";
 import { PartnersModule } from "./admin/partners/partners.module";
 import { RubricsModule } from "./admin/rubrics/rubrics.module";
+import { RubricsModuleDb } from "../db/rubrics/rubrics.module";
 
 @Module({
   imports: [
@@ -55,6 +56,7 @@ import { RubricsModule } from "./admin/rubrics/rubrics.module";
       TranslateModuleDb,
       PartnersModule,
       RubricsModule,
+      RubricsModuleDb,
       MikroOrmModule.forRoot({
           dbName: process.env.DB_NAME,
           user: process.env.DB_USER,

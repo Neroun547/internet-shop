@@ -12,6 +12,7 @@ const addToBasketBtn = document.querySelectorAll(".wrapper__product-add-to-baske
 
 const wrapperProducts = document.querySelector(".wrapper__products");
 const productsType = wrapperProducts.getAttribute("data-type");
+const activeRubric = wrapperProducts.getAttribute("data-rubric");
 
 let skip = 8;
 let limitForScroll = 150;
@@ -50,7 +51,7 @@ wrapperFiltersForm.addEventListener("submit", async function (e) {
     priceFromFilter = wrapperFiltersInputFrom.value;
     priceToFilter = wrapperFiltersInputTo.value;
 
-    const products = await fetch("/products/by-filters?priceFrom=" + priceFromFilter + "&priceTo=" + priceToFilter + "&available=" + availableFilter + "&type=" + productsType);
+    const products = await fetch("/products/by-filters?priceFrom=" + priceFromFilter + "&priceTo=" + priceToFilter + "&available=" + availableFilter + "&type=" + productsType + "&rubricId=" + activeRubric);
     const response = await products.json();
 
     skip = 8;
@@ -136,6 +137,9 @@ window.addEventListener("scroll", async function () {
         }
         if(availableFilter && priceFromFilter && priceToFilter) {
             loadMoreUrl += "&priceFrom=" + priceFromFilter + "&priceTo=" + priceToFilter + "&available=" + availableFilter;
+        }
+        if(activeRubric) {
+            loadMoreUrl += "&rubricId=" + activeRubric;
         }
         products = await fetch(loadMoreUrl);
         const response = await products.json();

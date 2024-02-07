@@ -1,3 +1,18 @@
+<div class="wrapper__rubrics mt-50">
+  <h2>Рубрики:</h2>
+  {{#each rubrics}}
+    {{#if this.active}}
+      <a href="/products/by-rubrics/{{this.id}}">
+        <button class="wrapper__rubrics-btn-active mt-20">{{this.name}}</button>
+      </a>
+    {{else}}
+      <a href="/products/by-rubrics/{{this.id}}">
+        <button class="wrapper__rubrics-btn mt-20">{{this.name}}</button>
+      </a>
+    {{/if}}
+  {{/each}}
+</div>
+
 {{#if products}}
 <div class="wrapper__filters">
     <form class="wrapper__filters-form">
@@ -21,7 +36,7 @@
 <button class="show-filters-btn">{{global_filters}}</button>
 {{/if}}
 
-<div class="wrapper__products" data-type="{{type}}">
+<div class="wrapper__products" data-type="{{type}}" data-rubric="{{rubric_id}}">
     {{#if products}}
         {{#each products}}
             <div class="wrapper__products-item">

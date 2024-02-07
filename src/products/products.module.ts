@@ -9,17 +9,21 @@ import { TranslateModule } from "../translate/translate.module";
 import { CommonModule } from "../../common/common.module";
 import { TranslateModuleDb } from "../../db/translate/translate.module";
 import { UsersModuleDb } from "../../db/users/users.module";
+import { RubricsTypesModuleDb } from "../../db/rubrics-types/rubrics-types.module";
+import { RubricsModuleDb } from "../../db/rubrics/rubrics.module";
 
 @Module({
    imports: [
-     BasketModule,
+      BasketModule,
       ProductsModuleDb,
       ProductsImagesModuleDb,
       OrdersModuleDb,
       TranslateModule,
       TranslateModuleDb,
       CommonModule,
-      UsersModuleDb
+      UsersModuleDb,
+      RubricsTypesModuleDb,
+      RubricsModuleDb
    ],
    controllers: [ProductsController],
    providers: [ProductsService],

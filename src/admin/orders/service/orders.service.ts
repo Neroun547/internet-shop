@@ -16,8 +16,8 @@ export class OrdersService {
         return this.parseOrders(await this.ordersServiceDb.getOrdersByStatusAndUserId(take, skip, status, userId));
     }
 
-    async getOrderAndProductByOrderId(orderId: string) {
-        return this.parseOrder(await this.ordersServiceDb.getOrderAndProductByOrderId(orderId));
+    async getOrderAndProductByOrderIdAndUserId(orderId: string, userId: number) {
+        return this.parseOrder(await this.ordersServiceDb.getOrderAndProductByOrderIdAndUserId(orderId, userId));
     }
 
     async deleteOrderByOrderId(idOrder: string) {

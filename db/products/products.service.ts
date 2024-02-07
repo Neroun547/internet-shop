@@ -175,4 +175,57 @@ export class ProductsServiceDb {
     async deleteProductsByUserId(userId: number) {
         await this.repository.nativeDelete({ user_id: userId });
     }
+    async getProductsAndImagesByRubricId(rubricId: number, take: number, skip: number) {
+        return await this.repository.find({ rubric_id: rubricId }, { limit: take, offset: skip, populate: ["productsImages"], orderBy: { num: "ASC" } });
+    }
+
+    async getMaxPriceProductsByRubricId(rubricId: number) {
+        const data = (await this.repository.find({ rubric_id: rubricId }, { orderBy: { price: "DESC" }, limit: 1 }))[0];
+
+        return data ? data.price : null;
+    }
+
+    async getMinPriceProductsByRubricId(rubricId: number) {
+        const data = (await this.repository.find({ rubric_id: rubricId }, { orderBy: { price: "ASC" }, limit: 1 }))[0];
+
+        return data ? data.price : null;
+    }
+
+  async getProductsAndImagesByFiltersAndRubricId(take: number, skip: number, priceFrom: number, priceTo: number, type: any, available: boolean, rubricId: number) {
+      if(available !== undefined) {
+          if(type) {
+              return await this.repository.find({
+                  rubric_id: rubricId,
+                  price: {
+                      $gte: priceFrom,
+                      $lte: priceTo
+                  }, available: available, type: type
+              }, {limit: take, offset: skip, populate: ["productsImages"], orderBy: {num: "ASC"}});
+          }
+          return await this.repository.find({
+              rubric_id: rubricId,
+              price: {
+                  $gte: priceFrom,
+                  $lte: priceTo
+              }, available: available
+          }, {limit: take, offset: skip, populate: ["productsImages"], orderBy: {num: "ASC"}});
+      } else {
+          if(type) {
+              return await this.repository.find({
+                  rubric_id: rubricId,
+                  price: {
+                      $gte: priceFrom,
+                      $lte: priceTo
+                  }, type: type
+              }, {limit: take, offset: skip, populate: ["productsImages"], orderBy: {num: "ASC"}});
+          }
+          return await this.repository.find({
+              rubric_id: rubricId,
+              price: {
+                  $gte: priceFrom,
+                  $lte: priceTo
+              }
+          }, {limit: take, offset: skip, populate: ["productsImages"], orderBy: {num: "ASC"}});
+      }
+  }
 }

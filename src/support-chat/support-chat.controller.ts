@@ -1,8 +1,7 @@
 import {
     Body,
     Controller,
-    Delete,
-    Get, Param,
+    Get,
     ParseIntPipe,
     Post,
     Query,
@@ -17,30 +16,46 @@ import {SupportChatAuthGuard} from "./auth/guards/support-chat-auth.guard";
 import {HttpExceptionFilter} from "../../error-filters/error-filter-client-chat";
 import {SaveMessageDto} from "./dto/save-message.dto";
 import { TranslateService } from "../translate/service/translate.service";
+import { RubricsTypesServiceDb } from "../../db/rubrics-types/rubrics-types.service";
 
 @Controller()
 @UseFilters(HttpExceptionFilter)
 export class SupportChatController {
     constructor(
       private chatService: SupportChatService,
-      private translateService: TranslateService
+      private translateService: TranslateService,
+      private rubricsTypesServiceDb: RubricsTypesServiceDb
     ) {}
 
     @Get()
     @UseGuards(SupportChatAuthGuard)
-    async chatPage(@Req() req: Request, @Res() res: Response) {
+    async chatPage(@Req() req: Request, @Res() res: Response, @Query("rubricId") rubricId) {
         const messages = await this.chatService.getMessages(req["user"].id, 10, 0);
         const translate = await this.translateService.getTranslateObjectByKeyAndIsoCode("support_chat_page", req.cookies["iso_code_shop"]);
 
-        res.render("support-chat/chat", {
-            styles: ["/css/chat/chat.css", "/css/chat-media.css"],
-            scripts: ["/js/chat/chat.js"],
-            messages: messages,
-            idLastMessage: messages[messages.length - 1] ? messages[messages.length - 1].id : -1,
-            loadMore: messages.length === 10,
-            activeLanguage: req.cookies["iso_code_shop"],
-            ...translate
-        });
+        if(rubricId) {
+            res.render("support-chat/chat", {
+                styles: ["/css/chat/chat.css", "/css/chat-media.css"],
+                scripts: ["/js/chat/chat.js"],
+                messages: messages,
+                idLastMessage: messages[messages.length - 1] ? messages[messages.length - 1].id : -1,
+                loadMore: messages.length === 10,
+                activeLanguage: req.cookies["iso_code_shop"],
+                filtersMenuItems: await this.rubricsTypesServiceDb.getTypesByRubricId(Number(rubricId)),
+                rubric_id: rubricId,
+                ...translate
+            });
+        } else {
+            res.render("support-chat/chat", {
+                styles: ["/css/chat/chat.css", "/css/chat-media.css"],
+                scripts: ["/js/chat/chat.js"],
+                messages: messages,
+                idLastMessage: messages[messages.length - 1] ? messages[messages.length - 1].id : -1,
+                loadMore: messages.length === 10,
+                activeLanguage: req.cookies["iso_code_shop"],
+                ...translate
+            });
+        }
     }
 
     @Post("save-message")

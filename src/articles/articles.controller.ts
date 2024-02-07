@@ -2,18 +2,27 @@ import { Controller, Get, Param, ParseIntPipe, Query, Req, Res } from "@nestjs/c
 import { Response, Request } from "express";
 import {ArticlesService} from "./service/articles.service";
 import { TranslateService } from "../translate/service/translate.service";
+import { RubricsTypesServiceDb } from "../../db/rubrics-types/rubrics-types.service";
 
 @Controller()
 export class ArticlesController {
     constructor(
       private articlesService: ArticlesService,
-      private translateService: TranslateService
+      private translateService: TranslateService,
+      private rubricsTypesServiceDb: RubricsTypesServiceDb
     ) {}
 
     @Get()
-    async getArticlesPage(@Req() req: Request, @Res() res: Response) {
+    async getArticlesPage(@Req() req: Request, @Res() res: Response, @Query("rubricId") rubricId) {
         const articles = await this.articlesService.getArticles(10, 0);
         const translate = await this.translateService.getTranslateObjectByKeyAndIsoCode("articles_page", req.cookies["iso_code_shop"]);
+        let rubricsTypes;
+
+        if(!isNaN(Number(rubricId))) {
+            rubricsTypes = await this.rubricsTypesServiceDb.getTypesByRubricId(rubricId);
+        } else {
+            rubricsTypes = [];
+        }
 
         if(articles.length) {
             res.render("articles/articles", {
@@ -22,7 +31,9 @@ export class ArticlesController {
                 scripts: ["/js/articles/articles.js"],
                 loadMore: articles.length === 10,
                 activeLanguage: req.cookies["iso_code_shop"],
-                ...translate
+                ...translate,
+                filtersMenuItems: rubricsTypes.length ? rubricsTypes : false,
+                rubric_id: rubricId
             });
         } else {
             res.render("articles/articles", {
