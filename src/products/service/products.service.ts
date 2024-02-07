@@ -58,7 +58,6 @@ export class ProductsService {
         }
         if(!isNaN(Number(type))) {
             const productType = await this.rubricsTypesServiceDb.getTypeById(Number(type));
-
             return await this.productsServiceDb.getProductsAndImagesByType(take, skip, productType.name);
         }
         if(type) {

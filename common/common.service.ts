@@ -1,8 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { randomBytes } from "crypto";
 import { request } from "https";
-import { translateTypeProduct } from "../constants";
-import { GetTypeProductByValueInterface } from "./interfaces/get-type-product-by-value.interface";
 
 @Injectable()
 export class CommonService {
@@ -27,13 +25,6 @@ export class CommonService {
             });
             api.end();
         });
-    }
-    getTypeProductByValue(value: string): GetTypeProductByValueInterface {
-        for(const key in translateTypeProduct) {
-            if(translateTypeProduct[key] === value) {
-                return { key: key, value: translateTypeProduct[key] }
-            }
-        }
     }
     generateRandomPassword(): string {
         const letters = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "G", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"];
