@@ -1,0 +1,29 @@
+<div class="wrapper__orders" id="{{userId}}">
+  <h2 class="wrapper__orders-logo">Замовлення</h2>
+  <h2 class="mt-50">Кількість замовлень: <span id="count-orders">{{countOrders}}</span></h2>
+  {{#if orders}}
+    {{#each orders}}
+      <div class="wrapper__orders-item">
+        <div class="wrapper__orders-item-complete">
+          {{#if (equals this.status "completed")}}
+            <span style="color: #69B904FF;">Виконано</span>
+          {{/if}}
+          {{#if (equals this.status "returned")}}
+            <span style="color: #000;">Повернено клієнтом</span>
+          {{/if}}
+          {{#if (equals this.status "in_process")}}
+            <span style="color: #000;">В процесі</span>
+          {{/if}}
+          {{#if (isNotStatus this.status)}}
+            <span>Не виконано</span>
+          {{/if}}
+        </div>
+        <div class="wrapper__orders-item-date">{{this.created_at}}</div>
+        <div class="wrapper__orders-item-sum">{{this.sum}}</div>
+      </div>
+    {{/each}}
+    <button class="load-more-orders-btn">Завантажити ще замовлення</button>
+  {{else}}
+    <h2 class="not-orders-logo">Немає замовлень</h2>
+  {{/if}}
+</div>

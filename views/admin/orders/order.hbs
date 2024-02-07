@@ -59,5 +59,9 @@
     {{#if (haveStatus status)}}
         <button class="wrapper__order-item-delete-status-btn mt-20" data-idOrder="{{idOrder}}">Скинути статус замовлення</button>
     {{/if}}
-    <button class="wrapper__order-delete-btn" data-idOrder="{{idOrder}}">Видалити замовлення</button>
+
+    {{#if partner}}
+    {{else}}
+      <button class="wrapper__order-delete-btn" data-idOrder="{{idOrder}}">Видалити замовлення</button>
+    {{/if}}
 </div>

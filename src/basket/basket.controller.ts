@@ -1,17 +1,28 @@
-import {Controller, Delete, Get, Param, ParseIntPipe, Post, Req, Res} from "@nestjs/common";
+import { Controller, Delete, Get, Param, Post, Query, Req, Res } from "@nestjs/common";
 import { Response, Request } from "express";
 import {BasketService} from "./service/basket.service";
 import { TranslateService } from "../translate/service/translate.service";
+import { RubricsTypesServiceDb } from "../../db/rubrics-types/rubrics-types.service";
 
 @Controller()
 export class BasketController {
-    constructor(private basketService: BasketService, private translateService: TranslateService) {}
+    constructor(
+      private basketService: BasketService,
+      private translateService: TranslateService,
+      private rubricsTypesServiceDb: RubricsTypesServiceDb
+    ) {}
 
     @Get()
-    async getBasketPage(@Req() req: Request, @Res() res: Response) {
+    async getBasketPage(@Req() req: Request, @Res() res: Response, @Query("rubricId") rubricId) {
         const parseData = await this.basketService.getBasketProducts(req.cookies["basket_in_shop"]);
         const translate = await this.translateService.getTranslateObjectByKeyAndIsoCode("basket_page", req.cookies["iso_code_shop"]);
+        let rubricsTypes;
 
+        if(!isNaN(Number(rubricId))) {
+            rubricsTypes = await this.rubricsTypesServiceDb.getTypesByRubricId(rubricId);
+        } else {
+            rubricsTypes = [];
+        }
         if(parseData) {
             res.render("basket/basket", {
                 products: parseData.data,
@@ -19,14 +30,18 @@ export class BasketController {
                 scripts: ["/js/basket/basket.js", "/js/buy/buy.js"],
                 sum: parseData.sum.toFixed(2),
                 activeLanguage: req.cookies["iso_code_shop"],
-                ...translate
+                ...translate,
+                filtersMenuItems: rubricsTypes.length ? rubricsTypes : false,
+                rubric_id: rubricId
             });
         } else {
             res.render("basket/basket", {
                 products: false,
                 styles: ["/css/basket/basket.css"],
                 activeLanguage: req.cookies["iso_code_shop"],
-                ...translate
+                ...translate,
+                filtersMenuItems: rubricsTypes.length ? rubricsTypes : false,
+                rubric_id: rubricId
             });
         }
     }

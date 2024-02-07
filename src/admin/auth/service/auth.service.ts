@@ -1,8 +1,8 @@
-import { Injectable, NotFoundException, UnauthorizedException} from "@nestjs/common";
+import { Injectable, UnauthorizedException} from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import {UsersServiceDb} from "../../../../db/users/users.service";
-import {UserInterface} from "../../../../db/users/interfaces/user.interface";
 import * as argon2 from "argon2";
+import { AuthInterface } from "../interfaces/auth.interface";
 
 @Injectable()
 export class AuthService {
@@ -11,7 +11,7 @@ export class AuthService {
         private usersServiceDb: UsersServiceDb
     ) {}
 
-    async auth(user: UserInterface) {
+    async auth(user: AuthInterface) {
         const userInDb = await this.usersServiceDb.getUserByName(user.name);
 
         if(!userInDb) {

@@ -16,6 +16,9 @@ export class VideoPhotoGallery implements VideoPhotoGalleryInterface {
   @Property()
   description: string;
 
+  @Property()
+  user_id: number;
+
   @OneToMany({ entity: () => VideoPhotoGalleryFiles, mappedBy: "video_photo_gallery" })
   videoPhotoGalleryFiles: Collection<VideoPhotoGalleryFiles>;
 }

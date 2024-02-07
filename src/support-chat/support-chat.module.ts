@@ -5,9 +5,10 @@ import { SupportChatUsersModuleDb } from "../../db/support-chats/support-chat-us
 import { SupportChatMessagesModuleDb } from "../../db/support-chats/support-chat-messages/support-chat-messages.module";
 import { SupportChatModuleDb } from "../../db/support-chats/support-chats.module";
 import { TranslateModule } from "../translate/translate.module";
+import { RubricsTypesModuleDb } from "../../db/rubrics-types/rubrics-types.module";
 
 @Module({
-    imports: [SupportChatUsersModuleDb, SupportChatMessagesModuleDb, SupportChatModuleDb, TranslateModule],
+    imports: [SupportChatUsersModuleDb, SupportChatMessagesModuleDb, SupportChatModuleDb, TranslateModule, RubricsTypesModuleDb],
     controllers: [SupportChatController],
     providers: [SupportChatService]
 })

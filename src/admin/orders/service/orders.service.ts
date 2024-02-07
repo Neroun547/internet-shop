@@ -8,24 +8,24 @@ Moment.locale("uk");
 export class OrdersService {
     constructor(private ordersServiceDb: OrdersServiceDb) {}
 
-    async getOrders(take: number, skip: number) {
-        return this.parseOrders(await this.ordersServiceDb.getOrders(take, skip));
+    async getOrdersByUserId(take: number, skip: number, userId: number) {
+        return this.parseOrders(await this.ordersServiceDb.getOrdersByUserId(take, skip, userId));
     }
 
-    async getOrdersByStatus(take: number, skip: number, status: string | null) {
-        return this.parseOrders(await this.ordersServiceDb.getOrdersByStatus(take, skip, status));
+    async getOrdersByStatusAndByUserId(take: number, skip: number, status: string | null, userId: number) {
+        return this.parseOrders(await this.ordersServiceDb.getOrdersByStatusAndUserId(take, skip, status, userId));
     }
 
-    async getOrderAndProductByOrderId(orderId: string) {
-        return this.parseOrder(await this.ordersServiceDb.getOrderAndProductByOrderId(orderId));
+    async getOrderAndProductByOrderIdAndUserId(orderId: string, userId: number) {
+        return this.parseOrder(await this.ordersServiceDb.getOrderAndProductByOrderIdAndUserId(orderId, userId));
     }
 
     async deleteOrderByOrderId(idOrder: string) {
         await this.ordersServiceDb.deleteOrderByOrderId(idOrder);
     }
 
-    async changeStatusByOrderId(idOrder: string, status: string) {
-        await this.ordersServiceDb.changeStatusByOrderId(idOrder, status);
+    async changeStatusByOrderIdAndUserId(idOrder: string, status: string, userId: number) {
+        await this.ordersServiceDb.changeStatusByOrderIdAndUserId(idOrder, status, userId);
     }
 
     async deleteStatusByOrderId(idOrder: string) {

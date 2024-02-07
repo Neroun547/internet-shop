@@ -1,7 +1,27 @@
+.wrapper__rubrics-btn {
+    border: none;
+    border-left: 1px solid #0474b6;
+    border-bottom: 1px solid #0474b6;
+    border-right: 1px solid #0474b6;
+    cursor: pointer;
+    background-color: transparent;
+    color: #0474b6;
+}
+
+.wrapper__rubrics-btn-active {
+    border: none;
+    border-left: 1px solid #000;
+    border-bottom: 1px solid #000;
+    border-right: 1px solid #000;
+    cursor: pointer;
+    background-color: transparent;
+    color: #000;
+}
+
 .wrapper__products {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 309px));
-    padding-top: 100px;
+    padding-top: 50px;
     grid-column-gap: 30px;
     grid-row-gap: 30px;
     justify-content: center;

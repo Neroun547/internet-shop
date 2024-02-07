@@ -1,0 +1,31 @@
+.partner-settings-logo {
+    margin-top: 50px;
+}
+
+.wrapper__partner-settings {
+    margin-top: 50px;
+}
+
+.wrapper__partner-settings-generate-new-password-btn {
+    padding: 15px;
+    border: none;
+    border-radius: 5px;
+    display: block;
+    width: 100%;
+    margin-top: 50px;
+    cursor: pointer;
+}
+
+.wrapper__partner-settings-name input {
+    width: 70%;
+    border: none;
+    border-bottom: 1px solid #000;
+}
+
+.wrapper__partner-settings-name button {
+    width: 28%;
+    cursor: pointer;
+}
+
+
+

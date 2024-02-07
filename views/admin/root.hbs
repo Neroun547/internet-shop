@@ -14,24 +14,59 @@
             <span>Весь товар</span>
         </button>
     </a>
-    <a href="/admin/articles">
+    {{#if partner}}
+
+    {{else}}
+      <a href="/admin/articles">
         <button class="wrapper__menu-admin-item">
-            <span>Статті</span>
+          <span>Статті</span>
         </button>
-    </a>
-    <a href="/admin/video-photo-gallery">
-      <button class="wrapper__menu-admin-item">
-        <span>Відео, фото галерея</span>
-      </button>
-    </a>
-    <a href="/admin/support">
+      </a>
+    {{/if}}
+
+    {{#if partner}}
+    {{else}}
+      <a href="/admin/video-photo-gallery">
         <button class="wrapper__menu-admin-item">
-            <span>Підтримка</span>
+          <span>Відео, фото галерея</span>
         </button>
-    </a>
-    <a href="/admin/statistics">
+      </a>
+    {{/if}}
+    {{#if partner}}
+
+    {{else}}
+      <a href="/admin/support">
         <button class="wrapper__menu-admin-item">
-            <span>Сатистика</span>
+          <span>Підтримка</span>
         </button>
-    </a>
+      </a>
+    {{/if}}
+    {{#if partner}}
+
+    {{else}}
+      <a href="/admin/statistics">
+        <button class="wrapper__menu-admin-item">
+          <span>Сатистика</span>
+        </button>
+      </a>
+    {{/if}}
+    {{#if partner}}
+
+    {{else}}
+      <a href="/admin/partners">
+        <button class="wrapper__menu-admin-item">
+          <span>Партнери</span>
+        </button>
+      </a>
+    {{/if}}
+
+    {{#if partner}}
+
+    {{else}}
+      <a href="/admin/rubrics">
+        <button class="wrapper__menu-admin-item">
+          <span>Рубрики</span>
+        </button>
+      </a>
+    {{/if}}
 </div>

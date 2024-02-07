@@ -26,7 +26,8 @@ export class BuyService {
                 remark: order.remark.trim().length ? order.remark.trim() : "",
                 first_name: order.first_name,
                 last_name: order.last_name,
-                admin_note: ""
+                admin_note: "",
+                user_id: (await this.productsServiceDb.getProductById(Number(order.products[i].id))).user_id
             });
         }
     }

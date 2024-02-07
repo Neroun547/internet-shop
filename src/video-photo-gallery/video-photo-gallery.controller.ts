@@ -2,25 +2,36 @@ import { Controller, Get, Param, ParseIntPipe, Query, Req, Res } from "@nestjs/c
 import { Response, Request } from "express";
 import { VideoPhotoGalleryService } from "./service/video-photo-gallery.service";
 import { TranslateService } from "../translate/service/translate.service";
+import { RubricsTypesServiceDb } from "../../db/rubrics-types/rubrics-types.service";
 
 @Controller()
 export class VideoPhotoGalleryController {
   constructor(
     private videoPhotoGalleryService: VideoPhotoGalleryService,
-    private translateService: TranslateService
+    private translateService: TranslateService,
+    private rubricsTypesServiceDb: RubricsTypesServiceDb
   ) {}
 
   @Get()
-  async videoPhotoGalleryPage(@Req() req: Request, @Res() res: Response) {
+  async videoPhotoGalleryPage(@Req() req: Request, @Res() res: Response, @Query("rubricId") rubricId) {
     const publications = await this.videoPhotoGalleryService.getPublications(12, 0);
     const translate = await this.translateService.getTranslateObjectByKeyAndIsoCode("video_photo_gallery_page", req.cookies["iso_code_shop"]);
 
+    let rubricsTypes;
+
+    if(!isNaN(Number(rubricId))) {
+      rubricsTypes = await this.rubricsTypesServiceDb.getTypesByRubricId(rubricId);
+    } else {
+      rubricsTypes = [];
+    }
     res.render("video-photo-gallery/video-photo-gallery", {
       publications: publications,
       styles: ["/css/video-photo-gallery/video-photo-gallery.css"],
       scripts: ["/js/video-photo-gallery/video-photo-gallery.js"],
       activeLanguage: req.cookies["iso_code_shop"],
-      ...translate
+      ...translate,
+      filtersMenuItems: rubricsTypes,
+      rubric_id: rubricId
     });
   }
 

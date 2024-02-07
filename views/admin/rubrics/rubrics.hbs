@@ -1,0 +1,30 @@
+<form id="add-rubric-form">
+  <input type="text" placeholder="Назва рубрики" class="rubric-name-input" required>
+  <input type="text" placeholder="Тип" class="rubric-type-input">
+  <button id="add-type-to-rubric-btn" class="mt-20" type="button">Додати тип до рубрики</button>
+  <h2 class="mt-20">Типи товарів в рубріці:</h2>
+  <ul id="rubric-types-list"></ul>
+  <button type="submit" class="mt-20">Зберегти рубрику</button>
+</form>
+<div class="wrapper__add-rubrics-form-message">
+
+</div>
+
+<div class="wrapper__rubrics">
+  {{#each rubrics}}
+    <div class="wrapper__rubrics-item" id="{{this.id}}">
+      <h2>Назва рубрики: {{this.name}}</h2>
+      <div class="mt-20">
+        <span>Типи товарів в рубриці:
+          {{#each rubricTypes}}
+            {{this.name}}
+          {{/each}}
+        </span>
+      </div>
+      {{#if this.selected_default}}
+      {{else}}
+        <button class="mt-20 wrapper__rubrics-item-delete-btn">Видалити рубрику</button>
+      {{/if}}
+    </div>
+  {{/each}}
+</div>

@@ -3,4 +3,5 @@ export interface VideoPhotoGalleryInterface {
   name: string;
   theme: string;
   description: string;
+  user_id: number;
 }

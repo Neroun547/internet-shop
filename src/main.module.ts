@@ -24,6 +24,9 @@ import { VideoPhotoGalleryModule } from "./video-photo-gallery/video-photo-galle
 import { VideoPhotoGalleryModuleAdmin } from "./admin/video-photo-gallery/video-photo-gallery.module";
 import { TranslateModule } from "./translate/translate.module";
 import { TranslateModuleDb } from "../db/translate/translate.module";
+import { PartnersModule } from "./admin/partners/partners.module";
+import { RubricsModule } from "./admin/rubrics/rubrics.module";
+import { RubricsModuleDb } from "../db/rubrics/rubrics.module";
 
 @Module({
   imports: [
@@ -51,6 +54,9 @@ import { TranslateModuleDb } from "../db/translate/translate.module";
       VideoPhotoGalleryModuleAdmin,
       TranslateModule,
       TranslateModuleDb,
+      PartnersModule,
+      RubricsModule,
+      RubricsModuleDb,
       MikroOrmModule.forRoot({
           dbName: process.env.DB_NAME,
           user: process.env.DB_USER,
@@ -72,7 +78,9 @@ import { TranslateModuleDb } from "../db/translate/translate.module";
                 { path: "support", module: SupportChatModuleAdmin },
                 { path: "articles", module: ArticlesModuleAdmin },
                 { path: "statistics", module: StatisticsModule },
-                { path: "video-photo-gallery", module: VideoPhotoGalleryModuleAdmin }
+                { path: "video-photo-gallery", module: VideoPhotoGalleryModuleAdmin },
+                { path: "partners", module: PartnersModule },
+                { path: "rubrics", module: RubricsModule }
             ]
           },
           {

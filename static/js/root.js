@@ -12,6 +12,7 @@ const addToBasketBtn = document.querySelectorAll(".wrapper__product-add-to-baske
 
 const wrapperProducts = document.querySelector(".wrapper__products");
 const productsType = wrapperProducts.getAttribute("data-type");
+const activeRubric = wrapperProducts.getAttribute("data-rubric");
 
 let skip = 8;
 let limitForScroll = 150;
@@ -50,7 +51,7 @@ wrapperFiltersForm.addEventListener("submit", async function (e) {
     priceFromFilter = wrapperFiltersInputFrom.value;
     priceToFilter = wrapperFiltersInputTo.value;
 
-    const products = await fetch("/products/by-filters?priceFrom=" + priceFromFilter + "&priceTo=" + priceToFilter + "&available=" + availableFilter + "&type=" + productsType);
+    const products = await fetch("/products/by-filters?priceFrom=" + priceFromFilter + "&priceTo=" + priceToFilter + "&available=" + availableFilter + "&type=" + productsType + "&rubricId=" + activeRubric);
     const response = await products.json();
 
     skip = 8;
@@ -137,6 +138,9 @@ window.addEventListener("scroll", async function () {
         if(availableFilter && priceFromFilter && priceToFilter) {
             loadMoreUrl += "&priceFrom=" + priceFromFilter + "&priceTo=" + priceToFilter + "&available=" + availableFilter;
         }
+        if(activeRubric) {
+            loadMoreUrl += "&rubricId=" + activeRubric;
+        }
         products = await fetch(loadMoreUrl);
         const response = await products.json();
 
@@ -152,7 +156,8 @@ window.addEventListener("scroll", async function () {
                         response[i].available,
                         response[i].price,
                         response[i].inBasket,
-                        response[i].translateTitle
+                        response[i].translateTitle,
+                        response[i].partner
                     )
                 )
             }
@@ -163,7 +168,7 @@ window.addEventListener("scroll", async function () {
     }
 });
 
-function createProductCard(id, filename, alt, name, type, available, price, inBasket, translateTitle) {
+function createProductCard(id, filename, alt, name, type, available, price, inBasket, translateTitle, partner) {
     const wrapperProductItem = document.createElement("div");
     wrapperProductItem.classList.add("wrapper__products-item");
 
@@ -219,6 +224,17 @@ function createProductCard(id, filename, alt, name, type, available, price, inBa
     wrapperProductsItemContentPrice.innerHTML = "Ціна: " + "<strong>" + price + "грн" + "</strong>";
 
     wrapperProductsItemContent.appendChild(wrapperProductsItemContentPrice);
+
+    const wrapperProductsItemContentPartner = document.createElement("strong");
+    wrapperProductsItemContentPartner.classList.add("product-from-partner-or-admin");
+    wrapperProductsItemContentPartner.classList.add("text-center");
+
+    if(partner) {
+        wrapperProductsItemContentPartner.innerText = "Товар від партнера Zolotar";
+    } else {
+        wrapperProductsItemContentPartner.innerText = "Товар від Zolotar";
+    }
+    wrapperProductsItemContent.appendChild(wrapperProductsItemContentPartner);
 
     if(inBasket) {
         const wrapperProductAddToBasketBtn = document.createElement("button");
