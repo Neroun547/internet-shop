@@ -21,7 +21,10 @@
           {{/each}}
         </span>
       </div>
-      <button class="mt-20 wrapper__rubrics-item-delete-btn">Видалити рубрику</button>
+      {{#if this.selected_default}}
+      {{else}}
+        <button class="mt-20 wrapper__rubrics-item-delete-btn">Видалити рубрику</button>
+      {{/if}}
     </div>
   {{/each}}
 </div>

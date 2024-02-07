@@ -1,14 +1,5 @@
 <div class="wrapper__orders" id="{{userId}}">
   <h2 class="wrapper__orders-logo">Замовлення</h2>
-  {{#if orders}}
-    <select name="sort" id="sort-select">
-      <option value="">Всі замовлення</option>
-      <option value="in_process">В процесі</option>
-      <option value="returned">Повернені</option>
-      <option value="completed">Виконані</option>
-      <option value="not_completed">Не виконані</option>
-    </select>
-  {{/if}}
   <h2 class="mt-50">Кількість замовлень: <span id="count-orders">{{countOrders}}</span></h2>
   {{#if orders}}
     {{#each orders}}
