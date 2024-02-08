@@ -2,27 +2,21 @@ import { Controller, Delete, Get, Param, Post, Query, Req, Res } from "@nestjs/c
 import { Response, Request } from "express";
 import {BasketService} from "./service/basket.service";
 import { TranslateService } from "../translate/service/translate.service";
-import { RubricsTypesServiceDb } from "../../db/rubrics-types/rubrics-types.service";
+import { CommonService } from "../../common/common.service";
 
 @Controller()
 export class BasketController {
     constructor(
       private basketService: BasketService,
       private translateService: TranslateService,
-      private rubricsTypesServiceDb: RubricsTypesServiceDb
+      private commonService: CommonService
     ) {}
 
     @Get()
     async getBasketPage(@Req() req: Request, @Res() res: Response, @Query("rubricId") rubricId) {
         const parseData = await this.basketService.getBasketProducts(req.cookies["basket_in_shop"]);
         const translate = await this.translateService.getTranslateObjectByKeyAndIsoCode("basket_page", req.cookies["iso_code_shop"]);
-        let rubricsTypes;
 
-        if(!isNaN(Number(rubricId))) {
-            rubricsTypes = await this.rubricsTypesServiceDb.getTypesByRubricId(rubricId);
-        } else {
-            rubricsTypes = [];
-        }
         if(parseData) {
             res.render("basket/basket", {
                 products: parseData.data,
@@ -31,7 +25,7 @@ export class BasketController {
                 sum: parseData.sum.toFixed(2),
                 activeLanguage: req.cookies["iso_code_shop"],
                 ...translate,
-                filtersMenuItems: rubricsTypes.length ? rubricsTypes : false,
+                filtersMenuItems: await this.commonService.getRubricsTypesForPages(rubricId),
                 rubric_id: rubricId
             });
         } else {
@@ -40,7 +34,7 @@ export class BasketController {
                 styles: ["/css/basket/basket.css"],
                 activeLanguage: req.cookies["iso_code_shop"],
                 ...translate,
-                filtersMenuItems: rubricsTypes.length ? rubricsTypes : false,
+                filtersMenuItems: await this.commonService.getRubricsTypesForPages(rubricId),
                 rubric_id: rubricId
             });
         }

@@ -8,6 +8,7 @@ import { CommonService } from "../../../common/common.service";
 import { UsersServiceDb } from "../../../db/users/users.service";
 import { RubricsTypesServiceDb } from "../../../db/rubrics-types/rubrics-types.service";
 import { RubricsServiceDb } from "../../../db/rubrics/rubrics.service";
+import { TranslateServiceDb } from "../../../db/translate/translate.service";
 
 @Injectable()
 export class ProductsService {
@@ -19,7 +20,8 @@ export class ProductsService {
         private commonService: CommonService,
         private usersServiceDb: UsersServiceDb,
         private rubricsTypesServiceDb: RubricsTypesServiceDb,
-        private rubricsServiceDb: RubricsServiceDb
+        private rubricsServiceDb: RubricsServiceDb,
+        private translateServiceDb: TranslateServiceDb
     ) {}
 
     async parseProductsForLoadCards(productsAndImages, basket?: string) {
@@ -159,5 +161,21 @@ export class ProductsService {
             parseRubrics[parseRubrics.length - 1].active = true;
         }
         return parseRubrics;
+    }
+    async getParseProductsWithTranslate(language: string, basket, products) {
+
+        if(language === "en") {
+            return await Promise.all((await this.parseProductsForLoadCards(products, basket))
+              .map(async product => {
+                  const translateTitle = (await this.translateServiceDb.getTranslateByKeyAndIsoCode("product_translate_" + product.id, "en"));
+
+                  return {
+                      ...product,
+                      translateTitle: translateTitle ? translateTitle.value : ""
+                  }
+              }));
+        } else {
+            return await this.parseProductsForLoadCards(products, basket);
+        }
     }
 }

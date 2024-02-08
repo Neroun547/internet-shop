@@ -4,10 +4,10 @@ import { VideoPhotoGalleryService } from "./service/video-photo-gallery.service"
 import { VideoPhotoGalleryModuleDb } from "../../db/video-photo-gallery/video-photo-gallery.module";
 import { VideoPhotoGalleryModuleAdmin } from "../admin/video-photo-gallery/video-photo-gallery.module";
 import { TranslateModule } from "../translate/translate.module";
-import { RubricsTypesModuleDb } from "../../db/rubrics-types/rubrics-types.module";
+import { CommonModule } from "../../common/common.module";
 
 @Module({
-  imports: [VideoPhotoGalleryModuleDb, forwardRef(() => VideoPhotoGalleryModuleAdmin), TranslateModule, RubricsTypesModuleDb],
+  imports: [VideoPhotoGalleryModuleDb, forwardRef(() => VideoPhotoGalleryModuleAdmin), TranslateModule, CommonModule],
   controllers: [VideoPhotoGalleryController],
   providers: [VideoPhotoGalleryService],
   exports: [VideoPhotoGalleryService]

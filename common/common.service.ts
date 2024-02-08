@@ -1,9 +1,13 @@
 import { Injectable } from "@nestjs/common";
 import { randomBytes } from "crypto";
 import { request } from "https";
+import { RubricsTypesServiceDb } from "../db/rubrics-types/rubrics-types.service";
+import { RubricsTypes } from "../db/rubrics-types/rubrics-types.entity";
 
 @Injectable()
 export class CommonService {
+    constructor(private rubricsTypesServiceDb: RubricsTypesServiceDb) {}
+
     generateRandomHash(size: number) {
         return randomBytes(size).toString('hex');
     }
@@ -92,5 +96,15 @@ export class CommonService {
             }
         }
         return password;
+    }
+    async getRubricsTypesForPages(rubricId: string): Promise<Array<RubricsTypes> | boolean> {
+        let rubricsTypes;
+
+        if(!isNaN(Number(rubricId))) {
+            rubricsTypes = await this.rubricsTypesServiceDb.getTypesByRubricId(Number(rubricId));
+
+            return rubricsTypes
+        }
+        return false;
     }
 }

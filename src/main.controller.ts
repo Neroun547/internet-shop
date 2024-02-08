@@ -22,27 +22,12 @@ export class MainController {
       const rubrics = JSON.parse(JSON.stringify(await this.rubricsServiceDb.getAllRubrics()));
       const translate = await this.translateService.getTranslateObjectByKeyAndIsoCode("main_page", req.cookies["iso_code_shop"]);
       const productsAndImages = await this.productsService.getProductsByType(8, 0, type, req.cookies["iso_code_shop"]);
-      let parseData;
-
-      if(req.cookies["iso_code_shop"] === "en") {
-        parseData = await Promise.all((await this.productsService.parseProductsForLoadCards(productsAndImages, req.cookies["basket_in_shop"]))
-          .map(async product => {
-            const translateTitle = await this.translateServiceDb.getTranslateByKeyAndIsoCode("product_translate_" + product.id, "en");
-
-            return {
-              ...product,
-              translateTitle: translateTitle ? translateTitle.value : ""
-            }
-          }));
-      } else {
-        parseData = await this.productsService.parseProductsForLoadCards(productsAndImages, req.cookies["basket_in_shop"]);
-      }
       const maxProductsPrice = await this.productsService.getMaxPriceProducts();
       const minProductsPrice = await this.productsService.getMinPriceProducts();
 
       res.render("root", {
           admin: false,
-          products: parseData,
+          products: await this.productsService.getParseProductsWithTranslate(req.cookies["iso_code_shop"], req.cookies["basket_in_shop"], productsAndImages),
           styles: ["/css/root.css"],
           scripts: ["/js/root.js"],
           maxProductsPrice: maxProductsPrice,
