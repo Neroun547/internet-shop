@@ -87,10 +87,20 @@ export class ProductsService {
     }
 
     async getMaxPriceProductsByType(type: string) {
+        if(!isNaN(Number(type))) {
+            const productType = await this.rubricsTypesServiceDb.getTypeById(Number(type));
+
+            return await this.productsServiceDb.getMaxPriceProductsByType(productType.name);
+        }
         return await this.productsServiceDb.getMaxPriceProductsByType(translateTypeProduct[type]);
     }
 
     async getMinPriceProductsByType(type: string) {
+        if(!isNaN(Number(type))) {
+            const productType = await this.rubricsTypesServiceDb.getTypeById(Number(type));
+
+            return await this.productsServiceDb.getMinPriceProductsByType(productType.name);
+        }
         return await this.productsServiceDb.getMinPriceProductsByType(translateTypeProduct[type]);
     }
 
