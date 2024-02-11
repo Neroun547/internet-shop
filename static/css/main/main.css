@@ -114,6 +114,7 @@
     background-color: black;
     height: 3px;
     width: 38px;
+    transition: .3s rotate;
 }
 
 .wrapper__logo-open-menu-decoration-2 {
@@ -122,6 +123,7 @@
     height: 3px;
     margin-top: 10px;
     width: 38px;
+    transition: .3s all;
 }
 
 .wrapper__logo-open-menu-decoration-3 {
@@ -130,6 +132,7 @@
     height: 3px;
     margin-top: 10px;
     width: 38px;
+    transition: .3s rotate;
 }
 
 .exit__btn {
