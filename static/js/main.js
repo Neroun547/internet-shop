@@ -4,6 +4,8 @@ const languageSelect = document.getElementById("language-select");
 const wrapperLogoMenuDecoration1 = wrapperMenuBtn.querySelector(".wrapper__logo-open-menu-decoration-1");
 const wrapperLogoMenuDecoration2 = wrapperMenuBtn.querySelector(".wrapper__logo-open-menu-decoration-2");
 const wrapperLogoMenuDecoration3 = wrapperMenuBtn.querySelector(".wrapper__logo-open-menu-decoration-3");
+const showRubricsBtn = document.querySelector(".wrapper__content-menu-item-show-rubrics-btn");
+const showRubricsBtnSymbol = document.querySelector(".wrapper__content-menu-item-show-rubrics-btn-symbol");
 
 let showMenu = false;
 let moveForMenu = wrapperContentLeftBarMenu.clientWidth / 8;
@@ -87,6 +89,55 @@ function hideCrossLeftBarMenuBtnDecoration() {
     wrapperLogoMenuDecoration3.style.position = "static";
     wrapperLogoMenuDecoration3.style.top = "0";
     wrapperLogoMenuDecoration3.style.rotate = "0deg";
+}
+
+let rubrics = [];
+
+showRubricsBtn.addEventListener("click", async function () {
+    const rubricsList = document.querySelector(".wrapper__content-menu-item-rubrics-list");
+
+    if(showRubricsBtnSymbol.style.transform === "rotate(180deg)") {
+        showRubricsBtnSymbol.style.transform = "rotate(0deg)";
+
+        if(rubricsList) {
+            rubricsList.style.display = "none";
+        }
+    } else {
+        showRubricsBtnSymbol.style.transform = "rotate(180deg)";
+
+        if(!rubrics.length) {
+            const response = await fetch("/rubrics/");
+            const data = await response.json();
+
+            rubrics = [...data];
+
+            showRubricsListInMenu(data);
+        } else {
+            showRubricsListInMenu(rubrics);
+        }
+    }
+});
+
+function showRubricsListInMenu(rubrics) {
+    const rubricsList = document.querySelector(".wrapper__content-menu-item-rubrics-list");
+
+    if(rubricsList) {
+        rubricsList.style.display = "block";
+    } else {
+        const rubricsList = document.createElement("ul");
+
+        rubricsList.classList.add("wrapper__content-menu-item-rubrics-list");
+
+        for(let i = 0; i < rubrics.length; i++) {
+            const li = document.createElement("li");
+
+            li.innerHTML = `<a href=${"/products/by-rubrics/" + rubrics[i].id}` + " style='text-decoration: none; color: #000;'>" + rubrics[i].name + "</a>";
+
+            rubricsList.appendChild(li);
+
+            document.querySelector(".wrapper__rubrics-list").appendChild(rubricsList);
+        }
+    }
 }
 
 

@@ -193,3 +193,36 @@
     text-align: center;
 }
 
+.wrapper__content-menu-item-show-rubrics-btn {
+    background-color: transparent;
+    border: none;
+    margin-top: 50px;
+    text-align: left;
+    margin-left: 46px;
+    position: relative;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.wrapper__content-menu-item-show-rubrics-btn:hover {
+    color: #fff;
+    transition: .2s;
+}
+
+.wrapper__content-menu-item-show-rubrics-btn-symbol {
+    font-size: 10px;
+    position: absolute;
+    left: 80px;
+}
+
+.wrapper__content-menu-item-rubrics-list li {
+    padding-left: 15px;
+    padding-top: 20px;
+    font-size: 14px;
+}
+
+.wrapper__content-menu-item-rubrics-list {
+    list-style: none;
+    margin-bottom: 0;
+}
+

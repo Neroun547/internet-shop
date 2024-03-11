@@ -18,7 +18,7 @@ import { RubricsTypesServiceDb } from "../../../db/rubrics-types/rubrics-types.s
 import { RubricsServiceDb } from "../../../db/rubrics/rubrics.service";
 
 @Controller()
-export class RubricsController {
+export class RubricsControllerAdmin {
   constructor(
     private rubricsService: RubricsService,
     private rubricsTypesServiceDb: RubricsTypesServiceDb,

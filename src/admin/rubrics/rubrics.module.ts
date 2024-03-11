@@ -1,5 +1,5 @@
 import { Module } from "@nestjs/common";
-import { RubricsController } from "./rubrics.controller";
+import { RubricsControllerAdmin } from "./rubrics.controller";
 import { RubricsService } from "./service/rubrics.service";
 import { RubricsModuleDb } from "../../../db/rubrics/rubrics.module";
 import { RubricsTypesModuleDb } from "../../../db/rubrics-types/rubrics-types.module";
@@ -9,7 +9,7 @@ import { ProductsImagesModuleDb } from "../../../db/products-images/products-ima
 
 @Module({
   imports: [RubricsModuleDb, RubricsTypesModuleDb, ProductsModuleDb, OrdersModuleDb, ProductsImagesModuleDb],
-  controllers: [RubricsController],
+  controllers: [RubricsControllerAdmin],
   providers: [RubricsService]
 })
-export class RubricsModule {}
+export class RubricsModuleAdmin {}
