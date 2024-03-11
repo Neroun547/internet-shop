@@ -213,6 +213,11 @@
     font-size: 10px;
     position: absolute;
     left: 80px;
+    color: #000;
+}
+
+.wrapper__content-menu-item-show-rubrics-btn-text {
+    color: #000;
 }
 
 .wrapper__content-menu-item-rubrics-list li {
