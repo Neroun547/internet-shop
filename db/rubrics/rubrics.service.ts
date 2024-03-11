@@ -30,4 +30,7 @@ export class RubricsServiceDb {
   async getRubricsWithTypesByRubricId(rubricId: number) {
     return await this.repository.findOne({ id: rubricId }, { populate: ["rubricTypes"] });
   }
+  async updateRubricNameById(name: string, id: number) {
+    await this.repository.nativeUpdate({ id: id }, { name: name });
+  }
 }

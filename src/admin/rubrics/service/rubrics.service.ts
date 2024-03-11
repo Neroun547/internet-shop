@@ -4,6 +4,7 @@ import { RubricsTypesServiceDb } from "../../../../db/rubrics-types/rubrics-type
 import { ProductsServiceDb } from "../../../../db/products/products.service";
 import { OrdersServiceDb } from "../../../../db/orders/orders.service";
 import { ProductsImagesServiceDb } from "../../../../db/products-images/products-images.service";
+import { UpdateRubricDto } from "../dto/update-rubric.dto";
 
 @Injectable()
 export class RubricsService {
@@ -41,5 +42,17 @@ export class RubricsService {
     await this.productsServiceDb.deleteProductsByRubricId(rubricId);
     await this.rubricsTypesServiceDb.deleteRubricTypesByRubricId(rubricId);
     await this.rubricsServiceDb.deleteRubricById(rubricId);
+  }
+
+  async updateRubric(rubric: UpdateRubricDto) {
+    await this.rubricsServiceDb.updateRubricNameById(rubric.name, rubric.id);
+    await this.rubricsTypesServiceDb.deleteRubricTypesByRubricId(rubric.id);
+
+    for(let i = 0; i < rubric.rubricTypes.length; i++) {
+      await this.rubricsTypesServiceDb.saveRubricsType({
+        rubric_id: rubric.id,
+        name: rubric.rubricTypes[i]
+      });
+    }
   }
 }

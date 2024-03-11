@@ -32,3 +32,69 @@
     cursor: pointer;
     padding: 5px;
 }
+
+.wrapper__rubrics-buttons {
+    display: flex;
+    flex-direction: column;
+    width: 200px;
+}
+
+.wrapper__rubrics-item-edit-btn {
+    background-color: #f8b71d;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    padding: 5px;
+}
+
+.wrapper__content-modal-edit-rubric {
+    display: flex;
+    flex-direction: column;
+    max-width: 90%;
+    margin: 0 auto;
+    padding: 15px;
+}
+
+.wrapper__content-modal-buttons {
+    display: flex;
+}
+
+.wrapper__content-modal-save-changes-btn {
+    display: block;
+    margin-left: auto;
+    background-color: #69B904FF;
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+    margin-top: 10px;
+    width: 150px;
+    height: 40px;
+    cursor: pointer;
+}
+
+.wrapper__content-modal-close-btn {
+    display: block;
+    background-color: #e54724;
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+    margin-top: 10px;
+    width: 150px;
+    height: 40px;
+    cursor: pointer;
+}
+
+.wrapper__content-modal-add-rubric-type-btn {
+    display: block;
+    height: 40px;
+    width: 170px;
+    margin: 0 auto;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+.wrapper__modal-message {
+    padding: 5px;
+    display: none;
+    text-align: center;
+}

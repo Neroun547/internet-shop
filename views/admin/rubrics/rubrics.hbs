@@ -13,7 +13,7 @@
 <div class="wrapper__rubrics">
   {{#each rubrics}}
     <div class="wrapper__rubrics-item" id="{{this.id}}">
-      <h2>Назва рубрики: {{this.name}}</h2>
+      <h2>Назва рубрики: <span class="wrapper__rubrics-item-name">{{this.name}}</span></h2>
       <div class="mt-20">
         <span>Типи товарів в рубриці:
           {{#each rubricTypes}}
@@ -23,7 +23,10 @@
       </div>
       {{#if this.selected_default}}
       {{else}}
-        <button class="mt-20 wrapper__rubrics-item-delete-btn">Видалити рубрику</button>
+        <div class="wrapper__rubrics-buttons">
+          <button class="mt-20 wrapper__rubrics-item-edit-btn">Редагувати рубрику</button>
+          <button class="mt-20 wrapper__rubrics-item-delete-btn">Видалити рубрику</button>
+        </div>
       {{/if}}
     </div>
   {{/each}}

@@ -1,5 +1,6 @@
 import { createRubricItem } from "./create-rubric-item.js";
 import { questionModal } from "../../common/question-modal.js";
+import { createEditRubricModal } from "./edit-rubric.modal.js";
 
 const addRubricForm = document.getElementById("add-rubric-form");
 const wrapperRubricsFormMessage = document.querySelector(".wrapper__add-rubrics-form-message");
@@ -8,6 +9,8 @@ const rubricTypeList = document.getElementById("rubric-types-list");
 const rubricTypeInput = document.querySelector(".rubric-type-input");
 const deleteRubricsButtons = document.querySelectorAll(".wrapper__rubrics-item-delete-btn");
 const wrapperRubrics = document.querySelector(".wrapper__rubrics");
+const editRubricsBtn = document.querySelectorAll(".wrapper__rubrics-item-edit-btn");
+
 let newRubricTypes = [];
 
 addRubricForm.addEventListener("submit", async function (e) {
@@ -79,5 +82,17 @@ for(let i = 0; i < deleteRubricsButtons.length; i++) {
       });
     }
     questionModal("Ви дійсно хочете видалити цю рубрику ? Всі товари з цієї рубрики, замовлення буде видалено.", removeRubric, false);
+  });
+}
+
+for(let i = 0; i < editRubricsBtn.length; i++) {
+  editRubricsBtn[i].addEventListener("click", async function() {
+    const id = editRubricsBtn[i].parentElement.parentElement.getAttribute("id");
+    const rubricName = editRubricsBtn[i].parentElement.parentElement.querySelector(".wrapper__rubrics-item-name").innerHTML;
+
+    const response = await fetch("/admin/rubrics/" + id + "/rubric-types");
+    const rubricTypes = await response.json();
+
+    createEditRubricModal(rubricTypes, rubricName, Number(id));
   });
 }

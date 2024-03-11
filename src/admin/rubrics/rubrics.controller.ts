@@ -4,7 +4,7 @@ import {
   ForbiddenException,
   Get,
   Param,
-  ParseIntPipe,
+  ParseIntPipe, Patch,
   Post,
   Req,
   Res,
@@ -16,6 +16,7 @@ import { RubricsService } from "./service/rubrics.service";
 import { CreateRubricDto } from "./dto/create-rubric.dto";
 import { RubricsTypesServiceDb } from "../../../db/rubrics-types/rubrics-types.service";
 import { RubricsServiceDb } from "../../../db/rubrics/rubrics.service";
+import { UpdateRubricDto } from "./dto/update-rubric.dto";
 
 @Controller()
 export class RubricsControllerAdmin {
@@ -72,5 +73,11 @@ export class RubricsControllerAdmin {
     await this.rubricsService.deleteRubricById(id);
 
     return;
+  }
+
+  @UseGuards(AuthGuard)
+  @Patch()
+  async updateRubric(@Body() body: UpdateRubricDto) {
+    await this.rubricsService.updateRubric(body);
   }
 }
