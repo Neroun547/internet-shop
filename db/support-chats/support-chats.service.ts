@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import {InjectRepository} from "@mikro-orm/nestjs";
-import {EntityManager, EntityRepository} from "@mikro-orm/mysql";
+import { EntityRepository } from "@mikro-orm/mysql";
 import { SupportChats } from "./support-chats.entity";
 
 @Injectable()

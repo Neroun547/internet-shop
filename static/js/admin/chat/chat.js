@@ -21,21 +21,35 @@ sendMessageForm.addEventListener("submit", async function (e) {
                 chatId: Number(chatId)
             })
         });
-        wrapperChatMessages.appendChild(createMessage(e.target[0].value, true))
+        wrapperChatMessages.appendChild(createMessage(e.target[0].value, true, new Date()))
 
         e.target[0].value = "";
     }
 });
 
-function createMessage(message, sender) {
+function createMessage(message, sender, date) {
     const wrapperMessage = document.createElement("div");
-    wrapperMessage.innerHTML = message;
 
     if(sender) {
         wrapperMessage.classList.add("wrapper__chat-messages-message-sender");
     } else {
         wrapperMessage.classList.add("wrapper__chat-messages-message");
     }
+    const wrapperMessageDate = document.createElement("span");
+    wrapperMessageDate.classList.add("wrapper__chat-messages-message-date");
+
+    if(date && typeof date !== "string") {
+        wrapperMessageDate.innerText = parseDateForMessage(date);
+    }
+    if(date && typeof date === "string") {
+        wrapperMessageDate.innerText = date;
+    }
+    const wrapperMessageText = document.createElement("span");
+    wrapperMessageDate.classList.add("wrapper__chat-messages-message-text");
+    wrapperMessageText.innerText = message;
+
+    wrapperMessage.appendChild(wrapperMessageText);
+    wrapperMessage.appendChild(wrapperMessageDate);
 
     return wrapperMessage;
 }
@@ -50,7 +64,7 @@ if(loadMoreMessagesBtn) {
             skipLoadMore += response.length;
 
             for (let i = 0; i < response.length; i++) {
-                wrapperChatMessages.insertBefore(createMessage(response[i].message, response[i].admin), wrapperChatMessages.childNodes[0]);
+                wrapperChatMessages.insertBefore(createMessage(response[i].message, response[i].admin, response[i].date), wrapperChatMessages.childNodes[0]);
             }
 
             wrapperChat.style.height = "auto";
@@ -74,9 +88,13 @@ setInterval(async () => {
     skipLoadMore += response.length;
 
     for(let i = 0; i < response.length; i++) {
-        wrapperChatMessages.appendChild(createMessage(response[i].message, false));
+        wrapperChatMessages.appendChild(createMessage(response[i].message, false, response[i].date));
     }
 }, 3000);
+
+function parseDateForMessage(date) {
+    return date.toISOString().replace("T", " ").substring(0, 19);
+}
 
 
 
