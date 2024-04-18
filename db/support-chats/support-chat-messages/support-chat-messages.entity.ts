@@ -15,4 +15,7 @@ export class SupportChatMessages implements SupportChatMessagesInterface {
 
     @Property()
     chat: SupportChats | number;
+
+    @Property()
+    date: string | Date;
 }

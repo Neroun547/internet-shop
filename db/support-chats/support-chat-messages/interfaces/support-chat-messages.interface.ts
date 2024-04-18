@@ -5,4 +5,5 @@ export interface SupportChatMessagesInterface {
     admin: boolean;
     message: string;
     chat: SupportChats | number;
+    date: string | Date;
 }

@@ -23,4 +23,8 @@ export class SupportChatMessagesServiceDb {
     async deleteMessagesByChatId(chatId: number) {
         await this.repository.nativeDelete({ chat: chatId });
     }
+
+    async getCountMessagesByChatId(chatId: number) {
+        return await this.repository.count({ chat: chatId });
+    }
 }
