@@ -23,7 +23,7 @@ export class SupportChatServiceAdmin {
         const messages = JSON.parse(JSON.stringify(await this.supportChatMessagesServiceDb.getMessagesByChatIdDESC(chatId, take, skip))).sort((a, b) => a.id - b.id);
 
         return messages.map(el => {
-            return { ...el, date: Moment(el.date).format("YYYY-MM-DD HH:mm:ss") }
+            return { ...el, date: el.date ? Moment(el.date).format("YYYY-MM-DD HH:mm:ss") : "" }
         });
     }
 
@@ -33,7 +33,7 @@ export class SupportChatServiceAdmin {
     }
 
     async getMessagesWhereIdGreater(chatId: number, take: number, idMessage: number) {
-        return (await this.supportChatMessagesServiceDb.getMessagesWhereIdGreater(chatId, take, idMessage, false)).map(el => ({ ...el, date: Moment(el.date).format("YYYY-MM-DD HH:mm:ss") }));
+        return (await this.supportChatMessagesServiceDb.getMessagesWhereIdGreater(chatId, take, idMessage, false)).map(el => ({ ...el, date: el.date ? Moment(el.date).format("YYYY-MM-DD HH:mm:ss") : "" }));
     }
 
     async deleteChat(chatId: number) {

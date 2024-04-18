@@ -18,7 +18,7 @@ export class SupportChatService {
         if(chat) {
             const parseData = JSON.parse(JSON.stringify(await this.supportChatMessagesServiceDb.getMessagesByChatIdDESC(chat.id, take, skip)));
 
-            return parseData.sort((a, b) => a.id - b.id).map(el => ({ ...el, date: Moment(el.date).format("YYYY-MM-DD HH:mm:ss") }));
+            return parseData.sort((a, b) => a.id - b.id).map(el => ({ ...el, date: el.date ? Moment(el.date).format("YYYY-MM-DD HH:mm:ss") : "" }));
         }
         await this.supportChatsServiceDb.saveChat(userId);
 
@@ -41,7 +41,7 @@ export class SupportChatService {
         const chat = await this.supportChatsServiceDb.getChatByUserId(userId);
 
         if(chat) {
-            return (await this.supportChatMessagesServiceDb.getMessagesWhereIdGreater(chat.id, take, idMessage)).map(el => ({ ...el, date: Moment(el.date).format("YYYY-MM-DD HH:mm:ss") }));
+            return (await this.supportChatMessagesServiceDb.getMessagesWhereIdGreater(chat.id, take, idMessage)).map(el => ({ ...el, date: el.date ? Moment(el.date).format("YYYY-MM-DD HH:mm:ss") : "" }));
         }
     }
 }
