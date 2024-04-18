@@ -29,6 +29,8 @@
 }
 
 .wrapper__chat-messages-message {
+    display: flex;
+    flex-direction: column;
     background-color: #f8b71d;
     color: #000;
     width: max-content;
