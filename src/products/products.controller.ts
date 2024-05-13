@@ -147,7 +147,8 @@ export class ProductsController {
                 ...productData,
                 ...translate,
                 translateDescription: translateDescription ? translateDescription.value : "",
-                moreThenOneImage: productData.images.length > 1
+                moreThenOneImage: productData.images.length > 1,
+                filtersMenuItems: await this.rubricsTypesServiceDb.getTypesByRubricId(productData.rubric_id)
             });
         } else {
             res.render("products/product", {
@@ -159,7 +160,8 @@ export class ProductsController {
                 ...productData,
                 ...translate,
                 translateDescription: translateDescription ? translateDescription.value : "",
-                moreThenOneImage: productData.images.length > 1
+                moreThenOneImage: productData.images.length > 1,
+                filtersMenuItems: await this.rubricsTypesServiceDb.getTypesByRubricId(productData.rubric_id)
             });
         }
     }
