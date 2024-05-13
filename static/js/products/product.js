@@ -4,7 +4,9 @@ const arrowLeft = document.querySelector(".arrow-left");
 const addToBasketBtn = document.getElementById("add-to-basket-btn");
 const buyNowBtn = document.getElementById("buy-now-btn");
 const wrapperSubImagesItems = document.querySelectorAll(".wrapper__sub-images-item");
-const wrapperProductImages = document.querySelector(".wrapper__product-images");
+const wrapperImagesCarousel = document.getElementById("wrapper__images-carousel");
+
+wrapperImagesCarousel.querySelectorAll(".carousel-item")[0].classList.add("active");
 
 let activeImage = wrapperProductImagesImage[0];
 let currentIndexImage = 0;

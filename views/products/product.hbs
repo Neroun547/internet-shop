@@ -1,7 +1,43 @@
+<!-- Modal -->
+<div class="modal modal-lg fade" id="images-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body">
+        <div id="carouselExampleIndicators" class="carousel slide">
+          <div class="carousel-inner" id="wrapper__images-carousel">
+
+            {{#each images}}
+              <div class="carousel-item">
+                <img src="/images/{{this}}" class="d-block w-100" alt="Зображення">
+              </div>
+            {{/each}}
+          </div>
+
+          {{#if moreThenOneImage}}
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Next</span>
+            </button>
+          {{/if}}
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрити</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
 <div class="wrapper__product">
   <div class="wrapper__product-images">
     {{#each images}}
-      <img src="/images/{{this}}" alt="Зображення" class="wrapper__product-images-image">
+      <div class="wrapper__product-images-image" style="background-image: url('/images/{{this}}')" data-bs-toggle="modal"  data-bs-target="#images-modal"></div>
     {{/each}}
     <button class="arrow-left">
       <span>&#8592;</span>

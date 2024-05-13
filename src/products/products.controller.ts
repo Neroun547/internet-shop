@@ -135,23 +135,27 @@ export class ProductsController {
             const inBasket = this.basketService.parseProductsCookie(req.cookies["basket_in_shop"]).find(el => el === String(productData.id));
 
             res.render("products/product", {
-                styles: ["/css/products/product.css"],
+                styles: ["/css/products/product.css", "https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"],
                 scripts: ["/js/products/product.js"],
+                headScripts: ["https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"],
                 inBasket: !!inBasket,
                 activeLanguage: req.cookies["iso_code_shop"],
                 ...productData,
                 ...translate,
-                translateDescription: translateDescription ? translateDescription.value : ""
+                translateDescription: translateDescription ? translateDescription.value : "",
+                moreThenOneImage: productData.images.length > 1
             });
         } else {
             res.render("products/product", {
-                styles: ["/css/products/product.css"],
+                styles: ["/css/products/product.css", "https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"],
                 scripts: ["/js/products/product.js"],
+                headScripts: ["https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"],
                 inBasket: false,
                 activeLanguage: req.cookies["iso_code_shop"],
                 ...productData,
                 ...translate,
-                translateDescription: translateDescription ? translateDescription.value : ""
+                translateDescription: translateDescription ? translateDescription.value : "",
+                moreThenOneImage: productData.images.length > 1
             });
         }
     }
