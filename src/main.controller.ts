@@ -37,7 +37,8 @@ export class MainController {
           activeLanguage: req.cookies["iso_code_shop"],
           ...translate,
           rubrics: rubrics.length > 1 ? [...rubrics, { name: "Всі товари", active: true, id: 0 }] : false,
-          filtersMenuItems: rubrics.length > 1 ? false : await this.rubricsTypesServiceDb.getTypesByRubricId(rubrics[0].id)
+          filtersMenuItems: rubrics.length > 1 ? false : await this.rubricsTypesServiceDb.getTypesByRubricId(rubrics[0].id),
+          rubric_id: rubrics.length <= 1 ? rubrics[0].id : ""
         });
     }
 }
