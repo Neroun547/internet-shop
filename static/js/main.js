@@ -93,30 +93,32 @@ function hideCrossLeftBarMenuBtnDecoration() {
 
 let rubrics = [];
 
-showRubricsBtn.addEventListener("click", async function () {
-    const rubricsList = document.querySelector(".wrapper__content-menu-item-rubrics-list");
+if(showRubricsBtn) {
+    showRubricsBtn.addEventListener("click", async function() {
+        const rubricsList = document.querySelector(".wrapper__content-menu-item-rubrics-list");
 
-    if(showRubricsBtnSymbol.style.transform === "rotate(180deg)") {
-        showRubricsBtnSymbol.style.transform = "rotate(0deg)";
+        if (showRubricsBtnSymbol.style.transform === "rotate(180deg)") {
+            showRubricsBtnSymbol.style.transform = "rotate(0deg)";
 
-        if(rubricsList) {
-            rubricsList.style.display = "none";
-        }
-    } else {
-        showRubricsBtnSymbol.style.transform = "rotate(180deg)";
-
-        if(!rubrics.length) {
-            const response = await fetch("/rubrics/");
-            const data = await response.json();
-
-            rubrics = [...data];
-
-            showRubricsListInMenu(data);
+            if (rubricsList) {
+                rubricsList.style.display = "none";
+            }
         } else {
-            showRubricsListInMenu(rubrics);
+            showRubricsBtnSymbol.style.transform = "rotate(180deg)";
+
+            if (!rubrics.length) {
+                const response = await fetch("/rubrics/");
+                const data = await response.json();
+
+                rubrics = [...data];
+
+                showRubricsListInMenu(data);
+            } else {
+                showRubricsListInMenu(rubrics);
+            }
         }
-    }
-});
+    });
+}
 
 function showRubricsListInMenu(rubrics) {
     const rubricsList = document.querySelector(".wrapper__content-menu-item-rubrics-list");
