@@ -63,6 +63,8 @@ export class ProductsController {
         const maxProductsPrice = await this.productsService.getMaxPriceProductsByType(type);
         const minProductsPrice = await this.productsService.getMinPriceProductsByType(type);
 
+        const rubrics = await this.productsService.getParseRubricsForPage(rubricId);
+
         const translate = await this.translateService.getTranslateObjectByKeyAndIsoCode("products_page", req.cookies["iso_code_shop"]);
 
         if(!products.length) {
@@ -72,7 +74,7 @@ export class ProductsController {
                 scripts: ["/js/root.js"],
                 activeLanguage: req.cookies["iso_code_shop"],
                 ...translate,
-                rubrics: await this.productsService.getParseRubricsForPage(rubricId),
+                rubrics: rubrics.length > 2 ? rubrics : false,
                 filtersMenuItems: await this.rubricsTypesServiceDb.getTypesByRubricId(rubricId),
                 rubric_id: rubricId
             });
@@ -86,7 +88,7 @@ export class ProductsController {
                 minProductsPrice: minProductsPrice,
                 activeLanguage: req.cookies["iso_code_shop"],
                 ...translate,
-                rubrics: await this.productsService.getParseRubricsForPage(rubricId),
+                rubrics: rubrics.length > 2 ? rubrics : false,
                 filtersMenuItems: await this.rubricsTypesServiceDb.getTypesByRubricId(rubricId),
                 rubric_id: rubricId
             });
@@ -105,6 +107,8 @@ export class ProductsController {
         const maxProductsPrice = await this.productsService.getMaxProductsPriceByRubricId(rubricId);
         const minProductsPrice = await this.productsService.getMinProductsPriceByRubricId(rubricId);
 
+        const rubrics = await this.productsService.getParseRubricsForPage(rubricId);
+
         const translate = await this.translateService.getTranslateObjectByKeyAndIsoCode("products_page", req.cookies["iso_code_shop"]);
 
         res.render("root", {
@@ -117,7 +121,7 @@ export class ProductsController {
             ...translate,
             filtersMenuItems: await this.rubricsTypesServiceDb.getTypesByRubricId(rubricId),
             rubric_id: rubricId,
-            rubrics: await this.productsService.getParseRubricsForPage(rubricId)
+            rubrics: rubrics.length > 2 ? rubrics : false
         });
     }
 

@@ -75,11 +75,11 @@ addTypeToRubricBtn.addEventListener("click", function () {
 for(let i = 0; i < deleteRubricsButtons.length; i++) {
   deleteRubricsButtons[i].addEventListener("click", async function () {
     async function removeRubric() {
-      deleteRubricsButtons[i].parentElement.remove();
-
-      await fetch("/admin/rubrics/" + deleteRubricsButtons[i].parentElement.getAttribute("id"), {
+      await fetch("/admin/rubrics/" + deleteRubricsButtons[i].parentElement.parentElement.getAttribute("id"), {
         method: "DELETE"
       });
+
+      deleteRubricsButtons[i].parentElement.parentElement.remove();
     }
     questionModal("Ви дійсно хочете видалити цю рубрику ? Всі товари з цієї рубрики, замовлення буде видалено.", removeRubric, false);
   });
