@@ -44,6 +44,7 @@ export class RubricsControllerAdmin {
 
       res.render("admin/rubrics/rubrics", {
         admin: true,
+        auth: true,
         rubrics: rubrics,
         rubricTypes: rubricTypes,
         styles: ["/css/admin/rubrics/rubrics.css"],

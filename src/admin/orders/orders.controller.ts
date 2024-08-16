@@ -40,6 +40,7 @@ export class OrdersController {
             res.render("admin/orders/orders", {
                 orders: orders,
                 admin: true,
+                auth: true,
                 styles: ["/css/admin/orders/orders.css"],
                 scripts: ["/js/admin/orders/orders.js"],
                 countOrders: countOrders
@@ -48,6 +49,7 @@ export class OrdersController {
             res.render("admin/orders/orders", {
                 orders: false,
                 admin: true,
+                auth: true,
                 styles: ["/css/admin/orders/orders.css"],
                 countOrders: 0
             });

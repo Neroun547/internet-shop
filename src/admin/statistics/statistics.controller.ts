@@ -14,6 +14,7 @@ export class StatisticsController {
     getStatisticsPage(@Res() res: Response) {
         res.render("admin/statistics/statistics", {
             admin: true,
+            auth: true,
             scripts: ["/js/admin/statistics/statistics.js"],
             styles: ["/css/admin/statistics/statistics.css"]
         });

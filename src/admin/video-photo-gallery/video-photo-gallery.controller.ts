@@ -27,6 +27,7 @@ export class VideoPhotoGalleryController {
 
     res.render("admin/video-photo-gallery/video-photo-gallery", {
       admin: true,
+      auth: true,
       styles: ["/css/admin/video-photo-gallery/video-photo-gallery.css"],
       scripts: ["/js/admin/video-photo-gallery/video-photo-gallery.js"],
       publications: publications
@@ -46,6 +47,7 @@ export class VideoPhotoGalleryController {
   uploadVideoPhotoPage(@Res() res: Response) {
     res.render("admin/video-photo-gallery/upload-video-photo", {
       admin: true,
+      auth: true,
       styles: ["/css/admin/products/upload-product.css"],
       scripts: ["/js/admin/video-photo-gallery/upload-video-photo.js"]
     });
@@ -85,7 +87,8 @@ export class VideoPhotoGalleryController {
       files: item.videoPhotoGalleryFiles,
       styles: ["/css/admin/products/upload-product.css"],
       scripts: ["/js/admin/video-photo-gallery/edit-video-photo.js"],
-      admin: true
+      admin: true,
+      auth: true,
     });
   }
 

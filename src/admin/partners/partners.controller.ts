@@ -36,6 +36,7 @@ export class PartnersController {
 
       res.render("admin/partners/partners", {
         admin: true,
+        auth: true,
         partners: partners,
         styles: ["/css/admin/partners/partners.css"],
         scripts: ["/js/admin/partners/partners.js"]
@@ -85,6 +86,7 @@ export class PartnersController {
 
       res.render("admin/partners/partner-settings", {
         admin: true,
+        auth: true,
         id: partner.id,
         name: partner.name,
         styles: ["/css/admin/partners/partner-settings.css"],
@@ -104,6 +106,7 @@ export class PartnersController {
       if(!orders.length) {
         res.render("admin/partners/partner-orders", {
           admin: true,
+          auth: true,
           orders: false,
           countOrders: 0,
           styles: ["/css/admin/orders/orders.css"],
@@ -114,6 +117,7 @@ export class PartnersController {
 
         res.render("admin/partners/partner-orders", {
           admin: true,
+          auth: true,
           orders: orders,
           countOrders: countOrders,
           userId: id,
@@ -145,6 +149,7 @@ export class PartnersController {
 
       res.render("admin/partners/partner-info", {
         admin: true,
+        auth: true,
         id: partner.id,
         name: partner.name,
         styles: ["/css/admin/partners/partner-info.css"]

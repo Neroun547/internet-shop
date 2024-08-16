@@ -12,6 +12,7 @@ export class AuthController {
     getAuthPage(@Res() res: Response) {
         res.render("admin/auth/auth", {
             admin: true,
+            auth: false,
             styles: ["/css/admin/auth/auth.css"],
             scripts: ["/js/admin/auth/auth.js"]
         });

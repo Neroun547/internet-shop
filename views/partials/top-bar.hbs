@@ -1,9 +1,11 @@
 <div class="wrapper__logo">
     {{#if admin}}
-        <a href="/admin/auth/exit">
-            <button class="exit__btn">Вийти</button>
-        </a>
-        <a href="/admin" class="link-to-main-page">Головна</a>
+        {{#if auth}}
+            <a href="/admin/auth/exit">
+                <button class="exit__btn">Вийти</button>
+            </a>
+            <a href="/admin" class="link-to-main-page">Головна</a>
+        {{/if}}
     {{else}}
         <button class="wrapper__logo-open-menu">
             <div class="wrapper__logo-open-menu-decoration-1"></div>

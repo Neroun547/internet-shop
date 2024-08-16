@@ -28,6 +28,7 @@ export class ArticlesController {
 
         res.render("admin/articles/articles", {
             admin: true,
+            auth: true,
             styles: ["/css/admin/articles/articles.css"],
             scripts: ["/js/admin/articles/articles.js"],
             articles: articles,
@@ -40,6 +41,7 @@ export class ArticlesController {
     getUploadArticlePage(@Res() res: Response) {
         res.render("admin/articles/upload-article", {
             admin: true,
+            auth: true,
             scripts: ["/js/admin/articles/upload-article.js"],
             headScripts: ["https://cdn.tiny.cloud/1/fqqboid3jj5dviefd7qko96da2nnz3run5y6af5t891srayh/tinymce/6/tinymce.min.js"],
             styles: ["/css/admin/articles/upload-article.css"]
@@ -66,6 +68,7 @@ export class ArticlesController {
             filename: article.filename,
             theme: article.theme,
             admin: true,
+            auth: true,
             styles: ["/css/admin/articles/upload-article.css"],
             headScripts: ["https://cdn.tiny.cloud/1/fqqboid3jj5dviefd7qko96da2nnz3run5y6af5t891srayh/tinymce/6/tinymce.min.js"],
             scripts: ["/js/admin/articles/edit-article.js"]
