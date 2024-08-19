@@ -1,10 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { ProductsServiceDb } from "../../../db/products/products.service";
-import {ProductsImagesServiceDb} from "../../../db/products-images/products-images.service";
 import {BasketService} from "../../basket/service/basket.service";
 import { translateTypeProduct } from "../../../constants";
-import {OrdersServiceDb} from "../../../db/orders/orders.service";
-import { CommonService } from "../../../common/common.service";
 import { UsersServiceDb } from "../../../db/users/users.service";
 import { RubricsTypesServiceDb } from "../../../db/rubrics-types/rubrics-types.service";
 import { RubricsServiceDb } from "../../../db/rubrics/rubrics.service";
@@ -14,10 +11,7 @@ import { TranslateServiceDb } from "../../../db/translate/translate.service";
 export class ProductsService {
     constructor(
         private productsServiceDb: ProductsServiceDb,
-        private productsImagesServiceDb: ProductsImagesServiceDb,
         private basketService: BasketService,
-        private ordersServiceDb: OrdersServiceDb,
-        private commonService: CommonService,
         private usersServiceDb: UsersServiceDb,
         private rubricsTypesServiceDb: RubricsTypesServiceDb,
         private rubricsServiceDb: RubricsServiceDb,

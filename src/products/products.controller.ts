@@ -148,7 +148,8 @@ export class ProductsController {
                 ...translate,
                 translateDescription: translateDescription ? translateDescription.value : "",
                 moreThenOneImage: productData.images.length > 1,
-                filtersMenuItems: await this.rubricsTypesServiceDb.getTypesByRubricId(productData.rubric_id)
+                filtersMenuItems: await this.rubricsTypesServiceDb.getTypesByRubricId(productData.rubric_id),
+                partner: productData.role
             });
         } else {
             res.render("products/product", {
@@ -161,7 +162,8 @@ export class ProductsController {
                 ...translate,
                 translateDescription: translateDescription ? translateDescription.value : "",
                 moreThenOneImage: productData.images.length > 1,
-                filtersMenuItems: await this.rubricsTypesServiceDb.getTypesByRubricId(productData.rubric_id)
+                filtersMenuItems: await this.rubricsTypesServiceDb.getTypesByRubricId(productData.rubric_id),
+                partner: productData.role
             });
         }
     }
