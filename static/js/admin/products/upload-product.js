@@ -105,7 +105,7 @@ uploadProductForm.addEventListener("submit", async function (e) {
    if(api.ok) {
       showModal("Товар завантажено успішно", "/admin");
    } else {
-      showModal("Помилка завантаження. Перевірте тип файлу", "/admin");
+      showModal("Помилка завантаження. Перевірте тип файлу та його розмір (розмір файлу повинен бути до 10 мегабайт)", "/admin");
    }
 
    const timeout = setTimeout(function () {

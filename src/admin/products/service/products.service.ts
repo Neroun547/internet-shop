@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import {BadRequestException, Injectable, NotFoundException} from "@nestjs/common";
 import { ProductsServiceDb } from "../../../../db/products/products.service";
 import { CommonService } from "../../../../common/common.service";
 import { translateTypeProduct } from "../../../../constants";
@@ -178,6 +178,14 @@ export class ProductsServiceAdmin {
       for(let i = 0; i < productsCountAfterNum; i++) {
         await this.productsServiceDb.updateProductsNumToPrev(numDeleteProductIncremented);
         numDeleteProductIncremented += 1;
+      }
+    }
+  }
+  // TODO Maybe better make another file with files validator
+  checkFilesSize(files: Array<any>) {
+    for(let i = 0; i < files.length; i++) {
+      if(files[i].size >= 10000000) {
+        throw new BadRequestException();
       }
     }
   }

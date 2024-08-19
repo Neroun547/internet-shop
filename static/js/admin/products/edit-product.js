@@ -101,7 +101,7 @@ uploadProductForm.addEventListener("submit", async function (e) {
     if(api.ok) {
         showModal("Товар оновлено", "/admin");
     } else {
-        showModal("Помилка оновлення товару", "/admin");
+        showModal("Помилка оновлення товару. Перевірте тип файлу та його розмір (розмір файлу повинен бути до 10 мегабайт)", "/admin");
     }
 
     const timeout = setTimeout(function () {

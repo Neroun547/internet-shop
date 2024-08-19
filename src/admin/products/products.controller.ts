@@ -115,6 +115,8 @@ export class ProductsController {
     }))
     @Post()
     async uploadProduct(@Req() req: Request, @Body() body, @UploadedFiles() files: Array<Express.Multer.File>, @Res() res: Response) {
+        this.productsServiceAdmin.checkFilesSize(files);
+
         body.available = body.available === "true";
 
         await this.productsServiceAdmin.uploadProduct({ ...body, user_id: req["user"].id }, files);
@@ -165,6 +167,8 @@ export class ProductsController {
     }))
     @Patch(":id")
     async updateProductById(@Param("id", new ParseIntPipe()) id: number, @Req() req: Request, @UploadedFiles() files: Array<Express.Multer.File>, @Body() body) {
+        this.productsServiceAdmin.checkFilesSize(files);
+
         body.available = body.available === "true";
         body.num = Number(body.num);
         body.rubric_id = Number(body.rubric_id);
