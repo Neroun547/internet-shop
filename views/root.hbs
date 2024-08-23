@@ -1,6 +1,6 @@
 {{#if rubrics}}
   <div class="wrapper__rubrics mt-50">
-    <h2>Рубрики:</h2>
+    <h2>{{global_rubrics}}:</h2>
     {{#each rubrics}}
       {{#if this.active}}
         <a href="/products/by-rubrics/{{this.id}}">
@@ -60,9 +60,9 @@
                     </div>
                 </a>
               {{#if this.partner}}
-                <strong class="product-from-partner-or-admin text-center">Товар від партнера Zolotar</strong>
+                <strong class="product-from-partner-or-admin text-center">{{../global_product_from_zolotar_partner}}</strong>
               {{else}}
-                <strong class="product-from-partner-or-admin text-center">Товар від Zolotar</strong>
+                <strong class="product-from-partner-or-admin text-center">{{../global_product_from_zolotar}}</strong>
               {{/if}}
                 {{#if this.inBasket}}
                     <button class="wrapper__product-add-to-basket-btn" style="background-color: #fff; color: #000;">
