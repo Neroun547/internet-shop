@@ -19,6 +19,7 @@ export class VideoPhotoGalleryController {
 
     res.render("video-photo-gallery/video-photo-gallery", {
       publications: publications,
+      loadMore: publications.length >= 12,
       styles: ["/css/video-photo-gallery/video-photo-gallery.css"],
       scripts: ["/js/video-photo-gallery/video-photo-gallery.js"],
       activeLanguage: req.cookies["iso_code_shop"],

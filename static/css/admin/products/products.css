@@ -1,3 +1,15 @@
+#load-more-products-btn {
+    background-color: #69B904FF;
+    display: block;
+    margin: 0 auto;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 20px;
+    margin-top: 50px;
+    cursor: pointer;
+    color: #fff;
+}
+
 #filters__form {
     display: flex;
     flex-direction: column;

@@ -30,7 +30,8 @@ export class VideoPhotoGalleryController {
       auth: true,
       styles: ["/css/admin/video-photo-gallery/video-photo-gallery.css"],
       scripts: ["/js/admin/video-photo-gallery/video-photo-gallery.js"],
-      publications: publications
+      publications: publications,
+      loadMore: publications.length >= 12
     });
   }
 

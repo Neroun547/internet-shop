@@ -60,9 +60,10 @@ export class ProductsController {
             admin: true,
             products: parseProductsAndImages,
             countProducts: countProducts,
+            loadMore: countProducts > 8,
             countAvailableProducts: countAvailableProducts,
             styles: ["/css/admin/products/products.css"],
-            scripts: ["/js/admin/products/products.js", "/js/admin/products/load-more-products.js"],
+            scripts: ["/js/admin/products/products.js"],
             filtersType: arrFiltersType,
             minProductsPrice: minProductsPrice,
             maxProductsPrice: maxProductsPrice

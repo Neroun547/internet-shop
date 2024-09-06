@@ -7,6 +7,8 @@ const wrapperFiltersInputToRange = document.querySelector(".wrapper__filters-ran
 const wrapperFiltersForm = document.querySelector(".wrapper__filters-form");
 const selectLanguage = document.getElementById("language-select");
 const moveUpButton = document.querySelector(".move-up-button");
+const loadMoreProductsBtn = document.getElementById("load-more-products-btn");
+const wrapperContentContent = document.querySelector(".wrapper__content-content");
 
 const addToBasketBtn = document.querySelectorAll(".wrapper__product-add-to-basket-btn");
 
@@ -15,7 +17,6 @@ const productsType = wrapperProducts.getAttribute("data-type");
 const activeRubric = wrapperProducts.getAttribute("data-rubric");
 
 let skip = 8;
-let limitForScroll = 150;
 
 let availableFilter;
 let priceFromFilter;
@@ -55,7 +56,6 @@ wrapperFiltersForm.addEventListener("submit", async function (e) {
     const response = await products.json();
 
     skip = 8;
-    limitForScroll = 150;
 
     if(response.length) {
         const noProductsFilters = document.querySelector(".no-products-filters");
@@ -88,6 +88,25 @@ wrapperFiltersForm.addEventListener("submit", async function (e) {
             document.querySelector(".wrapper__products").innerHTML = "<h3 class='no-products-filters'>За цими фільтрами товарів не знайдено</h3>";
         }
     }
+    if(response.length < 8) {
+        if(document.getElementById("load-more-products-btn")) {
+            loadMoreProductsBtn.remove();
+        }
+    } else {
+        if(!document.getElementById("load-more-products-btn")) {
+            const loadMoreBtn = document.createElement("button");
+
+            loadMoreBtn.setAttribute("id", "load-more-products-btn");
+
+            loadMoreBtn.innerText = "Завантажити більше";
+
+            loadMoreBtn.addEventListener("click", async function () {
+                await loadMoreProducts();
+            });
+
+            wrapperContentContent.appendChild(loadMoreBtn);
+        }
+    }
 });
 
 wrapperFiltersInputFromRange.addEventListener("input", function (e) {
@@ -106,67 +125,11 @@ showFiltersBtn.addEventListener("click", function () {
     }
 });
 
-if(window.matchMedia("(max-width: 1150px)").matches) {
-    limitForScroll = 500;
+if(loadMoreProductsBtn) {
+    loadMoreProductsBtn.addEventListener("click", async function () {
+        await loadMoreProducts();
+    });
 }
-
-if(window.matchMedia("(max-width: 755px").matches) {
-    limitForScroll = 1000;
-}
-
-window.addEventListener("scroll", async function () {
-
-    if(window.scrollY >= limitForScroll && wrapperProducts.children.length > 1 && skip > 0) {
-        let products;
-
-        skip += 8;
-
-        let loadMoreUrl = "/products/load-more?take=8&skip=" + (skip-8);
-
-        if(window.matchMedia("(max-width: 1150px)").matches) {
-            limitForScroll += 2000;
-        } else if(window.matchMedia("(max-width: 755px)").matches) {
-            limitForScroll += 3000;
-        } else {
-            limitForScroll += 1000;
-        }
-
-
-        if(productsType) {
-            loadMoreUrl += "&type=" + productsType;
-        }
-        if(availableFilter && priceFromFilter && priceToFilter) {
-            loadMoreUrl += "&priceFrom=" + priceFromFilter + "&priceTo=" + priceToFilter + "&available=" + availableFilter;
-        }
-        if(activeRubric) {
-            loadMoreUrl += "&rubricId=" + activeRubric;
-        }
-        products = await fetch(loadMoreUrl);
-        const response = await products.json();
-
-        if(response.length) {
-            for(let i = 0; i < response.length; i++) {
-                wrapperProducts.appendChild(
-                    createProductCard(
-                        response[i].id,
-                        response[i].file_name,
-                        "Зображення",
-                        response[i].name,
-                        response[i].type,
-                        response[i].available,
-                        response[i].price,
-                        response[i].inBasket,
-                        response[i].translateTitle,
-                        response[i].partner
-                    )
-                )
-            }
-            if(response.length < 8) {
-                skip = 0;
-            }
-        }
-    }
-});
 
 function createProductCard(id, filename, alt, name, type, available, price, inBasket, translateTitle, partner) {
     const wrapperProductItem = document.createElement("div");
@@ -285,6 +248,48 @@ function createProductCard(id, filename, alt, name, type, available, price, inBa
 function deleteAllElementsFromHTML(elements) {
     for(let i = 0; i < elements.length; i++) {
         elements[i].remove();
+    }
+}
+
+async function loadMoreProducts() {
+    let products;
+
+    skip += 8;
+
+    let loadMoreUrl = "/products/load-more?take=8&skip=" + (skip-8);
+
+    if(productsType) {
+        loadMoreUrl += "&type=" + productsType;
+    }
+    if(availableFilter && priceFromFilter && priceToFilter) {
+        loadMoreUrl += "&priceFrom=" + priceFromFilter + "&priceTo=" + priceToFilter + "&available=" + availableFilter;
+    }
+    if(activeRubric) {
+        loadMoreUrl += "&rubricId=" + activeRubric;
+    }
+    products = await fetch(loadMoreUrl);
+    const response = await products.json();
+
+    if(response.length) {
+        for(let i = 0; i < response.length; i++) {
+            wrapperProducts.appendChild(
+                createProductCard(
+                    response[i].id,
+                    response[i].file_name,
+                    "Зображення",
+                    response[i].name,
+                    response[i].type,
+                    response[i].available,
+                    response[i].price,
+                    response[i].inBasket,
+                    response[i].translateTitle,
+                    response[i].partner
+                )
+            )
+        }
+    }
+    if(response.length < 8) {
+        loadMoreProductsBtn.remove();
     }
 }
 

@@ -3,10 +3,9 @@ import { createPublicationCard } from "./functions/create-publication-card.js";
 const deleteButtons = document.querySelectorAll(".wrapper__publications-item-buttons-delete");
 const showDescriptionBtn = document.querySelectorAll(".show-description-btn");
 const wrapperPublications = document.querySelector(".wrapper__publications");
+const loadMorePublicationsBtn = document.getElementById("load-more-publications-btn");
 
 let skip = 12;
-let limitForScroll = 200;
-
 
 for(let i = 0; i < deleteButtons.length; i++) {
   deleteButtons[i].addEventListener("click", async function () {
@@ -17,6 +16,8 @@ for(let i = 0; i < deleteButtons.length; i++) {
     });
 
     deleteButtons[i].parentElement.parentElement.parentElement.remove();
+
+    skip -= 1;
   });
 }
 
@@ -30,11 +31,8 @@ for(let i = 0; i < showDescriptionBtn.length; i++) {
   });
 }
 
-window.addEventListener("scroll", async function () {
-
-  if(window.scrollY >= limitForScroll && wrapperPublications.children.length > 1 && skip > 0) {
+loadMorePublicationsBtn.addEventListener("click", async function () {
     skip += 12;
-    limitForScroll += 800;
 
     const api = await fetch(`/video-photo-gallery/load-more?take=8&skip=${skip - 12}`);
     const response = await api.json();
@@ -67,8 +65,7 @@ window.addEventListener("scroll", async function () {
         }
       }
       if(response.length < 12) {
-        skip = 0;
+        loadMorePublicationsBtn.remove();
       }
-    }
   }
 });

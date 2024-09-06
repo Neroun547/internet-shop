@@ -5,6 +5,7 @@ import { TranslateService } from "./translate/service/translate.service";
 import { TranslateServiceDb } from "../db/translate/translate.service";
 import { RubricsServiceDb } from "../db/rubrics/rubrics.service";
 import { RubricsTypesServiceDb } from "../db/rubrics-types/rubrics-types.service";
+import {ProductsServiceDb} from "../db/products/products.service";
 
 @Controller()
 export class MainController {
@@ -13,7 +14,8 @@ export class MainController {
     private translateService: TranslateService,
     private translateServiceDb: TranslateServiceDb,
     private rubricsServiceDb: RubricsServiceDb,
-    private rubricsTypesServiceDb: RubricsTypesServiceDb
+    private rubricsTypesServiceDb: RubricsTypesServiceDb,
+    private productsServiceDb: ProductsServiceDb
   ) {}
 
   @Get()
@@ -35,6 +37,7 @@ export class MainController {
           maxProductsPrice: maxProductsPrice,
           minProductsPrice: minProductsPrice,
           activeLanguage: req.cookies["iso_code_shop"],
+          loadMore: productsAndImages.length >= 8,
           ...translate,
           rubrics: rubrics.length > 1 ? [...rubrics, { name: "Всі товари", active: true, id: 0 }] : false,
           filtersMenuItems: rubrics.length > 1 ? false : await this.rubricsTypesServiceDb.getTypesByRubricId(rubrics[0].id),

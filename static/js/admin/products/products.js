@@ -8,9 +8,10 @@ const wrapperFiltersInputFrom = document.querySelector(".wrapper__filters-price-
 const wrapperFiltersInputTo = document.querySelector(".wrapper__filters-price-inputs-to");
 const wrapperFiltersInputFromRange = document.querySelector(".wrapper__filters-range-input-from")
 const wrapperFiltersInputToRange = document.querySelector(".wrapper__filters-range-input-to");
+const loadMoreProductsBtn = document.getElementById("load-more-products-btn");
+const wrapperContentContent = document.querySelector(".wrapper__content-content")
 
 let skip = 8;
-let limitForScroll = 200;
 let availableProductFilter;
 let minPriceProductFilter;
 let maxPriceProductFilter;
@@ -40,7 +41,6 @@ filtersForm.addEventListener("submit", async function (e) {
     const data = await response.json();
 
     skip = 8;
-    limitForScroll = 200;
 
     removeAllProducts();
 
@@ -66,44 +66,33 @@ filtersForm.addEventListener("submit", async function (e) {
 
         wrapperProducts.appendChild(noProductsFoundLogo);
     }
-});
 
-window.addEventListener("scroll", async function () {
+    if(data.length >= 8) {
+        if(!document.getElementById("load-more-products-btn")) {
+            const loadMoreProductsBtn = document.createElement("button");
 
-    if(window.scrollY >= limitForScroll && wrapperProducts.children.length > 1 && skip > 0) {
-        skip += 8;
-        limitForScroll += 800;
+            loadMoreProductsBtn.innerText = "Завантажити більше";
 
-        let products;
+            loadMoreProductsBtn.setAttribute("id", "load-more-products-btn");
 
-        if(availableProductFilter && minPriceProductFilter && maxPriceProductFilter && typeProductFilter) {
-            products = await fetch(`/admin/products/load-more?take=8&skip=${skip - 8}&available=${availableProductFilter}&type=${typeProductFilter}&priceFrom=${minPriceProductFilter}&priceTo=${maxPriceProductFilter}`);
-        } else {
-            products = await fetch(`/admin/products/load-more?take=8&skip=${skip - 8}`);
+            loadMoreProductsBtn.addEventListener("click", async function () {
+                await loadMoreProducts();
+            });
+
+            wrapperContentContent.appendChild(loadMoreProductsBtn);
         }
-        const response = await products.json();
-
-        if(response.length) {
-            for(let i = 0; i < response.length; i++) {
-                wrapperProducts.appendChild(
-                  createProductCard(
-                    response[i].id,
-                    response[i].productsImages && response[i].productsImages[0] ? response[i].productsImages[0].file_name : "",
-                    "Зображення",
-                    response[i].name,
-                    response[i].type,
-                    response[i].available,
-                    response[i].price,
-                    response[i].num
-                  )
-                )
-            }
-            if(response.length < 8) {
-                skip = 0;
-            }
+    } else {
+        if(loadMoreProductsBtn) {
+            loadMoreProductsBtn.remove();
         }
     }
 });
+
+if(loadMoreProductsBtn) {
+    loadMoreProductsBtn.addEventListener("click", async function () {
+        await loadMoreProducts();
+    });
+}
 
 wrapperFiltersInputFromRange.addEventListener("input", function (e) {
     wrapperFiltersInputFrom.value = e.target.value;
@@ -112,3 +101,35 @@ wrapperFiltersInputFromRange.addEventListener("input", function (e) {
 wrapperFiltersInputToRange.addEventListener("input", function (e) {
     wrapperFiltersInputTo.value = e.target.value;
 });
+
+async function loadMoreProducts() {
+    let products;
+
+    if(availableProductFilter && minPriceProductFilter && maxPriceProductFilter && typeProductFilter) {
+        products = await fetch(`/admin/products/load-more?take=8&skip=${skip}&available=${availableProductFilter}&type=${typeProductFilter}&priceFrom=${minPriceProductFilter}&priceTo=${maxPriceProductFilter}`);
+    } else {
+        products = await fetch(`/admin/products/load-more?take=8&skip=${skip}`);
+    }
+    skip += 8;
+    const response = await products.json();
+
+    if(response.length) {
+        for(let i = 0; i < response.length; i++) {
+            wrapperProducts.appendChild(
+                createProductCard(
+                    response[i].id,
+                    response[i].productsImages && response[i].productsImages[0] ? response[i].productsImages[0].file_name : "",
+                    "Зображення",
+                    response[i].name,
+                    response[i].type,
+                    response[i].available,
+                    response[i].price,
+                    response[i].num
+                )
+            )
+        }
+    }
+    if(response.length < 8) {
+        loadMoreProductsBtn.remove();
+    }
+}

@@ -1,15 +1,12 @@
 import { createPublicationCard } from "./functions/create-publication-card.js";
 
 const wrapperPublications = document.querySelector(".wrapper__publications");
+const loadMorePublicationsBtn = document.getElementById("load-more-publications-btn")
 
 let skip = 12;
-let limitForScroll = 200;
 
-window.addEventListener("scroll", async function () {
-
-  if(window.scrollY >= limitForScroll && wrapperPublications.children.length > 1 && skip > 0) {
+loadMorePublicationsBtn.addEventListener("click", async function () {
     skip += 12;
-    limitForScroll += 800;
 
     const api = await fetch(`/video-photo-gallery/load-more?take=8&skip=${skip - 12}`);
     const response = await api.json();
@@ -41,8 +38,7 @@ window.addEventListener("scroll", async function () {
         }
       }
       if(response.length < 12) {
-        skip = 0;
+        loadMorePublicationsBtn.remove();
       }
     }
-  }
 });

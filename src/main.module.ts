@@ -29,6 +29,7 @@ import { RubricsModuleAdmin } from "./admin/rubrics/rubrics.module";
 import { RubricsModuleDb } from "../db/rubrics/rubrics.module";
 import { RubricsModule } from "./rubrics/rubrics.module";
 import { RubricsTypesModuleDb } from "../db/rubrics-types/rubrics-types.module";
+import {ProductsModuleDb} from "../db/products/products.module";
 
 @Module({
   imports: [
@@ -61,6 +62,7 @@ import { RubricsTypesModuleDb } from "../db/rubrics-types/rubrics-types.module";
       RubricsModuleDb,
       RubricsModule,
       RubricsTypesModuleDb,
+      ProductsModuleDb,
       MikroOrmModule.forRoot({
           dbName: process.env.DB_NAME,
           user: process.env.DB_USER,
