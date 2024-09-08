@@ -17,7 +17,6 @@ import {SupportChatModuleAdmin} from "./admin/support-chat/support-chat.module";
 import { ArticlesModule } from "./articles/articles.module";
 import { ArticlesModuleAdmin } from "./admin/articles/articles.module";
 import {StatisticsModule} from "./admin/statistics/statistics.module";
-import {StatisticsMiddleware} from "../middlewars/statistics.middleware";
 import {StatisticsModuleDb} from "../db/statistics/statistics.module";
 import {CommonModule} from "../common/common.module";
 import { VideoPhotoGalleryModule } from "./video-photo-gallery/video-photo-gallery.module";
@@ -130,10 +129,4 @@ import {ProductsModuleDb} from "../db/products/products.module";
   controllers: [MainController],
   providers: []
 })
-export class MainModule {
-    configure(consumer: MiddlewareConsumer) {
-        consumer
-            .apply(StatisticsMiddleware)
-            .forRoutes("*");
-    }
-}
+export class MainModule {}
