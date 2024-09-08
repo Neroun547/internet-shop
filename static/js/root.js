@@ -100,8 +100,8 @@ wrapperFiltersForm.addEventListener("submit", async function (e) {
 
             loadMoreBtn.innerText = "Завантажити більше";
 
-            loadMoreBtn.addEventListener("click", async function () {
-                await loadMoreProducts();
+            loadMoreBtn.addEventListener("click", function () {
+                loadMoreProducts();
             });
 
             wrapperContentContent.appendChild(loadMoreBtn);
@@ -126,8 +126,8 @@ showFiltersBtn.addEventListener("click", function () {
 });
 
 if(loadMoreProductsBtn) {
-    loadMoreProductsBtn.addEventListener("click", async function () {
-        await loadMoreProducts();
+    loadMoreProductsBtn.addEventListener("click", function () {
+        loadMoreProducts();
     });
 }
 
