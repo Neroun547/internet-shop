@@ -6,6 +6,11 @@ const loadMorePublicationsBtn = document.getElementById("load-more-publications-
 let skip = 12;
 
 loadMorePublicationsBtn.addEventListener("click", async function () {
+    const loadMorePublicationsText = loadMorePublicationsBtn.innerText;
+
+    loadMorePublicationsBtn.innerText = "";
+    loadMorePublicationsBtn.innerHTML = "<div class=\"lds-ring\"><div></div><div></div><div></div><div></div></div>";
+
     skip += 12;
 
     const api = await fetch(`/video-photo-gallery/load-more?take=8&skip=${skip - 12}`);
@@ -37,8 +42,10 @@ loadMorePublicationsBtn.addEventListener("click", async function () {
           )
         }
       }
-      if(response.length < 12) {
+    }
+    if(response.length < 12) {
         loadMorePublicationsBtn.remove();
-      }
+    } else {
+        loadMorePublicationsBtn.innerHTML = loadMorePublicationsText;
     }
 });

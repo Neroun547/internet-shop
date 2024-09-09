@@ -101,7 +101,7 @@ wrapperFiltersForm.addEventListener("submit", async function (e) {
             loadMoreBtn.innerText = "Завантажити більше";
 
             loadMoreBtn.addEventListener("click", function () {
-                loadMoreProducts();
+                callLoadMoreProductsEvent();
             });
 
             wrapperContentContent.appendChild(loadMoreBtn);
@@ -127,7 +127,7 @@ showFiltersBtn.addEventListener("click", function () {
 
 if(loadMoreProductsBtn) {
     loadMoreProductsBtn.addEventListener("click", function () {
-        loadMoreProducts();
+        callLoadMoreProductsEvent();
     });
 }
 
@@ -249,6 +249,18 @@ function deleteAllElementsFromHTML(elements) {
     for(let i = 0; i < elements.length; i++) {
         elements[i].remove();
     }
+}
+
+function callLoadMoreProductsEvent() {
+    const text = loadMoreProductsBtn.innerText;
+
+    loadMoreProductsBtn.innerText = "";
+    loadMoreProductsBtn.innerHTML = "<div class=\"lds-ring\"><div></div><div></div><div></div><div></div></div>";
+
+    loadMoreProducts()
+        .then(() => {
+            loadMoreProductsBtn.innerHTML = text;
+        });
 }
 
 async function loadMoreProducts() {
