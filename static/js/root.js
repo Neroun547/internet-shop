@@ -87,10 +87,13 @@ wrapperFiltersForm.addEventListener("submit", async function (e) {
             deleteAllElementsFromHTML(document.querySelectorAll(".wrapper__products-item"));
             document.querySelector(".wrapper__products").innerHTML = "<h3 class='no-products-filters'>За цими фільтрами товарів не знайдено</h3>";
         }
+        if(document.getElementById("load-more-products-btn")) {
+            document.getElementById("load-more-products-btn").remove();
+        }
     }
     if(response.length < 8) {
         if(document.getElementById("load-more-products-btn")) {
-            loadMoreProductsBtn.remove();
+            document.getElementById("load-more-products-btn").remove();
         }
     } else {
         if(!document.getElementById("load-more-products-btn")) {
@@ -301,7 +304,7 @@ async function loadMoreProducts() {
         }
     }
     if(response.length < 8) {
-        loadMoreProductsBtn.remove();
+        document.getElementById("load-more-products-btn").remove();
     }
 }
 
