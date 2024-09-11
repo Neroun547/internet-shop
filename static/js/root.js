@@ -256,7 +256,7 @@ function deleteAllElementsFromHTML(elements) {
 
 function callLoadMoreProductsEvent() {
     const loadMoreBtn = document.getElementById("load-more-products-btn");
-    const text = loadMoreBtn.innerText;
+    const text = loadMoreBtn.innerText ? loadMoreBtn.innerText : "Завантажити більше";
 
     loadMoreBtn.innerText = "";
     loadMoreBtn.innerHTML = "<div class=\"lds-ring\"><div></div><div></div><div></div><div></div></div>";
