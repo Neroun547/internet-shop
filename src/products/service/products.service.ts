@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { ProductsServiceDb } from "../../../db/products/products.service";
-import {BasketService} from "../../basket/service/basket.service";
+import { BasketService } from "../../basket/service/basket.service";
 import { translateTypeProduct } from "../../../constants";
 import { UsersServiceDb } from "../../../db/users/users.service";
 import { RubricsTypesServiceDb } from "../../../db/rubrics-types/rubrics-types.service";
@@ -44,21 +44,25 @@ export class ProductsService {
         return parseArr;
     }
 
-    async getProductsByType(take: number, skip: number, type?: string, rubricId?: any) {
+    async getProductsByType(take: number, skip: number, type?: string, rubricId?: any, searchName?: string) {
         if(!type) {
             if(!isNaN(Number(rubricId)) && Number(rubricId) !== 0) {
-                return await this.productsServiceDb.getProductsAndImagesByRubricId(Number(rubricId), take, skip);
+                return await this.productsServiceDb.getProductsAndImagesByRubricId(Number(rubricId), take, skip, searchName);
             } else {
-                return await this.productsServiceDb.getProductsAndImages(take, skip);
+                return await this.productsServiceDb.getProductsAndImages(take, skip, searchName);
             }
         }
         if(!isNaN(Number(type))) {
             const productType = await this.rubricsTypesServiceDb.getTypeById(Number(type));
-            return await this.productsServiceDb.getProductsAndImagesByType(take, skip, productType.name);
+            return await this.productsServiceDb.getProductsAndImagesByType(take, skip, productType.name, searchName);
         }
         if(type) {
-            return await this.productsServiceDb.getProductsAndImagesByType(take, skip, translateTypeProduct[type]);
+            return await this.productsServiceDb.getProductsAndImagesByType(take, skip, translateTypeProduct[type], searchName);
         }
+    }
+
+    async getProductsLikeName(take: number, skip: number, name: string) {
+        return await this.productsServiceDb.getProductsAndImagesLikeName(take, skip, name);
     }
 
     async getProductAndImageByProductId(id: number) {
@@ -106,27 +110,35 @@ export class ProductsService {
         return await this.productsServiceDb.getMinPriceProducts();
     }
 
-    async getProductsByFilters(take: number, skip: number, available: string, priceFrom: number, priceTo: number, type: string, rubricId?: any) {
+    async getMaxProductPriceLikeName(name: string) {
+        return await this.productsServiceDb.getMaxPriceProductsLikeName(name);
+    }
+
+    async getMinProductsPriceLikeName(name: string) {
+        return await this.productsServiceDb.getMinPriceProductsLikeName(name);
+    }
+
+    async getProductsByFilters(take: number, skip: number, available: string, priceFrom: number, priceTo: number, type: string, rubricId?: any, searchName?: string) {
 
         if(!isNaN(Number(rubricId)) && Number(rubricId) !== 0) {
             if(available === "all") {
-                return await this.productsServiceDb.getProductsAndImagesByFiltersAndRubricId(take, skip, priceFrom, priceTo, type === "all" ? "" : translateTypeProduct[type], undefined, Number(rubricId));
+                return await this.productsServiceDb.getProductsAndImagesByFiltersAndRubricId(take, skip, priceFrom, priceTo, type === "all" ? "" : translateTypeProduct[type], undefined, Number(rubricId), searchName);
             }
             if(available === "not_available") {
-                return await this.productsServiceDb.getProductsAndImagesByFiltersAndRubricId(take, skip, priceFrom, priceTo, type === "all" ? "" : translateTypeProduct[type], false, Number(rubricId));
+                return await this.productsServiceDb.getProductsAndImagesByFiltersAndRubricId(take, skip, priceFrom, priceTo, type === "all" ? "" : translateTypeProduct[type], false, Number(rubricId), searchName);
             }
             if(available === "available") {
-                return await this.productsServiceDb.getProductsAndImagesByFiltersAndRubricId(take, skip, priceFrom, priceTo, type === "all" ? "" : translateTypeProduct[type], true, Number(rubricId));
+                return await this.productsServiceDb.getProductsAndImagesByFiltersAndRubricId(take, skip, priceFrom, priceTo, type === "all" ? "" : translateTypeProduct[type], true, Number(rubricId), searchName);
             }
         } else {
             if(available === "all") {
-                return await this.productsServiceDb.getProductsAndImagesByFilters(take, skip, priceFrom, priceTo, type === "all" ? "" : translateTypeProduct[type]);
+                return await this.productsServiceDb.getProductsAndImagesByFilters(take, skip, priceFrom, priceTo, type === "all" ? "" : translateTypeProduct[type], undefined, searchName);
             }
             if(available === "not_available") {
-                return await this.productsServiceDb.getProductsAndImagesByFilters(take, skip, priceFrom, priceTo, type === "all" ? "" : translateTypeProduct[type], false);
+                return await this.productsServiceDb.getProductsAndImagesByFilters(take, skip, priceFrom, priceTo, type === "all" ? "" : translateTypeProduct[type], false, searchName);
             }
             if(available === "available") {
-                return await this.productsServiceDb.getProductsAndImagesByFilters(take, skip, priceFrom, priceTo, type === "all" ? "" : translateTypeProduct[type], true);
+                return await this.productsServiceDb.getProductsAndImagesByFilters(take, skip, priceFrom, priceTo, type === "all" ? "" : translateTypeProduct[type], true, searchName);
             }
         }
     }

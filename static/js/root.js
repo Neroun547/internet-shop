@@ -15,6 +15,7 @@ const addToBasketBtn = document.querySelectorAll(".wrapper__product-add-to-baske
 const wrapperProducts = document.querySelector(".wrapper__products");
 const productsType = wrapperProducts.getAttribute("data-type");
 const activeRubric = wrapperProducts.getAttribute("data-rubric");
+const searchName = wrapperProducts.getAttribute("data-searchname");
 
 let skip = 8;
 
@@ -52,7 +53,12 @@ wrapperFiltersForm.addEventListener("submit", async function (e) {
     priceFromFilter = wrapperFiltersInputFrom.value;
     priceToFilter = wrapperFiltersInputTo.value;
 
-    const products = await fetch("/products/by-filters?priceFrom=" + priceFromFilter + "&priceTo=" + priceToFilter + "&available=" + availableFilter + "&type=" + productsType + "&rubricId=" + activeRubric);
+    let url = "/products/by-filters?priceFrom=" + priceFromFilter + "&priceTo=" + priceToFilter + "&available=" + availableFilter + "&type=" + productsType + "&rubricId=" + activeRubric;
+
+    if(searchName) {
+        url += "&searchName=" + searchName;
+    }
+    const products = await fetch(url);
     const response = await products.json();
 
     skip = 8;
@@ -282,6 +288,9 @@ async function loadMoreProducts() {
     }
     if(activeRubric) {
         loadMoreUrl += "&rubricId=" + activeRubric;
+    }
+    if(searchName) {
+        loadMoreUrl += "&searchName=" + searchName;
     }
     products = await fetch(loadMoreUrl);
     const response = await products.json();

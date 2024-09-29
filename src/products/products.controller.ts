@@ -23,9 +23,10 @@ export class ProductsController {
         @Query("priceTo", new ParseFloatPipe()) priceTo: number,
         @Query("type") type: string,
         @Query("rubricId") rubricId,
+        @Query("searchName") searchName: string,
         @Req() req: Request
     ) {
-        const productsAndImages = await this.productsService.getProductsByFilters(8, 0, available, priceFrom, priceTo, type, rubricId);
+        const productsAndImages = await this.productsService.getProductsByFilters(8, 0, available, priceFrom, priceTo, type, rubricId, searchName);
 
         if(req.cookies["iso_code_shop"] === "en") {
             return await this.productsService.getParseProductsWithTranslate(req.cookies["iso_code_shop"], req.cookies["basket_in_shop"], productsAndImages);
@@ -43,14 +44,15 @@ export class ProductsController {
         @Query("priceFrom") priceFrom: number,
         @Query("priceTo") priceTo: number,
         @Query("rubricId") rubricId,
+        @Query("searchName") searchName: string,
         @Req() req: Request) {
 
         if(available && priceFrom && priceTo) {
-            const productsAndImages = await this.productsService.getProductsByFilters(take, skip, available, Number(priceFrom), Number(priceTo), type, rubricId);
+            const productsAndImages = await this.productsService.getProductsByFilters(take, skip, available, Number(priceFrom), Number(priceTo), type, rubricId, searchName);
 
             return await this.productsService.getParseProductsWithTranslate(req.cookies["iso_code_shop"], req.cookies["basket_in_shop"], productsAndImages);
         } else {
-            const productsAndImages = await this.productsService.getProductsByType(take, skip, type, rubricId);
+            const productsAndImages = await this.productsService.getProductsByType(take, skip, type, rubricId, searchName);
 
             return await this.productsService.getParseProductsWithTranslate(req.cookies["iso_code_shop"], req.cookies["basket_in_shop"], productsAndImages);
         }
@@ -124,6 +126,28 @@ export class ProductsController {
             filtersMenuItems: await this.rubricsTypesServiceDb.getTypesByRubricId(rubricId),
             rubric_id: rubricId,
             rubrics: rubrics.length > 2 ? rubrics : false
+        });
+    }
+
+    @Get("by-name")
+    async getProductsLikeName(@Query("name") name: string, @Res() res: Response, @Req() req: Request) {
+        const products = await this.productsService.getProductsLikeName(8, 0, name);
+        const translate = await this.translateService.getTranslateObjectByKeyAndIsoCode("products_page", req.cookies["iso_code_shop"]);
+
+        const maxProductsPrice = await this.productsService.getMaxProductPriceLikeName(name);
+        const minProductsPrice = await this.productsService.getMinProductsPriceLikeName(name);
+
+        res.render("root", {
+            products: await this.productsService.getParseProductsWithTranslate(req.cookies["iso_code_shop"], req.cookies["basket_in_shop"], products),
+            styles: ["/css/root.css"],
+            scripts: ["/js/root.js"],
+            maxProductsPrice: maxProductsPrice,
+            minProductsPrice: minProductsPrice,
+            activeLanguage: req.cookies["iso_code_shop"],
+            loadMore: products.length >= 8,
+            ...translate,
+            rubrics: false,
+            searchName: name
         });
     }
 

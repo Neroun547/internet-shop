@@ -204,12 +204,49 @@
     transition: .3s;
 }
 
+.wrapper__search-form {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 25px;
+}
+
+.wrapper__search input {
+    width: 80%;
+}
+
+.wrapper__search button {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    width: 15%;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+}
+
+@media screen and (max-width: 760px) {
+    .wrapper__search {
+        width: 100%;
+    }
+    .wrapper__search button {
+        font-size: 14px;
+    }
+    .wrapper__search input {
+        font-size: 14px;
+    }
+}
+
 @media screen and (max-width: 500px) {
     .wrapper__rubrics-btn {
         font-size: 14px;
     }
     .wrapper__rubrics-btn-active {
         font-size: 14px;
+    }
+    .wrapper__search input {
+        width: 60%;
+    }
+    .wrapper__search button {
+        width: 35%;
     }
 }
 

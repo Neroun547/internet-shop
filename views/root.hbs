@@ -1,3 +1,14 @@
+<h2 class="mt-50">Глобальний пошук:</h2>
+<div class="wrapper__search">
+  <form action="/products/by-name" method="GET" class="wrapper__search-form">
+    {{#if searchName}}
+      <input type="text" placeholder="Назва товару:" name="name" value="{{searchName}}">
+    {{else}}
+      <input type="text" placeholder="Назва товару:" name="name">
+    {{/if}}
+    <button id="search-product-btn" type="submit">Пошук</button>
+  </form>
+</div>
 {{#if rubrics}}
   <div class="wrapper__rubrics mt-50">
     <h2>{{global_rubrics}}:</h2>
@@ -38,7 +49,7 @@
 <button class="show-filters-btn">{{global_filters}}</button>
 {{/if}}
 
-<div class="wrapper__products" data-type="{{type}}" data-rubric="{{rubric_id}}">
+<div class="wrapper__products" data-type="{{type}}" data-rubric="{{rubric_id}}" data-searchname="{{searchName}}">
     {{#if products}}
         {{#each products}}
             <div class="wrapper__products-item">
