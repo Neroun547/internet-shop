@@ -6,12 +6,6 @@
       <option value="available">Які є в наявності</option>
       <option value="not_available">Яких немає в наявності</option>
     </select>
-    <select>
-      <option value="all">Всі</option>
-      {{#each filtersType}}
-        <option value="{{this.value}}">{{this.name}}</option>
-      {{/each}}
-    </select>
     <div class="wrapper__filters-price-inputs">
       <span class="wrapper__filters-price-span">Ціна від:</span>
       <input type="number" placeholder="Від" min="{{minProductsPrice}}" max="{{maxProductsPrice}}" step="0.01" class="wrapper__filters-price-inputs-from" value="{{minProductsPrice}}">

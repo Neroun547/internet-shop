@@ -4,7 +4,7 @@ import {
     Controller,
     Delete,
     Get,
-    Param,
+    Param, ParseFloatPipe,
     ParseIntPipe,
     Patch,
     Post,
@@ -50,11 +50,6 @@ export class ProductsController {
         const minProductsPrice = await this.productsServiceDb.getMinPriceProductsByUserId(req["user"].id);
         const maxProductsPrice = await this.productsServiceDb.getMaxPriceProductsByUserId(req["user"].id);
 
-        const arrFiltersType = [];
-
-        for(let key in translateTypeProduct) {
-            arrFiltersType.push({ name: translateTypeProduct[key], value: key });
-        }
         res.render("admin/products/products", {
             auth: true,
             admin: true,
@@ -64,7 +59,6 @@ export class ProductsController {
             countAvailableProducts: countAvailableProducts,
             styles: ["/css/admin/products/products.css"],
             scripts: ["/js/admin/products/products.js"],
-            filtersType: arrFiltersType,
             minProductsPrice: minProductsPrice,
             maxProductsPrice: maxProductsPrice
         });
@@ -177,5 +171,22 @@ export class ProductsController {
         await this.productsServiceAdmin.updateProductById(id, body, files, req["user"].id);
 
         return;
+    }
+
+    @UseGuards(AuthGuard)
+    @Get("by-filters")
+    async getProductsByFilters(
+      @Query("available") available: string,
+      @Query("priceFrom", new ParseFloatPipe()) priceFrom: number,
+      @Query("priceTo", new ParseFloatPipe()) priceTo: number,
+      @Req() req: Request
+    ) {
+        const productsAndImages = await this.productsServiceAdmin.getProductsByFiltersAndAdminId(8, 0, 'all', priceFrom, priceTo, available, req["user"].id);
+
+        if(req.cookies["iso_code_shop"] === "en") {
+            return await this.productsService.getParseProductsWithTranslate(req.cookies["iso_code_shop"], req.cookies["basket_in_shop"], productsAndImages);
+        } else {
+            return await this.productsService.parseProductsForLoadCards(productsAndImages, req.cookies["basket_in_shop"]);
+        }
     }
 }

@@ -340,4 +340,20 @@ export class ProductsServiceDb {
 
         return data ? data.price : null;
     }
+
+    async getProductsAndImagesByFiltersAndAdminId(take: number, skip: number, priceFrom: number, priceTo: number, type: string, adminId: number, available: boolean | undefined) {
+        if(available === undefined) {
+            if(type) {
+                return await this.repository.find({ price: { $gte: priceFrom, $lte: priceTo }, type: type, user_id: adminId }, { offset: skip, limit: take, populate: ["productsImages"], orderBy: {num: "ASC"} });
+            } else {
+                return await this.repository.find({ price: { $gte: priceFrom, $lte: priceTo }, user_id: adminId }, { offset: skip, limit: take, populate: ["productsImages"], orderBy: {num: "ASC"} });
+            }
+        } else {
+            if(type) {
+                return await this.repository.find({ price: { $gte: priceFrom, $lte: priceTo }, type: type, user_id: adminId, available: available }, { offset: skip, limit: take, populate: ["productsImages"], orderBy: {num: "ASC"} });
+            } else {
+                return await this.repository.find({ price: { $gte: priceFrom, $lte: priceTo }, user_id: adminId, available: available }, { offset: skip, limit: take, populate: ["productsImages"], orderBy: {num: "ASC"} });
+            }
+        }
+    }
 }

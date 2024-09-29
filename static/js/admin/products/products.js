@@ -33,11 +33,10 @@ filtersForm.addEventListener("submit", async function (e) {
     e.preventDefault();
 
     availableProductFilter = e.target[0].value;
-    typeProductFilter = e.target[1].value;
-    minPriceProductFilter = e.target[2].value;
-    maxPriceProductFilter = e.target[4].value;
+    minPriceProductFilter = e.target[1].value;
+    maxPriceProductFilter = e.target[3].value;
 
-    const response = await fetch(`/products/by-filters?available=${availableProductFilter}&type=${typeProductFilter}&priceFrom=${minPriceProductFilter}&priceTo=${maxPriceProductFilter}`);
+    const response = await fetch(`/admin/products/by-filters?available=${availableProductFilter}&priceFrom=${minPriceProductFilter}&priceTo=${maxPriceProductFilter}`);
     const data = await response.json();
 
     skip = 8;
@@ -105,8 +104,8 @@ wrapperFiltersInputToRange.addEventListener("input", function (e) {
 async function loadMoreProducts() {
     let products;
 
-    if(availableProductFilter && minPriceProductFilter && maxPriceProductFilter && typeProductFilter) {
-        products = await fetch(`/admin/products/load-more?take=8&skip=${skip}&available=${availableProductFilter}&type=${typeProductFilter}&priceFrom=${minPriceProductFilter}&priceTo=${maxPriceProductFilter}`);
+    if(availableProductFilter && minPriceProductFilter && maxPriceProductFilter) {
+        products = await fetch(`/admin/products/load-more?take=8&skip=${skip}&available=${availableProductFilter}&priceFrom=${minPriceProductFilter}&priceTo=${maxPriceProductFilter}`);
     } else {
         products = await fetch(`/admin/products/load-more?take=8&skip=${skip}`);
     }
@@ -130,6 +129,6 @@ async function loadMoreProducts() {
         }
     }
     if(response.length < 8) {
-        loadMoreProductsBtn.remove();
+        document.getElementById("load-more-products-btn").remove();
     }
 }

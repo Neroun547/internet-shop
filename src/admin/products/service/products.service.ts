@@ -181,6 +181,19 @@ export class ProductsServiceAdmin {
       }
     }
   }
+
+  async getProductsByFiltersAndAdminId(take: number, skip: number, type: string, priceFrom: number, priceTo: number, available: string, adminId: number) {
+    if(available === "all") {
+      return await this.productsServiceDb.getProductsAndImagesByFiltersAndAdminId(take, skip, priceFrom, priceTo, type === "all" ? "" : translateTypeProduct[type], adminId, undefined);
+    }
+    if(available === "not_available") {
+      return await this.productsServiceDb.getProductsAndImagesByFiltersAndAdminId(take, skip, priceFrom, priceTo, type === "all" ? "" : translateTypeProduct[type], adminId, false);
+    }
+    if(available === "available") {
+      return await this.productsServiceDb.getProductsAndImagesByFiltersAndAdminId(take, skip, priceFrom, priceTo, type === "all" ? "" : translateTypeProduct[type], adminId, true);
+    }
+  }
+
   // TODO Maybe better make another file with files validator
   checkFilesSize(files: Array<any>) {
     for(let i = 0; i < files.length; i++) {
