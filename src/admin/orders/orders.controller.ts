@@ -43,7 +43,8 @@ export class OrdersController {
                 auth: true,
                 styles: ["/css/admin/orders/orders.css"],
                 scripts: ["/js/admin/orders/orders.js"],
-                countOrders: countOrders
+                countOrders: countOrders,
+                partner: req["user"].role !== "admin"
             });
         } else {
             res.render("admin/orders/orders", {
@@ -51,7 +52,8 @@ export class OrdersController {
                 admin: true,
                 auth: true,
                 styles: ["/css/admin/orders/orders.css"],
-                countOrders: 0
+                countOrders: 0,
+                partner: req["user"].role !== "admin"
             });
         }
     }

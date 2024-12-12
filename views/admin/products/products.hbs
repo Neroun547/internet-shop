@@ -1,44 +1,52 @@
-<div class="wrapper__filters">
-  <h2>Фільтри:</h2>
-  <form id="filters__form">
-    <select>
-      <option value="all">Всі</option>
-      <option value="available">Які є в наявності</option>
-      <option value="not_available">Яких немає в наявності</option>
-    </select>
-    <div class="wrapper__filters-price-inputs">
-      <span class="wrapper__filters-price-span">Ціна від:</span>
-      <input type="number" placeholder="Від" min="{{minProductsPrice}}" max="{{maxProductsPrice}}" step="0.01" class="wrapper__filters-price-inputs-from" value="{{minProductsPrice}}">
-      <input type="range" min="{{minProductsPrice}}" max="{{maxProductsPrice}}" class="wrapper__filters-range-input-from" step="0.01" value="{{minProductsPrice}}">
+<div class="wrapper__page">
+  <a href="/admin/products/upload-product" class="add-product-link">
+    <button class="add-product-btn">
+      <span>Додати товар</span>
+    </button>
+  </a>
+  <div class="wrapper__filters">
+    <h2>Фільтри:</h2>
+    <form id="filters__form">
+      <select>
+        <option value="all">Всі</option>
+        <option value="available">Які є в наявності</option>
+        <option value="not_available">Яких немає в наявності</option>
+      </select>
+      <div class="wrapper__filters-price-inputs">
+        <span class="wrapper__filters-price-span">Ціна від:</span>
+        <input type="number" placeholder="Від" min="{{minProductsPrice}}" max="{{maxProductsPrice}}" step="0.01" class="wrapper__filters-price-inputs-from" value="{{minProductsPrice}}">
+        <input type="range" min="{{minProductsPrice}}" max="{{maxProductsPrice}}" class="wrapper__filters-range-input-from" step="0.01" value="{{minProductsPrice}}">
 
-      <span class="wrapper__filters-price-span">Ціна до:</span>
-      <input type="number" placeholder="До" min="{{minProductsPrice}}" max="{{maxProductsPrice}}" step="0.01" class="wrapper__filters-price-inputs-to" value="{{maxProductsPrice}}">
-      <input type="range" min="{{minProductsPrice}}" max="{{maxProductsPrice}}" class="wrapper__filters-range-input-to" step="0.01" value="{{maxProductsPrice}}">
-    </div>
+        <span class="wrapper__filters-price-span">Ціна до:</span>
+        <input type="number" placeholder="До" min="{{minProductsPrice}}" max="{{maxProductsPrice}}" step="0.01" class="wrapper__filters-price-inputs-to" value="{{maxProductsPrice}}">
+        <input type="range" min="{{minProductsPrice}}" max="{{maxProductsPrice}}" class="wrapper__filters-range-input-to" step="0.01" value="{{maxProductsPrice}}">
+      </div>
 
-    <button type="submit" class="filters__form-submit-btn">Застосувати фільтри</button>
-  </form>
-</div>
+      <button type="submit" class="filters__form-submit-btn">Застосувати фільтри</button>
+    </form>
+  </div>
 
-<h2 class="count-products-item">Загальні кількість товару: <span id="count-products">{{countProducts}}</span></h2>
-<h2 class="count-products-item">Кількість товарів у наявності: <span id="count-available-products">{{countAvailableProducts}}</span></h2>
-<div class="wrapper__products">
+  <h2 class="count-products-item">Загальні кількість товару: <span id="count-products">{{countProducts}}</span></h2>
+  <h2 class="count-products-item">Кількість товарів у наявності: <span id="count-available-products">{{countAvailableProducts}}</span></h2>
+  <div class="wrapper__products">
     {{#each products}}
-        <div class="wrapper__products-item">
-            <img src="/images/{{this.file_name}}" alt="Зображення" class="wrapper__products-item-image">
-            <div class="wrapper__products-item-num">Порядковий номер: {{this.num}}</div>
-            <div class="wrapper__products-item-name">Назва: {{this.name}}</div>
-            <div class="wrapper__products-item-type">Тип: {{this.type}}</div>
-            <div class="wrapper__products-item-price">Ціна: {{this.price}} грн</div>
-            <button class="wrapper__products-item-edit-btn wrapper__products-item-delete-btn" style="background-color: #e54724; color: white;" id="{{this.id}}" data-available="{{this.available}}">Видалити</button>
+      <div class="wrapper__products-item">
+        <img src="/images/{{this.file_name}}" alt="Зображення" class="wrapper__products-item-image">
+        <div class="wrapper__products-item-num">Порядковий номер: {{this.num}}</div>
+        <div class="wrapper__products-item-name">Назва: {{this.name}}</div>
+        <div class="wrapper__products-item-type">Тип: {{this.type}}</div>
+        <div class="wrapper__products-item-price">Ціна: {{this.price}} грн</div>
+        <button class="wrapper__products-item-edit-btn wrapper__products-item-delete-btn" style="background-color: #e54724; color: white;" id="{{this.id}}" data-available="{{this.available}}">Видалити</button>
 
-            <a href="/admin/products/edit/{{this.id}}">
-                <button class="wrapper__products-item-edit-btn">Редагувати</button>
-            </a>
-        </div>
+        <a href="/admin/products/edit/{{this.id}}">
+          <button class="wrapper__products-item-edit-btn">Редагувати</button>
+        </a>
+      </div>
     {{/each}}
+  </div>
+
+  {{#if loadMore}}
+    <button id="load-more-products-btn">Завантажити більше</button>
+  {{/if}}
 </div>
 
-{{#if loadMore}}
-    <button id="load-more-products-btn">Завантажити більше</button>
-{{/if}}

@@ -1,7 +1,10 @@
-<form action="/admin/articles/edit" class="wrapper__redactor-form" id="edit-article-form" data-filename="{{filename}}">
+<div class="wrapper__page">
+  <form action="/admin/articles/edit" class="wrapper__redactor-form" id="edit-article-form" data-filename="{{filename}}">
     <input type="text" name="name" placeholder="Назва статті:" class="wrapper__redactor-form-authors-input" value="{{name}}" required>
     <input type="text" name="theme" placeholder="Тема статті:" class="wrapper__redactor-form-authors-input" value="{{theme}}" required>
     <input type="text" name="authors" placeholder="Автори:" class="wrapper__redactor-form-authors-input" value="{{authors}}" required>
     <textarea id="textarea" name="content">{{content}}</textarea>
     <button name="submitbtn" type="submit">Зберегти</button>
-</form>
+  </form>
+</div>
+

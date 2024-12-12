@@ -1,13 +1,14 @@
-<div class="wrapper__selected">
+<div class="wrapper__page">
+  <div class="wrapper__selected">
     <div class="wrapper__selected-images">
 
     </div>
     <div class="wrapper__selected-btn">
-        <button class="wrapper__selected-left">&#8592;</button>
-        <button class="wrapper__selected-right">&#8594;</button>
+      <button class="wrapper__selected-left">&#8592;</button>
+      <button class="wrapper__selected-right">&#8594;</button>
     </div>
-</div>
-<form class="upload__product-form">
+  </div>
+  <form class="upload__product-form">
     <input type="file" multiple name="files" id="files__input">
     <input type="text" placeholder="Назва товару:" name="name" required>
     <input type="text" placeholder="Опис товару:" name="description">
@@ -35,16 +36,17 @@
 
     <label for="product-type" class="mt-20">Тип товару:</label>
     <select name="type" id="product-type">
-        <option value="Сережки">Сережки</option>
-        <option value="Підвіски">Підвіски</option>
-        <option value="Дукачі">Дукачі</option>
-        <option value="Браслети">Браслети</option>
-        <option value="Комплекти">Комплекти</option>
-        <option value="Інше">Інше</option>
+      <option value="Сережки">Сережки</option>
+      <option value="Підвіски">Підвіски</option>
+      <option value="Дукачі">Дукачі</option>
+      <option value="Браслети">Браслети</option>
+      <option value="Комплекти">Комплекти</option>
+      <option value="Інше">Інше</option>
     </select>
 
     <label for="available" style="margin-top: 50px">Є в наявності ?</label>
     <input type="checkbox" id="available" style="margin: 0; width: min-content;" name="available">
     <button type="submit">Додати товар</button>
-</form>
+  </form>
+</div>
 

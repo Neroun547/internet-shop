@@ -1,35 +1,37 @@
-<a href="/admin/video-photo-gallery/upload-video-photo" class="upload__video-photo-btn">
-  <button>Завантажити фото чи відео</button>
-</a>
+<div class="wrapper__page">
+  <a href="/admin/video-photo-gallery/upload-video-photo" class="upload__video-photo-btn">
+    <button>Завантажити фото чи відео</button>
+  </a>
 
-<div class="wrapper__publications">
-  {{#each publications}}
-    <div class="wrapper__publications-item">
-      <div class="wrapper__publications-sub-item">
-        {{#if this.previewFileVideo}}
-          <video controls preload="metadata">
-            <source src="/gallery/{{this.previewFile}}">
-          </video>
-        {{else}}
-          <img src="/gallery/{{this.previewFile}}">
-        {{/if}}
-        <h2>Назва: {{this.name}}</h2>
-        <p>Тема: {{this.theme}}</p>
-        <button class="show-description-btn">Показати опис</button>
-        <div class="item-description">
-          {{this.description}}
-        </div>
-        <div class="wrapper__publications-item-buttons">
-          <a href="/admin/video-photo-gallery/edit-item/{{this.id}}">
-            <button class="wrapper__publications-item-buttons-edit">Редагувати</button>
-          </a>
-          <button class="wrapper__publications-item-buttons-delete" id="{{this.id}}">Видалити</button>
+  <div class="wrapper__publications">
+    {{#each publications}}
+      <div class="wrapper__publications-item">
+        <div class="wrapper__publications-sub-item">
+          {{#if this.previewFileVideo}}
+            <video controls preload="metadata">
+              <source src="/gallery/{{this.previewFile}}">
+            </video>
+          {{else}}
+            <img src="/gallery/{{this.previewFile}}">
+          {{/if}}
+          <h2>Назва: {{this.name}}</h2>
+          <p>Тема: {{this.theme}}</p>
+          <button class="show-description-btn">Показати опис</button>
+          <div class="item-description">
+            {{this.description}}
+          </div>
+          <div class="wrapper__publications-item-buttons">
+            <a href="/admin/video-photo-gallery/edit-item/{{this.id}}">
+              <button class="wrapper__publications-item-buttons-edit">Редагувати</button>
+            </a>
+            <button class="wrapper__publications-item-buttons-delete" id="{{this.id}}">Видалити</button>
+          </div>
         </div>
       </div>
-    </div>
-  {{/each}}
-</div>
+    {{/each}}
+  </div>
 
-{{#if loadMore}}
+  {{#if loadMore}}
     <button id="load-more-publications-btn">Завантажити більше</button>
-{{/if}}
+  {{/if}}
+</div>

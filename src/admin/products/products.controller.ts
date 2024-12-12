@@ -60,7 +60,8 @@ export class ProductsController {
             styles: ["/css/admin/products/products.css"],
             scripts: ["/js/admin/products/products.js"],
             minProductsPrice: minProductsPrice,
-            maxProductsPrice: maxProductsPrice
+            maxProductsPrice: maxProductsPrice,
+            partner: req["user"].role !== "admin"
         });
     }
 
@@ -84,7 +85,7 @@ export class ProductsController {
 
     @UseGuards(AuthGuard)
     @Get("upload-product")
-    async getUploadProductPage(@Res() res: Response) {
+    async getUploadProductPage(@Res() res: Response, @Req() req: Request) {
         const rubrics = await this.rubricsServiceDb.getAllRubrics();
 
         res.render("admin/products/upload-product", {
@@ -93,7 +94,8 @@ export class ProductsController {
             styles: ["/css/admin/products/upload-product.css"],
             scripts: ["/js/admin/products/upload-product.js"],
             rubrics: rubrics.filter(el => el.selected_default !== 1),
-            selectedRubric: rubrics.find(el => el.selected_default === 1)
+            selectedRubric: rubrics.find(el => el.selected_default === 1),
+            partner: req["user"].role !== "admin"
         });
     }
 
@@ -121,7 +123,7 @@ export class ProductsController {
 
     @UseGuards(AuthGuard)
     @Get("edit/:id")
-    async getEditPage(@Param("id", new ParseIntPipe()) id: number, @Res() res: Response) {
+    async getEditPage(@Param("id", new ParseIntPipe()) id: number, @Req() req: Request, @Res() res: Response) {
         const product = await this.productsService.getProductAndImageByProductId(id);
         const translateTitle = await this.translateServiceDb.getTranslateByKeyAndIsoCode("product_translate_" + product.id, "en");
         const translateDescription = await this.translateServiceDb.getTranslateByKeyAndIsoCode("product_translate_description_" + product.id, "en");
@@ -130,6 +132,7 @@ export class ProductsController {
 
         res.render("admin/products/product", {
             admin: true,
+            auth: true,
             product: product,
             translateTitle: translateTitle ? translateTitle.value : "",
             translateDescription: translateDescription ? translateDescription.value : "",
@@ -137,7 +140,8 @@ export class ProductsController {
             rubrics: rubrics.filter(el => el.id !== product.rubric_id),
             selectedRubric: rubrics.find(el => el.id === product.rubric_id),
             styles: ["/css/admin/products/upload-product.css"],
-            scripts: ["/js/admin/products/edit-product.js"]
+            scripts: ["/js/admin/products/edit-product.js"],
+            partner: req["user"].role !== "admin"
         });
     }
 

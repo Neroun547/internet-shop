@@ -21,7 +21,7 @@ authForm.addEventListener("submit", async function (e) {
         if(!api.ok) {
             showModal(response.message);
         } else {
-            window.location.href = "/admin";
+            window.location.href = "/admin/orders";
         }
     }
 });

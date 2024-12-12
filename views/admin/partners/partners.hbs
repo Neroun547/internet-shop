@@ -1,13 +1,15 @@
-<div class="wrapper__partners">
-  <div class="dark-background"></div>
-  <button id="create-partner">Додати партнера</button>
-  {{#each partners}}
-    <div class="wrapper__partners-item">
-      <h2>{{this.name}}</h2>
-      <a href="/admin/partners/info-page/{{this.id}}">
-        <button class="view-info-about-partner">Інформація про партнера</button>
-      </a>
-      <button class="delete-partner-btn" id="{{this.id}}">Видалити партнера</button>
-    </div>
-  {{/each}}
+<div class="wrapper__page">
+  <div class="wrapper__partners">
+    <div class="dark-background"></div>
+    <button id="create-partner">Додати партнера</button>
+    {{#each partners}}
+      <div class="wrapper__partners-item">
+        <h2>{{this.name}}</h2>
+        <a href="/admin/partners/info-page/{{this.id}}">
+          <button class="view-info-about-partner">Інформація про партнера</button>
+        </a>
+        <button class="delete-partner-btn" id="{{this.id}}">Видалити партнера</button>
+      </div>
+    {{/each}}
+  </div>
 </div>

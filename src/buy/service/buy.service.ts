@@ -33,27 +33,6 @@ export class BuyService {
                 user_id: (await this.productsServiceDb.getProductById(Number(order.products[i].id))).user_id
             });
         }
-        console.log(process.env.PUSH_MESSAGES_PUBLIC_KEY)
-        webPush.setVapidDetails(
-          "https://zolotar.shop/",
-          process.env.PUSH_MESSAGES_PUBLIC_KEY,
-          process.env.PUSH_MESSAGES_PRIVATE_KEY
-        );
-        const subscription = JSON.parse((await this.settingsServiceDb.getSettingByKey("push_messages_subscription")).setting_value);
-
-        setTimeout(() => {
-            const payload = null;
-            const options = {
-                TTL: 20,
-            };
-            webPush.sendNotification(subscription, payload, options)
-              .then(success => {
-                  console.log(success)
-              })
-              .catch(e => {
-                  console.log(e)
-              })
-        }, 10000);
     }
 }
 

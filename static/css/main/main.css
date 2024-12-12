@@ -136,9 +136,6 @@
 }
 
 .exit__btn {
-    position: absolute;
-    right: 30px;
-    top: 10px;
     background: #f8b71d;
     border-color: #f8b71d;
     border-radius: 5px;

@@ -3,19 +3,17 @@
     {{> head}}
 <body>
 <div class="wrapper__filter">
-
     {{#if admin}}
         <div class="wrapper__content-admin">
+          {{#if auth}}
           <div class="wrapper__nav-bar-left-admin">
+            <button class="open-close-burger-menu">Усі розділи <</button>
             <nav>
-              <a href="/admin/products/upload-product">
-                Товари
+              <a href="/admin/products/">
+                Весь товар
               </a>
               <a href="/admin/orders">
                 Замовлення
-              </a>
-              <a href="/admin/products/">
-                Весь товар
               </a>
               {{#if partner}}
 
@@ -41,13 +39,6 @@
               {{#if partner}}
 
               {{else}}
-                <a href="/admin/statistics">
-                  Сатистика
-                </a>
-              {{/if}}
-              {{#if partner}}
-
-              {{else}}
                 <a href="/admin/partners">
                   Партнери
                 </a>
@@ -60,9 +51,15 @@
                   Рубрики
                 </a>
               {{/if}}
+              <a href="/admin/auth/exit">
+                <button class="exit__btn">Вийти</button>
+              </a>
             </nav>
           </div>
-          <div class="wrapper__content-content-admin">{{{body}}}</div>
+          {{/if}}
+          <div class="wrapper__content-content-admin">
+            {{{body}}}
+          </div>
         </div>
     {{else}}
       {{> top-bar}}
@@ -107,7 +104,7 @@
     </div>
 </div>
 {{#if admin}}
-
+   <script src="/js/admin/main.js" type="module"></script>
 {{else}}
     <script src="/js/main.js" type="module"></script>
 {{/if}}

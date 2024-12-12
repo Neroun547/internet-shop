@@ -11,11 +11,6 @@ export class AdminController {
     @UseGuards(AuthGuard)
     @Get()
     getAdminPage(@Req() req: Request, @Res() res: Response) {
-        res.render("admin/root", {
-            admin: true,
-            auth: true,
-            styles: ["/css/admin/main.css"],
-            partner: req["user"].role !== "admin"
-        });
+        res.redirect("/admin/orders");
     }
 }

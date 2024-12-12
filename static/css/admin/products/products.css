@@ -86,4 +86,19 @@
     margin-top: 20px;
 }
 
+.add-product-link {
+    display: block;
+    margin: 0 auto;
+    width: max-content;
+}
+
+.add-product-btn {
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    background-color: #f8b71d;
+    border: none;
+}
+
+
 

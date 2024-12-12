@@ -1,67 +1,70 @@
-<div class="wrapper__order">
+<div class="wrapper__page">
+  <div class="wrapper__order">
     <h2>Замовлення: </h2>
     {{#each order}}
-        <div class="wrapper__order-item">
-            <div class="wrapper__order-item-name">Назва: {{this.product.name}}</div>
-            <div class="wrapper__order-item-type">Тип: {{this.product.type}}</div>
-            <div class="wrapper__order-item-price">Ціна: {{this.product.price}}</div>
-            <div class="wrapper__order-item-count">Кількість: {{this.count}}</div>
-            {{#if this.product.available}}
-                <div>Є в наявності</div>
-            {{else}}
-                <div>Немає в наявності</div>
-            {{/if}}
-        </div>
+      <div class="wrapper__order-item">
+        <div class="wrapper__order-item-name">Назва: {{this.product.name}}</div>
+        <div class="wrapper__order-item-type">Тип: {{this.product.type}}</div>
+        <div class="wrapper__order-item-price">Ціна: {{this.product.price}}</div>
+        <div class="wrapper__order-item-count">Кількість: {{this.count}}</div>
+        {{#if this.product.available}}
+          <div>Є в наявності</div>
+        {{else}}
+          <div>Немає в наявності</div>
+        {{/if}}
+      </div>
     {{/each}}
     <div class="wrapper__order-all-sum">Загальна сума замовлення: {{all_sum}}</div>
     <div>Ім'я клієнта: {{first_name}}</div>
     <div>Прізвище клієнта: {{last_name}}</div>
     <div class="wrapper__order-contact-info">Контактна інформація клієнта: {{contact_info}}</div>
     {{#if remark}}
-        <div>Примітка від клієнта: {{remark}}</div>
+      <div>Примітка від клієнта: {{remark}}</div>
     {{/if}}
 
     <div class="wrapper__order-item-status">
-        <button class="wrapper__order-admin-note-btn">Додати примітку</button>
-        <form class="wrapper__order-admin-note-form" method="POST" action="/admin/orders/add-admin-note/{{idOrder}}">
-            <textarea name="note">{{admin_note}}</textarea>
-            <button type="submit">Додати примітку</button>
-        </form>
-        {{#if (haveStatus status)}}
-            {{#if (equals status "completed")}}
-                <button class="wrapper__order-done-btn mt-50 mb-50" style="background-color: #fff; color: #000;">Поточний статус: Вже виконано</button>
-                <button class="wrapper__order-done-btn mt-20" data-idOrder="{{idOrder}}">Позначити як "виконано"</button>
-                <button class="wrapper__order-return-btn mt-20" data-idOrder="{{idOrder}}">Позначити як "Клієнт повернув товар"</button>
-                <button class="wrapper__order-in-process-btn mt-20" data-idOrder="{{idOrder}}">Позначити як "В процесі"</button>
-            {{/if}}
-
-            {{#if (equals status "returned")}}
-                <button class="wrapper__order-return-btn mt-50 mb-50" style="background-color: #fff; color: #000;">Поточний статус: Клієнт повернув товар</button>
-                <button class="wrapper__order-done-btn mt-20" data-idOrder="{{idOrder}}">Позначити як "виконано"</button>
-                <button class="wrapper__order-return-btn mt-20" data-idOrder="{{idOrder}}">Позначити як "Клієнт повернув товар"</button>
-                <button class="wrapper__order-in-process-btn mt-20" data-idOrder="{{idOrder}}">Позначити як "В процесі"</button>
-            {{/if}}
-
-            {{#if (equals status "in_process")}}
-                <button class="wrapper__order-in-process-btn mt-50 mb-50" style="background-color: #fff; color: #000;">Поточний статус: В процесі</button>
-                <button class="wrapper__order-done-btn mt-20" data-idOrder="{{idOrder}}">Позначити як "виконано"</button>
-                <button class="wrapper__order-return-btn mt-20" data-idOrder="{{idOrder}}">Позначити як "Клієнт повернув товар"</button>
-                <button class="wrapper__order-in-process-btn mt-20" data-idOrder="{{idOrder}}">Позначити як "В процесі"</button>
-            {{/if}}
-
-        {{else}}
-            <button class="wrapper__order-done-btn mt-20" data-idOrder="{{idOrder}}">Позначити як "виконано"</button>
-            <button class="wrapper__order-return-btn mt-20" data-idOrder="{{idOrder}}">Позначити як "Клієнт повернув товар"</button>
-            <button class="wrapper__order-in-process-btn mt-20" data-idOrder="{{idOrder}}">Позначити як "В процесі"</button>
+      <button class="wrapper__order-admin-note-btn">Додати примітку</button>
+      <form class="wrapper__order-admin-note-form" method="POST" action="/admin/orders/add-admin-note/{{idOrder}}">
+        <textarea name="note">{{admin_note}}</textarea>
+        <button type="submit">Додати примітку</button>
+      </form>
+      {{#if (haveStatus status)}}
+        {{#if (equals status "completed")}}
+          <button class="wrapper__order-done-btn mt-50 mb-50" style="background-color: #fff; color: #000;">Поточний статус: Вже виконано</button>
+          <button class="wrapper__order-done-btn mt-20" data-idOrder="{{idOrder}}">Позначити як "виконано"</button>
+          <button class="wrapper__order-return-btn mt-20" data-idOrder="{{idOrder}}">Позначити як "Клієнт повернув товар"</button>
+          <button class="wrapper__order-in-process-btn mt-20" data-idOrder="{{idOrder}}">Позначити як "В процесі"</button>
         {{/if}}
+
+        {{#if (equals status "returned")}}
+          <button class="wrapper__order-return-btn mt-50 mb-50" style="background-color: #fff; color: #000;">Поточний статус: Клієнт повернув товар</button>
+          <button class="wrapper__order-done-btn mt-20" data-idOrder="{{idOrder}}">Позначити як "виконано"</button>
+          <button class="wrapper__order-return-btn mt-20" data-idOrder="{{idOrder}}">Позначити як "Клієнт повернув товар"</button>
+          <button class="wrapper__order-in-process-btn mt-20" data-idOrder="{{idOrder}}">Позначити як "В процесі"</button>
+        {{/if}}
+
+        {{#if (equals status "in_process")}}
+          <button class="wrapper__order-in-process-btn mt-50 mb-50" style="background-color: #fff; color: #000;">Поточний статус: В процесі</button>
+          <button class="wrapper__order-done-btn mt-20" data-idOrder="{{idOrder}}">Позначити як "виконано"</button>
+          <button class="wrapper__order-return-btn mt-20" data-idOrder="{{idOrder}}">Позначити як "Клієнт повернув товар"</button>
+          <button class="wrapper__order-in-process-btn mt-20" data-idOrder="{{idOrder}}">Позначити як "В процесі"</button>
+        {{/if}}
+
+      {{else}}
+        <button class="wrapper__order-done-btn mt-20" data-idOrder="{{idOrder}}">Позначити як "виконано"</button>
+        <button class="wrapper__order-return-btn mt-20" data-idOrder="{{idOrder}}">Позначити як "Клієнт повернув товар"</button>
+        <button class="wrapper__order-in-process-btn mt-20" data-idOrder="{{idOrder}}">Позначити як "В процесі"</button>
+      {{/if}}
     </div>
 
     {{#if (haveStatus status)}}
-        <button class="wrapper__order-item-delete-status-btn mt-20" data-idOrder="{{idOrder}}">Скинути статус замовлення</button>
+      <button class="wrapper__order-item-delete-status-btn mt-20" data-idOrder="{{idOrder}}">Скинути статус замовлення</button>
     {{/if}}
 
     {{#if partner}}
     {{else}}
       <button class="wrapper__order-delete-btn" data-idOrder="{{idOrder}}">Видалити замовлення</button>
     {{/if}}
+  </div>
+
 </div>

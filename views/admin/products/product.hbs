@@ -1,17 +1,14 @@
-<a href="/admin/products">
-    <button class="back-button">Назад</button>
-</a>
-
-<div class="wrapper__selected">
+<div class="wrapper__page">
+  <div class="wrapper__selected">
     <div class="wrapper__selected-images">
 
     </div>
     <div class="wrapper__selected-btn">
-        <button class="wrapper__selected-left">&#8592;</button>
-        <button class="wrapper__selected-right">&#8594;</button>
+      <button class="wrapper__selected-left">&#8592;</button>
+      <button class="wrapper__selected-right">&#8594;</button>
     </div>
-</div>
-<form class="upload__product-form" id="{{product.id}}">
+  </div>
+  <form class="upload__product-form" id="{{product.id}}">
     <input type="file" multiple name="files" id="files__input">
     <input type="number" step="1" name="num" placeholder="Порядковий номер:" value="{{product.num}}">
     <input type="text" placeholder="Назва товару:" name="name" value="{{this.product.name}}" required>
@@ -47,9 +44,11 @@
 
     <label for="available" style="margin-top: 50px">Є в наявності ?</label>
     {{#if product.available}}
-        <input type="checkbox" id="available" style="margin: 0; width: min-content;" name="available" checked>
+      <input type="checkbox" id="available" style="margin: 0; width: min-content;" name="available" checked>
     {{else}}
-        <input type="checkbox" id="available" style="margin: 0; width: min-content;" name="available">
+      <input type="checkbox" id="available" style="margin: 0; width: min-content;" name="available">
     {{/if}}
     <button type="submit">Оновити товар</button>
-</form>
+  </form>
+
+</div>
