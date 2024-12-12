@@ -4,7 +4,6 @@ import {BasketService} from "../../basket/service/basket.service";
 import {AddOrderDto} from "../dto/add-order.dto";
 import {OrdersServiceDb} from "../../../db/orders/orders.service";
 import { SettingsServiceDb } from "../../../db/settings/settings.service";
-const webPush = require("web-push");
 
 @Injectable()
 export class BuyService {
