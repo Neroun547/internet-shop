@@ -53,3 +53,43 @@
 .mb-50 {
     margin-bottom: 50px;
 }
+
+.wrapper__nav-bar-left-admin {
+    width: 16%;
+    border: 1px solid #ccc;
+    position: fixed;
+    height: 100%;
+}
+
+.wrapper__nav-bar-left-admin nav {
+    display: flex;
+    flex-direction: column;
+    padding-left: 20px;
+}
+
+.wrapper__nav-bar-left-admin nav a {
+    text-decoration: none;
+    margin-top: 40px;
+    color: #000;
+}
+
+.wrapper__nav-bar-left-admin nav a:hover {
+    color: #f8b71d;
+}
+
+.wrapper__content-admin {
+    flex: 20;
+    display: flex;
+    justify-content: space-between;
+}
+
+.wrapper__content-content-admin {
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+    padding-bottom: 50px;
+    margin-top: 48px;
+    margin-left: 18%;
+}
+
+

@@ -3,13 +3,69 @@
     {{> head}}
 <body>
 <div class="wrapper__filter">
-    {{> top-bar}}
 
     {{#if admin}}
-        <div class="wrapper__content">
-            <div class="wrapper__content-content">{{{body}}}</div>
+        <div class="wrapper__content-admin">
+          <div class="wrapper__nav-bar-left-admin">
+            <nav>
+              <a href="/admin/products/upload-product">
+                Товари
+              </a>
+              <a href="/admin/orders">
+                Замовлення
+              </a>
+              <a href="/admin/products/">
+                Весь товар
+              </a>
+              {{#if partner}}
+
+              {{else}}
+                <a href="/admin/articles">
+                  Статті
+                </a>
+              {{/if}}
+
+              {{#if partner}}
+              {{else}}
+                <a href="/admin/video-photo-gallery">
+                  Відео, фото галерея
+                </a>
+              {{/if}}
+              {{#if partner}}
+
+              {{else}}
+                <a href="/admin/support">
+                  Підтримка
+                </a>
+              {{/if}}
+              {{#if partner}}
+
+              {{else}}
+                <a href="/admin/statistics">
+                  Сатистика
+                </a>
+              {{/if}}
+              {{#if partner}}
+
+              {{else}}
+                <a href="/admin/partners">
+                  Партнери
+                </a>
+              {{/if}}
+
+              {{#if partner}}
+
+              {{else}}
+                <a href="/admin/rubrics">
+                  Рубрики
+                </a>
+              {{/if}}
+            </nav>
+          </div>
+          <div class="wrapper__content-content-admin">{{{body}}}</div>
         </div>
     {{else}}
+      {{> top-bar}}
         {{#if filtersMenuItems}}
           <div class="wrapper__content">
             <div class="wrapper__content-left-bar-menu">
