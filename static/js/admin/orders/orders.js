@@ -63,6 +63,7 @@ sortSelect.addEventListener("change", async function (e) {
     if(orders.length === 10 && !document.querySelector(".load-more-orders-btn")) {
         const loadMoreOrdersBtn = document.createElement("button");
         loadMoreOrdersBtn.classList.add("load-more-orders-btn");
+        loadMoreOrdersBtn.classList.add("load-more-button");
         loadMoreOrdersBtn.innerText = "Завантажити ще замовленн";
 
         wrapperOrders.appendChild(loadMoreOrdersBtn);
