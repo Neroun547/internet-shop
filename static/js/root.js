@@ -107,6 +107,7 @@ wrapperFiltersForm.addEventListener("submit", async function (e) {
         if(!document.getElementById("load-more-products-btn")) {
             const loadMoreBtn = document.createElement("button");
 
+            loadMoreBtn.classList.add("load-more-button");
             loadMoreBtn.setAttribute("id", "load-more-products-btn");
 
             loadMoreBtn.innerText = "Завантажити більше";

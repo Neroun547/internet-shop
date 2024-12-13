@@ -73,6 +73,7 @@ filtersForm.addEventListener("submit", async function (e) {
 
             loadMoreProductsBtn.innerText = "Завантажити більше";
 
+            loadMoreProductsBtn.classList.add("load-more-button");
             loadMoreProductsBtn.setAttribute("id", "load-more-products-btn");
 
             loadMoreProductsBtn.addEventListener("click", async function () {
