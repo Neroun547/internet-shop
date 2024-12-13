@@ -1,5 +1,6 @@
 import { createProductCard } from "./functions/create-product-card.js";
 import { removeAllProducts } from "./functions/remove-all-products.js";
+import { startLoadMoreBtnAnimation } from "../../common/start-load-more-btn-animation.js";
 
 const wrapperProducts = document.querySelector(".wrapper__products");
 const filtersForm = document.getElementById("filters__form");
@@ -102,6 +103,11 @@ wrapperFiltersInputToRange.addEventListener("input", function (e) {
 });
 
 async function loadMoreProducts() {
+    const loadMoreBtn = document.getElementById("load-more-products-btn");
+    const loadMoreBtnText = loadMoreBtn.innerText;
+
+    startLoadMoreBtnAnimation();
+
     let products;
 
     if(availableProductFilter && minPriceProductFilter && maxPriceProductFilter) {
@@ -130,5 +136,7 @@ async function loadMoreProducts() {
     }
     if(response.length < 8) {
         document.getElementById("load-more-products-btn").remove();
+    } else {
+        loadMoreBtn.innerText = loadMoreBtnText;
     }
 }

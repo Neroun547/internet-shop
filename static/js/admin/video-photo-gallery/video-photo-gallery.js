@@ -1,4 +1,5 @@
 import { createPublicationCard } from "./functions/create-publication-card.js";
+import { startLoadMoreBtnAnimation } from "../../common/start-load-more-btn-animation.js";
 
 const deleteButtons = document.querySelectorAll(".wrapper__publications-item-buttons-delete");
 const showDescriptionBtn = document.querySelectorAll(".show-description-btn");
@@ -32,6 +33,10 @@ for(let i = 0; i < showDescriptionBtn.length; i++) {
 }
 
 loadMorePublicationsBtn.addEventListener("click", async function () {
+    const loadMorePublicationsBtnText = loadMorePublicationsBtn.innerText;
+
+    startLoadMoreBtnAnimation();
+
     skip += 12;
 
     const api = await fetch(`/video-photo-gallery/load-more?take=8&skip=${skip - 12}`);
@@ -64,8 +69,10 @@ loadMorePublicationsBtn.addEventListener("click", async function () {
           )
         }
       }
-      if(response.length < 12) {
-        loadMorePublicationsBtn.remove();
-      }
-  }
+    }
+    if(response.length < 12) {
+      loadMorePublicationsBtn.remove();
+    } else {
+      loadMorePublicationsBtn.innerText = loadMorePublicationsBtnText;
+    }
 });

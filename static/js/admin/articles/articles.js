@@ -1,5 +1,6 @@
 import { questionModal } from "../../common/question-modal.js";
 import {createArticleItem} from "../../common/create-article-item.js";
+import { startLoadMoreBtnAnimation } from "../../common/start-load-more-btn-animation.js";
 
 const wrapperArticles = document.querySelector(".wrapper__articles");
 const deleteArticleBtn = document.querySelectorAll(".wrapper__articles-item-del-btn");
@@ -21,6 +22,9 @@ for(let i = 0; i < deleteArticleBtn.length; i++) {
 
 if(loadMoreArticlesBtn) {
     loadMoreArticlesBtn.addEventListener("click", async function () {
+        const loadMoreArticlesBtnText = loadMoreArticlesBtn.innerText;
+
+        startLoadMoreBtnAnimation();
 
         if (skip) {
             const api = await fetch("/articles/articles?count=10&skip=" + skip);
@@ -37,6 +41,7 @@ if(loadMoreArticlesBtn) {
                 skip += 10;
             }
         }
+        loadMoreArticlesBtn.innerText = loadMoreArticlesBtnText;
     });
 }
 

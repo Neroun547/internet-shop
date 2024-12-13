@@ -1,4 +1,5 @@
 import { createArticleItem } from "../common/create-article-item.js";
+import { startLoadMoreBtnAnimation } from "../common/start-load-more-btn-animation.js";
 
 const loadMoreArticlesBtn = document.querySelector(".load-more-articles-btn");
 const wrapperArticles = document.querySelector(".wrapper__articles");
@@ -7,6 +8,9 @@ let skip = 10;
 
 if(loadMoreArticlesBtn) {
     loadMoreArticlesBtn.addEventListener("click", async function () {
+        const loadMoreArticlesBtnText = loadMoreArticlesBtn.innerText;
+
+        startLoadMoreBtnAnimation();
 
         if (skip) {
             const api = await fetch("/articles/articles?count=10&skip=" + skip);
@@ -23,6 +27,7 @@ if(loadMoreArticlesBtn) {
                 skip += 10;
             }
         }
+        loadMoreArticlesBtn.innerText = loadMoreArticlesBtnText;
     });
 }
 

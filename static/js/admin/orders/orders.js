@@ -1,3 +1,5 @@
+import { startLoadMoreBtnAnimation } from "../../common/start-load-more-btn-animation.js";
+
 const wrapperOrders = document.querySelector(".wrapper__orders");
 const loadMoreOrdersBtn = document.querySelector(".load-more-orders-btn");
 const sortSelect = document.getElementById("sort-select");
@@ -93,6 +95,10 @@ sortSelect.addEventListener("change", async function (e) {
 });
 
 async function loadMoreOrdersAction() {
+    const loadMoreOrdersBtn = document.querySelector(".load-more-orders-btn");
+    const loadMoreOrdersBtnText = loadMoreOrdersBtn.innerText;
+
+    startLoadMoreBtnAnimation();
 
     if(skip) {
         skip += 10;
@@ -136,12 +142,11 @@ async function loadMoreOrdersAction() {
             }
         }
     } else {
-        const loadMoreOrdersBtn = document.querySelector(".load-more-orders-btn");
-
         if(loadMoreOrdersBtn) {
             loadMoreOrdersBtn.remove();
         }
     }
+    loadMoreOrdersBtn.innerText = loadMoreOrdersBtnText;
 }
 
 function deleteAllWrapperOrdersItems() {

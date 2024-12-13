@@ -1,3 +1,5 @@
+import { startLoadMoreBtnAnimation } from "./common/start-load-more-btn-animation.js";
+
 const showFiltersBtn = document.querySelector(".show-filters-btn");
 const wrapperFilters = document.querySelector(".wrapper__filters");
 const wrapperFiltersInputFrom = document.querySelector(".wrapper__filters-price-inputs-from");
@@ -261,11 +263,10 @@ function deleteAllElementsFromHTML(elements) {
 }
 
 function callLoadMoreProductsEvent() {
+    startLoadMoreBtnAnimation();
+
     const loadMoreBtn = document.getElementById("load-more-products-btn");
     const text = loadMoreBtn.innerText ? loadMoreBtn.innerText : "Завантажити більше";
-
-    loadMoreBtn.innerText = "";
-    loadMoreBtn.innerHTML = "<div class=\"lds-ring\"><div></div><div></div><div></div><div></div></div>";
 
     loadMoreProducts()
         .then(() => {

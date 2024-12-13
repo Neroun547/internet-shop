@@ -1,3 +1,5 @@
+@import "/css/components/buttons/load-more-btn.css";
+
 #sort-select {
     margin-top: 20px;
 }
@@ -33,16 +35,4 @@
 .wrapper__orders-logo {
     text-align: center;
     margin-top: 20px;
-}
-
-.load-more-orders-btn {
-    background-color: #f8b71d;
-    display: block;
-    margin: 0 auto;
-    margin-top: 200px;
-    color: black;
-    border: none;
-    padding: 10px;
-    border-radius: 5px;
-    cursor: pointer;
 }

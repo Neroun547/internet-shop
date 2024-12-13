@@ -1,4 +1,5 @@
 import { createPublicationCard } from "./functions/create-publication-card.js";
+import { startLoadMoreBtnAnimation } from "../common/start-load-more-btn-animation.js";
 
 const wrapperPublications = document.querySelector(".wrapper__publications");
 const loadMorePublicationsBtn = document.getElementById("load-more-publications-btn")
@@ -8,8 +9,7 @@ let skip = 12;
 loadMorePublicationsBtn.addEventListener("click", async function () {
     const loadMorePublicationsText = loadMorePublicationsBtn.innerText;
 
-    loadMorePublicationsBtn.innerText = "";
-    loadMorePublicationsBtn.innerHTML = "<div class=\"lds-ring\"><div></div><div></div><div></div><div></div></div>";
+    startLoadMoreBtnAnimation();
 
     skip += 12;
 
