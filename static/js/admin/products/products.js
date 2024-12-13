@@ -9,7 +9,7 @@ const wrapperFiltersInputTo = document.querySelector(".wrapper__filters-price-in
 const wrapperFiltersInputFromRange = document.querySelector(".wrapper__filters-range-input-from")
 const wrapperFiltersInputToRange = document.querySelector(".wrapper__filters-range-input-to");
 const loadMoreProductsBtn = document.getElementById("load-more-products-btn");
-const wrapperContentContent = document.querySelector(".wrapper__content-content")
+const wrapperContentContent = document.querySelector(".wrapper__content-content-admin")
 
 let skip = 8;
 let availableProductFilter;

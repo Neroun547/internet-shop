@@ -2,6 +2,8 @@ import { Body, Controller, Get, Post, UseGuards } from "@nestjs/common";
 import { SettingsService } from "./service/settings.service";
 import { AuthGuard } from "../auth/guards/auth.guard";
 
+// TODO in feature
+
 @Controller()
 export class SettingsController {
   constructor(private settingsService: SettingsService) {}
