@@ -23,7 +23,9 @@
           <div class="wrapper__orders-item-sum">{{this.sum}}</div>
         </div>
       {{/each}}
-      <button class="load-more-orders-btn">Завантажити ще замовлення</button>
+      {{#if loadMore}}
+        <button class="load-more-button load-more-orders-btn">Завантажити ще замовлення</button>
+      {{/if}}
     {{else}}
       <h2 class="not-orders-logo">Немає замовлень</h2>
     {{/if}}

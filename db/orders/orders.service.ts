@@ -70,15 +70,15 @@ export class OrdersServiceDb {
         await this.repository.nativeDelete({ user_id: userId });
     }
 
-    async getOrdersAndProductsByUserId(take: number, skip: number, userId: number) {
-        return await this.repository.find({ user_id: userId }, { limit: take, offset: skip, populate: ["product"], orderBy: { created_at: "DESC" } });
-    }
-
     async getOrderAndProductByOrderIdAndUserId(orderId: string, userId: number) {
           return await this.repository.find({ id_order: orderId, user_id: userId }, { populate: ["product"] })
     }
 
     async changeStatusByOrderIdAndUserId(idOrder: string, status: string, userId: number) {
         await this.repository.nativeUpdate({ id_order: idOrder, user_id: userId }, { status: status });
+    }
+
+    async getProductsByOrderIdAndUserId(orderId: string, userId: number) {
+        return await this.repository.find({ id_order: orderId, user_id: userId }, { populate: ["product"]  })
     }
 }

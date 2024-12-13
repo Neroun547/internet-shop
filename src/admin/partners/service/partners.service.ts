@@ -20,14 +20,10 @@ export class PartnersService {
   constructor(
     private usersServiceDb: UsersServiceDb,
     private commonService: CommonService,
-
     private ordersServiceDb: OrdersServiceDb,
-
     private videoPhotoGalleryServiceDb: VideoPhotoGalleryServiceDb,
     private videoPhotoGalleryFilesServiceDb: VideoPhotoGalleryFilesServiceDb,
-
     private articlesServiceDb: ArticlesServiceDb,
-
     private productsServiceDb: ProductsServiceDb,
     private productsImagesServiceDb: ProductsImagesServiceDb
   ) {};
@@ -113,28 +109,20 @@ export class PartnersService {
     return newPassword;
   }
 
+  async parseOrder(order) {
+    const products = await this.ordersServiceDb.getProductsByOrderIdAndUserId(order.id_order, order.user_id);
+    
+    return {
+      // @ts-ignore
+      sum: products.reduce((previousValue, currentValue) => previousValue + currentValue.product.price, 0),
+      status: order.status,
+      created_at: new Moment(order.created_at).format("LLLL")
+    }
+  }
+
   async getOrdersByUserId(userId: number, take: number, skip: number) {
-    const orders = await this.ordersServiceDb.getOrdersAndProductsByUserId(take, skip, userId);
-    const objectWithOrders = {};
+    const orders = await this.ordersServiceDb.getOrdersByUserId(take, skip, userId);
 
-    for(let i = 0; i < orders.length; i++) {
-      if(objectWithOrders[orders[i].id_order]) {
-        // @ts-ignore
-        objectWithOrders[orders[i].id_order].sum += orders[i].product.price;
-      } else {
-        objectWithOrders[orders[i].id_order] = {
-          ...orders[i],
-          created_at: new Moment(orders[i].created_at).format("LLLL"),
-          // @ts-ignore
-          sum: orders[i].product.price
-        };
-      }
-    }
-    const parseArr = [];
-
-    for(const key in objectWithOrders) {
-      parseArr.push(objectWithOrders[key]);
-    }
-    return parseArr;
+    return await Promise.all(orders.map(async (order) => await this.parseOrder({...order, user_id: userId })));
   }
 }

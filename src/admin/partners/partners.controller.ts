@@ -119,6 +119,7 @@ export class PartnersController {
           admin: true,
           auth: true,
           orders: orders,
+          loadMore: orders.length === 10,
           countOrders: countOrders,
           userId: id,
           styles: ["/css/admin/orders/orders.css"],

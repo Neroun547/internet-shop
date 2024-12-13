@@ -1,62 +1,70 @@
+import { startLoadMoreBtnAnimation } from "../../common/start-load-more-btn-animation.js";
+
 const loadMoreOrdersBtn = document.querySelector(".load-more-orders-btn");
 const wrapperOrders = document.querySelector(".wrapper__orders");
 const userId = wrapperOrders.getAttribute("id");
 
 let skip = 10;
 
-loadMoreOrdersBtn.addEventListener("click", async function () {
-  if(skip) {
-    skip += 10;
-    let response;
+if(loadMoreOrdersBtn) {
+  loadMoreOrdersBtn.addEventListener("click", async function () {
+    const text = loadMoreOrdersBtn.innerText;
 
-    if(status && status !== "all") {
-      response = await fetch("/admin/partners/info-page/" + userId + "/orders" + "/load-more?take=10&skip=" + (skip - 10) + "&status=" + status);
-    } else {
-      response = await fetch("/admin/partners/info-page/" + userId + "/orders" + "/load-more?take=10&skip=" + (skip - 10));
-    }
-    const { orders } = await response.json();
+    startLoadMoreBtnAnimation();
 
-    if (orders.length) {
-      const loadMoreOrdersBtn = document.querySelector(".load-more-orders-btn");
+    if(skip) {
+      skip += 10;
+      let response;
 
-      for (let i = 0; i < orders.length; i++) {
-        if(loadMoreOrdersBtn) {
-          wrapperOrders.insertBefore(
-            createOrderCard(
+      if(status && status !== "all") {
+        response = await fetch("/admin/partners/info-page/" + userId + "/orders" + "/load-more?take=10&skip=" + (skip - 10) + "&status=" + status);
+      } else {
+        response = await fetch("/admin/partners/info-page/" + userId + "/orders" + "/load-more?take=10&skip=" + (skip - 10));
+      }
+      const { orders } = await response.json();
+
+      if (orders.length) {
+        const loadMoreOrdersBtn = document.querySelector(".load-more-orders-btn");
+
+        for (let i = 0; i < orders.length; i++) {
+          if(loadMoreOrdersBtn) {
+            wrapperOrders.insertBefore(
+              createOrderCard(
+                orders[i].id_order,
+                orders[i].status,
+                orders[i].created_at,
+                orders[i].sum
+              ),
+              loadMoreOrdersBtn
+            );
+          } else {
+            wrapperOrders.appendChild(createOrderCard(
               orders[i].id_order,
               orders[i].status,
               orders[i].created_at,
               orders[i].sum
-            ),
-            loadMoreOrdersBtn
-          );
-        } else {
-          wrapperOrders.appendChild(createOrderCard(
-            orders[i].id_order,
-            orders[i].status,
-            orders[i].created_at,
-            orders[i].sum
-          ));
+            ));
+          }
         }
       }
-    }
-    if (orders.length < 10) {
+      if (orders.length < 10) {
+        const loadMoreOrdersBtn = document.querySelector(".load-more-orders-btn");
+        skip = 0;
+
+        if(loadMoreOrdersBtn) {
+          loadMoreOrdersBtn.remove();
+        }
+      }
+    } else {
       const loadMoreOrdersBtn = document.querySelector(".load-more-orders-btn");
-      skip = 0;
 
       if(loadMoreOrdersBtn) {
         loadMoreOrdersBtn.remove();
       }
     }
-  } else {
-    const loadMoreOrdersBtn = document.querySelector(".load-more-orders-btn");
-
-    if(loadMoreOrdersBtn) {
-      loadMoreOrdersBtn.remove();
-    }
-  }
-});
-
+    loadMoreOrdersBtn.innerText = text;
+  });
+}
 
 function createOrderCard(idOrder, status, date, sum) {
   const wrapperOrdersItem = document.createElement("div");
