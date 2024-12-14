@@ -41,7 +41,7 @@ export class ProductsController {
     @UseGuards(AuthGuard)
     @Get()
     async getProductsPage(@Req() req: Request, @Res() res: Response) {
-        const productsAndImages = await this.productsServiceAdmin.getProductsAndImagesByUserId(8, 0, req["user"].id);
+        const productsAndImages = await this.productsServiceAdmin.getProductsAndImagesByUserId(20, 0, req["user"].id);
         const parseProductsAndImages = await this.productsService.parseProductsForLoadCards(productsAndImages, "");
 
         const countProducts = await this.productsServiceDb.getCountProductsByUserId(req["user"].id);
@@ -55,7 +55,7 @@ export class ProductsController {
             admin: true,
             products: parseProductsAndImages,
             countProducts: countProducts,
-            loadMore: countProducts > 8,
+            loadMore: countProducts > 20,
             countAvailableProducts: countAvailableProducts,
             styles: ["/css/admin/products/products.css"],
             scripts: ["/js/admin/products/products.js"],
@@ -185,7 +185,7 @@ export class ProductsController {
       @Query("priceTo", new ParseFloatPipe()) priceTo: number,
       @Req() req: Request
     ) {
-        const productsAndImages = await this.productsServiceAdmin.getProductsByFiltersAndAdminId(8, 0, 'all', priceFrom, priceTo, available, req["user"].id);
+        const productsAndImages = await this.productsServiceAdmin.getProductsByFiltersAndAdminId(20, 0, 'all', priceFrom, priceTo, available, req["user"].id);
 
         if(req.cookies["iso_code_shop"] === "en") {
             return await this.productsService.getParseProductsWithTranslate(req.cookies["iso_code_shop"], req.cookies["basket_in_shop"], productsAndImages);

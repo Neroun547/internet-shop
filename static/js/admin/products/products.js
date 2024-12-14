@@ -12,7 +12,7 @@ const wrapperFiltersInputToRange = document.querySelector(".wrapper__filters-ran
 const loadMoreProductsBtn = document.getElementById("load-more-products-btn");
 const wrapperContentContent = document.querySelector(".wrapper__content-content-admin")
 
-let skip = 8;
+let skip = 20;
 let availableProductFilter;
 let minPriceProductFilter;
 let maxPriceProductFilter;
@@ -40,7 +40,7 @@ filtersForm.addEventListener("submit", async function (e) {
     const response = await fetch(`/admin/products/by-filters?available=${availableProductFilter}&priceFrom=${minPriceProductFilter}&priceTo=${maxPriceProductFilter}`);
     const data = await response.json();
 
-    skip = 8;
+    skip = 20;
 
     removeAllProducts();
 
@@ -67,7 +67,7 @@ filtersForm.addEventListener("submit", async function (e) {
         wrapperProducts.appendChild(noProductsFoundLogo);
     }
 
-    if(data.length >= 8) {
+    if(data.length >= 20) {
         if(!document.getElementById("load-more-products-btn")) {
             const loadMoreProductsBtn = document.createElement("button");
 
@@ -112,11 +112,11 @@ async function loadMoreProducts() {
     let products;
 
     if(availableProductFilter && minPriceProductFilter && maxPriceProductFilter) {
-        products = await fetch(`/admin/products/load-more?take=8&skip=${skip}&available=${availableProductFilter}&priceFrom=${minPriceProductFilter}&priceTo=${maxPriceProductFilter}`);
+        products = await fetch(`/admin/products/load-more?take=20&skip=${skip}&available=${availableProductFilter}&priceFrom=${minPriceProductFilter}&priceTo=${maxPriceProductFilter}`);
     } else {
-        products = await fetch(`/admin/products/load-more?take=8&skip=${skip}`);
+        products = await fetch(`/admin/products/load-more?take=20&skip=${skip}`);
     }
-    skip += 8;
+    skip += 20;
     const response = await products.json();
 
     if(response.length) {
@@ -135,7 +135,7 @@ async function loadMoreProducts() {
             )
         }
     }
-    if(response.length < 8) {
+    if(response.length < 20) {
         document.getElementById("load-more-products-btn").remove();
     } else {
         loadMoreBtn.innerText = loadMoreBtnText;
