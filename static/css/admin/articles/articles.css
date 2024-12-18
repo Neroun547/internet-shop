@@ -9,11 +9,11 @@ a {
     margin: 0 auto;
     margin-top: 25px;
     background-color: #f8b71d;
-    padding: 5px;
-    border: none;
+    padding: 5px 10px;
     border-radius: 5px;
     cursor: pointer;
-    font-size: 22px;
+    font-size: 20px;
+    border: none;
 }
 
 .wrapper__articles-no-articles {
@@ -67,6 +67,8 @@ a {
     cursor: pointer;
     background-color: #e54724;
     color: #fff;
+    width: 189px;
+    margin-top: 35px;
 }
 
 
