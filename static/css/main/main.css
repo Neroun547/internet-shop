@@ -68,19 +68,20 @@
     position: fixed;
     width: 11%;
     background-color: #f8b71d;
-    height: 96vh;
-    display: flex;
-    flex-direction: column;
+    height: 100%;
     top: 46px;
     z-index: 1;
+    overflow-y: scroll;
 }
 
 .wrapper__content-menu-item {
-    margin-top: 40px;
+    margin-top: 45px;
     margin-left: 50px;
+    line-height: 20px !important;
     transition: .2s;
     color: #000;
     text-decoration: none;
+    display: block;
 }
 
 .wrapper__content-menu-item:hover {
