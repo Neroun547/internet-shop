@@ -71,6 +71,10 @@ function createOrderCard(idOrder, status, date, sum) {
 
   wrapperOrdersItem.classList.add("wrapper__orders-item");
 
+  const subWrapperOrdersItem = document.createElement("div");
+
+  subWrapperOrdersItem.classList.add("sub-wrapper__orders-item");
+
   const wrapperOrdersItemComplete = document.createElement("wrapper__orders-item-complete");
   wrapperOrdersItemComplete.classList.add("wrapper__orders-item-complete");
   const span = document.createElement("span");
@@ -102,9 +106,11 @@ function createOrderCard(idOrder, status, date, sum) {
   wrapperOrdersItemSum.innerText = sum;
 
 
-  wrapperOrdersItem.appendChild(wrapperOrdersItemComplete);
-  wrapperOrdersItem.appendChild(wrapperOrdersItemDate);
-  wrapperOrdersItem.appendChild(wrapperOrdersItemSum);
+  subWrapperOrdersItem.appendChild(wrapperOrdersItemComplete);
+  subWrapperOrdersItem.appendChild(wrapperOrdersItemDate);
+  subWrapperOrdersItem.appendChild(wrapperOrdersItemSum);
+
+  wrapperOrdersItem.appendChild(subWrapperOrdersItem);
 
   return wrapperOrdersItem;
 }
