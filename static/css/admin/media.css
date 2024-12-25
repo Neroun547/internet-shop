@@ -25,15 +25,15 @@
     .wrapper__products-item-price {
         margin-top: 20px;
     }
-    .wrapper__orders-item {
+    .sub-wrapper__orders-item {
         display: flex;
         flex-direction: column;
     }
-    .wrapper__orders-item a {
+    .sub-wrapper__orders-item a {
         width: 100%;
         text-decoration: none;
     }
-    .wrapper__orders-item a button {
+    .sub-wrapper__orders-item a button {
         width: 90%;
         display: block;
         margin: 0 auto;

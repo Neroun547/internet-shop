@@ -1,14 +1,15 @@
 import {Entity, OneToOne, PrimaryKey, Property} from "@mikro-orm/core";
 import {Products} from "../products/products.entity";
 import {OrdersInterface} from "./interfaces/orders.interface";
+import { CustomDateType } from "./types/custom-date.type";
 
 @Entity()
 export class Orders implements OrdersInterface {
     @PrimaryKey()
     id: number;
 
-    @OneToOne({ entity: () => Products })
-    product: Products | number;
+    @OneToOne({ entity: () => Products, nullable: true })
+    product: Products;
 
     @Property({ nullable: false })
     count: number;
@@ -19,7 +20,7 @@ export class Orders implements OrdersInterface {
     @Property({ nullable: false })
     contact_info: string;
 
-    @Property({ onCreate: () => new Date() })
+    @Property({ onCreate: () => new Date(), type: CustomDateType })
     created_at: string;
 
     @Property()
@@ -39,4 +40,7 @@ export class Orders implements OrdersInterface {
 
     @Property()
     user_id: number;
+
+    @Property()
+    product_id: number;
 }

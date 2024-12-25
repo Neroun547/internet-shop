@@ -9,11 +9,11 @@ export class OrdersService {
     constructor(private ordersServiceDb: OrdersServiceDb) {}
 
     async getOrdersByUserId(take: number, skip: number, userId: number) {
-        return this.parseOrders(await this.ordersServiceDb.getOrdersByUserId(take, skip, userId));
+        return await this.parseOrders(await this.ordersServiceDb.getOrdersByUserId(take, skip, userId), userId);
     }
 
     async getOrdersByStatusAndByUserId(take: number, skip: number, status: string | null, userId: number) {
-        return this.parseOrders(await this.ordersServiceDb.getOrdersByStatusAndUserId(take, skip, status, userId));
+        return await this.parseOrders(await this.ordersServiceDb.getOrdersByStatusAndUserId(take, skip, status, userId), userId);
     }
 
     async getOrderAndProductByOrderIdAndUserId(orderId: string, userId: number) {
@@ -36,11 +36,27 @@ export class OrdersService {
         await this.ordersServiceDb.addAdminNoteByIdOrder(id, note);
     }
 
-    parseOrders(arr) {
+    async parseOrders(arr, userId: number) {
         const result = [];
 
         for(let i = 0; i < arr.length; i++) {
-            result.push({...arr[i], created_at: new Moment(arr[i].created_at).format("LLLL") });
+            const ordersAndProducts = (await this.ordersServiceDb.geOrdersAndProductsByOrderIdAndUserId(arr[i].id_order, userId));
+            const setOfProductsNames = new Set();
+
+            for(let i = 0; i < ordersAndProducts.length; i++) {
+                if(setOfProductsNames.size < 5) {
+                    setOfProductsNames.add(ordersAndProducts[i].product.name);
+                } else {
+                    setOfProductsNames.add("...");
+
+                    break;
+                }
+            }
+            result.push({
+                ...arr[i],
+                created_at: new Moment(arr[i].created_at).format("LLLL"),
+                productsList: Array.from(setOfProductsNames)
+            });
         }
         return result;
     }

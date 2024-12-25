@@ -42,7 +42,8 @@ sortSelect.addEventListener("change", async function (e) {
                     createOrderCard(
                         orders[i].id_order,
                         orders[i].status,
-                        orders[i].created_at
+                        orders[i].created_at,
+                        orders[i].productsList
                     ),
                     loadMoreOrdersBtn
                 )
@@ -51,7 +52,8 @@ sortSelect.addEventListener("change", async function (e) {
                     createOrderCard(
                         orders[i].id_order,
                         orders[i].status,
-                        orders[i].created_at
+                        orders[i].created_at,
+                        orders[i].productsList
                     )
                 )
             }
@@ -121,7 +123,8 @@ async function loadMoreOrdersAction() {
                         createOrderCard(
                             orders[i].id_order,
                             orders[i].status,
-                            orders[i].created_at
+                            orders[i].created_at,
+                            orders[i].productsList
                         ),
                         loadMoreOrdersBtn
                     );
@@ -129,7 +132,8 @@ async function loadMoreOrdersAction() {
                     wrapperOrders.appendChild(createOrderCard(
                         orders[i].id_order,
                         orders[i].status,
-                        orders[i].created_at
+                        orders[i].created_at,
+                        orders[i].productsList
                     ));
                 }
             }
@@ -158,10 +162,14 @@ function deleteAllWrapperOrdersItems() {
     }
 }
 
-function createOrderCard(idOrder, status, date) {
+function createOrderCard(idOrder, status, date, productsList) {
     const wrapperOrdersItem = document.createElement("div");
 
     wrapperOrdersItem.classList.add("wrapper__orders-item");
+
+    const subWrapperOrdersItem = document.createElement("div");
+
+    subWrapperOrdersItem.classList.add("sub-wrapper__orders-item");
 
     const wrapperOrdersItemComplete = document.createElement("wrapper__orders-item-complete");
     wrapperOrdersItemComplete.classList.add("wrapper__orders-item-complete");
@@ -198,9 +206,26 @@ function createOrderCard(idOrder, status, date) {
 
     link.appendChild(button);
 
-    wrapperOrdersItem.appendChild(wrapperOrdersItemComplete);
-    wrapperOrdersItem.appendChild(wrapperOrdersItemDate);
-    wrapperOrdersItem.appendChild(link);
+    const subWrapperOrdersItemProductsList = document.createElement("div");
+    subWrapperOrdersItemProductsList.classList.add("sub-wrapper__orders-item-products-list");
+
+    const subWrapperOrdersItemProductsListUl = document.createElement("ul");
+
+    for(let i = 0; i < productsList.length; i++) {
+        const li = document.createElement("li");
+
+        li.innerText = productsList[i];
+
+        subWrapperOrdersItemProductsListUl.appendChild(li);
+    }
+    subWrapperOrdersItemProductsList.appendChild(subWrapperOrdersItemProductsListUl);
+
+    subWrapperOrdersItem.appendChild(wrapperOrdersItemComplete);
+    subWrapperOrdersItem.appendChild(wrapperOrdersItemDate);
+    subWrapperOrdersItem.appendChild(link);
+
+    wrapperOrdersItem.appendChild(subWrapperOrdersItem);
+    wrapperOrdersItem.appendChild(subWrapperOrdersItemProductsList);
 
     return wrapperOrdersItem;
 }

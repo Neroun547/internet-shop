@@ -5,12 +5,22 @@
 }
 
 .wrapper__orders-item {
+    background-color: #F5F5F5;
+}
+
+.sub-wrapper__orders-item-products-list {
+    padding-bottom: 10px;
+}
+
+.sub-wrapper__orders-item-products-list li {
+    padding-top: 10px;
+}
+
+.sub-wrapper__orders-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-top: 50px;
-    margin-bottom: 50px;
-    background-color: #F5F5F5;
     padding: 20px;
 }
 

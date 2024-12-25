@@ -14,7 +14,7 @@ export class OrdersServiceDb {
     async saveOrder(order: OrdersInterface) {
         const orderModel = new Orders();
 
-        orderModel.product = order.product;
+        orderModel.product_id = order.product_id;
         orderModel.count = order.count;
         orderModel.contact_info = order.contact_info;
         orderModel.id_order = order.id_order;
@@ -80,5 +80,14 @@ export class OrdersServiceDb {
 
     async getProductsByOrderIdAndUserId(orderId: string, userId: number) {
         return await this.repository.find({ id_order: orderId, user_id: userId }, { populate: ["product"]  })
+    }
+    async geOrdersAndProductsByOrderIdAndUserId(orderId: string, userId: number) {
+        return await this.repository
+          .createQueryBuilder("o")
+          .select("*")
+          .where("o.id_order = ?", [orderId])
+          .andWhere("o.user_id = ?", [userId])
+          .joinAndSelect("product", "p")
+          .getResult();
     }
 }

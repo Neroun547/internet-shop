@@ -2,7 +2,8 @@ import {Products} from "../../products/products.entity";
 
 export interface OrdersInterface {
     id?: number;
-    product: Products | number;
+    product?: Products;
+    product_id: number;
     count: number;
     id_order: string;
     contact_info: string;
