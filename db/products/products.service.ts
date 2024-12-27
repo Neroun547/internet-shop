@@ -329,6 +329,10 @@ export class ProductsServiceDb {
         return await this.repository.find({ name: { $like: "%" + name + "%" } }, { populate: ["productsImages"], offset: skip, limit: take });
   }
 
+    async getProductsAndImagesLikeNameByUserId(take: number, skip: number, name: string, userId: number) {
+        return await this.repository.find({ name: { $like: "%" + name + "%" }, user_id: userId }, { populate: ["productsImages"], offset: skip, limit: take });
+    }
+
   async getMaxPriceProductsLikeName(name: string): Promise<number | null> {
         const data = (await this.repository.find({ name: { $like: "%" + name + "%" } }, { orderBy: { price: "DESC" }, limit: 1 }))[0];
 
@@ -341,19 +345,28 @@ export class ProductsServiceDb {
         return data ? data.price : null;
     }
 
-    async getProductsAndImagesByFiltersAndAdminId(take: number, skip: number, priceFrom: number, priceTo: number, type: string, adminId: number, available: boolean | undefined) {
-        if(available === undefined) {
-            if(type) {
-                return await this.repository.find({ price: { $gte: priceFrom, $lte: priceTo }, type: type, user_id: adminId }, { offset: skip, limit: take, populate: ["productsImages"], orderBy: {num: "ASC"} });
-            } else {
-                return await this.repository.find({ price: { $gte: priceFrom, $lte: priceTo }, user_id: adminId }, { offset: skip, limit: take, populate: ["productsImages"], orderBy: {num: "ASC"} });
-            }
-        } else {
-            if(type) {
-                return await this.repository.find({ price: { $gte: priceFrom, $lte: priceTo }, type: type, user_id: adminId, available: available }, { offset: skip, limit: take, populate: ["productsImages"], orderBy: {num: "ASC"} });
-            } else {
-                return await this.repository.find({ price: { $gte: priceFrom, $lte: priceTo }, user_id: adminId, available: available }, { offset: skip, limit: take, populate: ["productsImages"], orderBy: {num: "ASC"} });
+    async getProductsAndImagesByFiltersAndAdminId(take: number, skip: number, priceFrom: number, priceTo: number, adminId: number, available: boolean | undefined, rubricId: number | null, rubricTypeName: string | null) {
+        const filtersObject = {
+            user_id: adminId
+        };
+
+        if(priceFrom && priceTo) {
+            //@ts-ignore
+            filtersObject.price = { $gte: priceFrom, $lte: priceTo };
+        }
+        if(available !== undefined) {
+            //@ts-ignore
+            filtersObject.available = available;
+        }
+        if(rubricId) {
+            //@ts-ignore
+            filtersObject.rubric_id = rubricId;
+
+            if(rubricTypeName) {
+                //@ts-ignore
+                filtersObject.type = rubricTypeName;
             }
         }
+        return await this.repository.find(filtersObject, { offset: skip, limit: take, populate: ["productsImages"], orderBy: {num: "ASC"} });
     }
 }

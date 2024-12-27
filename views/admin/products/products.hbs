@@ -5,20 +5,31 @@
     </button>
   </a>
   <div class="wrapper__filters">
+    <form class="wrapper__filters-form-search">
+      <input type="text" placeholder="Пошук за назвою:">
+      <button>Пошук</button>
+    </form>
     <h2>Фільтри:</h2>
     <form id="filters__form">
-      <select>
+      <label for="filters__form-rubric-select">Рубрика товарів:</label>
+      <select id="filters__form-rubric-select">
+        {{#each allRubrics}}
+          <option value="{{this.id}}">{{this.name}}</option>
+        {{/each}}
+      </select>
+      <label for="filters__form-available-select">Статус товарів:</label>
+      <select id="filters__form-available-select">
         <option value="all">Всі</option>
         <option value="available">Які є в наявності</option>
         <option value="not_available">Яких немає в наявності</option>
       </select>
       <div class="wrapper__filters-price-inputs">
         <span class="wrapper__filters-price-span">Ціна від:</span>
-        <input type="number" placeholder="Від" min="{{minProductsPrice}}" max="{{maxProductsPrice}}" step="0.01" class="wrapper__filters-price-inputs-from" value="{{minProductsPrice}}">
+        <input id="filters__form-price-from-input" type="number" placeholder="Від" min="{{minProductsPrice}}" max="{{maxProductsPrice}}" step="0.01" class="wrapper__filters-price-inputs-from" value="{{minProductsPrice}}">
         <input type="range" min="{{minProductsPrice}}" max="{{maxProductsPrice}}" class="wrapper__filters-range-input-from" step="0.01" value="{{minProductsPrice}}">
 
         <span class="wrapper__filters-price-span">Ціна до:</span>
-        <input type="number" placeholder="До" min="{{minProductsPrice}}" max="{{maxProductsPrice}}" step="0.01" class="wrapper__filters-price-inputs-to" value="{{maxProductsPrice}}">
+        <input id="filters__form-price-to-input" type="number" placeholder="До" min="{{minProductsPrice}}" max="{{maxProductsPrice}}" step="0.01" class="wrapper__filters-price-inputs-to" value="{{maxProductsPrice}}">
         <input type="range" min="{{minProductsPrice}}" max="{{maxProductsPrice}}" class="wrapper__filters-range-input-to" step="0.01" value="{{maxProductsPrice}}">
       </div>
 

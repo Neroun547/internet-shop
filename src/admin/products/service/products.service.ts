@@ -8,6 +8,7 @@ import { resolve } from "path";
 import { TranslateServiceDb } from "../../../../db/translate/translate.service";
 import { OrdersServiceDb } from "../../../../db/orders/orders.service";
 import { ProductsImagesServiceDb } from "../../../../db/products-images/products-images.service";
+import { RubricsTypesServiceDb } from "../../../../db/rubrics-types/rubrics-types.service";
 
 @Injectable()
 export class ProductsServiceAdmin {
@@ -16,7 +17,8 @@ export class ProductsServiceAdmin {
     private commonService: CommonService,
     private translateServiceDb: TranslateServiceDb,
     private ordersServiceDb: OrdersServiceDb,
-    private productsImagesServiceDb: ProductsImagesServiceDb
+    private productsImagesServiceDb: ProductsImagesServiceDb,
+    private rubricsTypesServiceDb: RubricsTypesServiceDb,
   ) {}
 
   async deleteProductImages(productImages) {
@@ -37,24 +39,6 @@ export class ProductsServiceAdmin {
         ...el
       }
     });
-  }
-  async getProductsByFiltersAndUserId(take: number, skip: number, available: string, priceFrom: number, priceTo: number, type: string, userId: number) {
-    if(available === "all") {
-      return await this.productsServiceDb.getProductsAndImagesByFiltersAndUserId(take, skip, priceFrom, priceTo, type === "all" ? "" : translateTypeProduct[type], userId);
-    }
-    if(available === "not_available") {
-      return await this.productsServiceDb.getProductsAndImagesByFiltersAndUserId(take, skip, priceFrom, priceTo, type === "all" ? "" : translateTypeProduct[type], userId, false);
-    }
-    if(available === "available") {
-      return await this.productsServiceDb.getProductsAndImagesByFiltersAndUserId(take, skip, priceFrom, priceTo, type === "all" ? "" : translateTypeProduct[type], userId, true);
-    }
-  }
-
-  async getProductsByTypeAndUserId(take: number, skip: number, type: string, userId: number) {
-    if(!type) {
-      return await this.productsServiceDb.getProductsAndImagesByUserId(take, skip, userId);
-    }
-    return await this.productsServiceDb.getProductsAndImagesByTypeAndUserId(take, skip, translateTypeProduct[type], userId);
   }
 
   async updateProductById(id: number, product: UploadProductInterface, files: Array<Express.Multer.File>, userId: number) {
@@ -182,15 +166,17 @@ export class ProductsServiceAdmin {
     }
   }
 
-  async getProductsByFiltersAndAdminId(take: number, skip: number, type: string, priceFrom: number, priceTo: number, available: string, adminId: number) {
+  async getProductsByFiltersAndAdminId(take: number, skip: number, priceFrom: number, priceTo: number, available: string, rubricId: number, rubricTypeNameId: number, adminId: number) {
+    const rubricType = await this.rubricsTypesServiceDb.getTypeById(rubricTypeNameId);
+
     if(available === "all") {
-      return await this.productsServiceDb.getProductsAndImagesByFiltersAndAdminId(take, skip, priceFrom, priceTo, type === "all" ? "" : translateTypeProduct[type], adminId, undefined);
+      return await this.productsServiceDb.getProductsAndImagesByFiltersAndAdminId(take, skip, priceFrom, priceTo,  adminId, undefined, rubricId,  rubricType ? rubricType.name : null);
     }
     if(available === "not_available") {
-      return await this.productsServiceDb.getProductsAndImagesByFiltersAndAdminId(take, skip, priceFrom, priceTo, type === "all" ? "" : translateTypeProduct[type], adminId, false);
+      return await this.productsServiceDb.getProductsAndImagesByFiltersAndAdminId(take, skip, priceFrom, priceTo,  adminId, false, rubricId,  rubricType ? rubricType.name : null);
     }
     if(available === "available") {
-      return await this.productsServiceDb.getProductsAndImagesByFiltersAndAdminId(take, skip, priceFrom, priceTo, type === "all" ? "" : translateTypeProduct[type], adminId, true);
+      return await this.productsServiceDb.getProductsAndImagesByFiltersAndAdminId(take, skip, priceFrom, priceTo,  adminId, true, rubricId,  rubricType ? rubricType.name : null);
     }
   }
 

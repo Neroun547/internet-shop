@@ -50,6 +50,11 @@ export class ProductsController {
         const minProductsPrice = await this.productsServiceDb.getMinPriceProductsByUserId(req["user"].id);
         const maxProductsPrice = await this.productsServiceDb.getMaxPriceProductsByUserId(req["user"].id);
 
+        const allRubrics = await this.rubricsServiceDb.getAllRubrics();
+
+        //@ts-ignore
+        allRubrics.unshift({ name: "Всі", id: 0 });
+
         res.render("admin/products/products", {
             auth: true,
             admin: true,
@@ -61,7 +66,8 @@ export class ProductsController {
             scripts: ["/js/admin/products/products.js"],
             minProductsPrice: minProductsPrice,
             maxProductsPrice: maxProductsPrice,
-            partner: req["user"].role !== "admin"
+            partner: req["user"].role !== "admin",
+            allRubrics: allRubrics
         });
     }
 
@@ -74,13 +80,11 @@ export class ProductsController {
       @Query("available") available: string,
       @Query("priceFrom") priceFrom: number,
       @Query("priceTo") priceTo: number,
+      @Query("rubricTypeNameId") rubricTypeNameId: string,
+      @Query("rubricId") rubricId: string,
       @Req() req: Request
     ) {
-        if(available && priceFrom && priceTo) {
-            return await this.productsServiceAdmin.getProductsByFiltersAndUserId(take, skip, available, Number(priceFrom), Number(priceTo), type, req["user"].id)
-        } else {
-            return await this.productsServiceAdmin.getProductsByTypeAndUserId(take, skip, type, req["user"].id);
-        }
+        return await this.productsServiceAdmin.getProductsByFiltersAndAdminId(take, skip, Number(priceFrom), Number(priceTo), available, isNaN(Number(rubricId)) ? null : Number(rubricId), isNaN(Number(rubricTypeNameId)) ? null : Number(rubricTypeNameId), req["user"].id);
     }
 
     @UseGuards(AuthGuard)
@@ -181,16 +185,23 @@ export class ProductsController {
     @Get("by-filters")
     async getProductsByFilters(
       @Query("available") available: string,
-      @Query("priceFrom", new ParseFloatPipe()) priceFrom: number,
-      @Query("priceTo", new ParseFloatPipe()) priceTo: number,
+      @Query("priceFrom") priceFrom: string,
+      @Query("priceTo") priceTo: string,
+      @Query("rubricId") rubricId: string,
+      @Query("rubricTypeNameId") rubricTypeNameId: string,
       @Req() req: Request
     ) {
-        const productsAndImages = await this.productsServiceAdmin.getProductsByFiltersAndAdminId(20, 0, 'all', priceFrom, priceTo, available, req["user"].id);
+        return await this.productsServiceAdmin.getProductsByFiltersAndAdminId(20, 0, Number(priceFrom), Number(priceTo), available, isNaN(Number(rubricId)) ? null : Number(rubricId), isNaN(Number(rubricTypeNameId)) ? null : Number(rubricTypeNameId), req["user"].id);
+    }
 
-        if(req.cookies["iso_code_shop"] === "en") {
-            return await this.productsService.getParseProductsWithTranslate(req.cookies["iso_code_shop"], req.cookies["basket_in_shop"], productsAndImages);
-        } else {
-            return await this.productsService.parseProductsForLoadCards(productsAndImages, req.cookies["basket_in_shop"]);
-        }
+    @UseGuards(AuthGuard)
+    @Get("search-by-name")
+    async getProductByName(
+      @Req() req: Request,
+      @Query("name") name: string,
+      @Query("take", new ParseIntPipe()) take: number,
+      @Query("skip", new ParseIntPipe()) skip: number,
+    ) {
+        return await this.productsServiceDb.getProductsAndImagesLikeNameByUserId(take, skip, name, req["user"].id);
     }
 }
