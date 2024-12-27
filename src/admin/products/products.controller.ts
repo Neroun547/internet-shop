@@ -84,7 +84,7 @@ export class ProductsController {
       @Query("rubricId") rubricId: string,
       @Req() req: Request
     ) {
-        return await this.productsServiceAdmin.getProductsByFiltersAndAdminId(take, skip, Number(priceFrom), Number(priceTo), available, isNaN(Number(rubricId)) ? null : Number(rubricId), isNaN(Number(rubricTypeNameId)) ? null : Number(rubricTypeNameId), req["user"].id);
+        return await this.productsService.parseProductsForLoadCards(await this.productsServiceAdmin.getProductsByFiltersAndAdminId(take, skip, Number(priceFrom), Number(priceTo), available, isNaN(Number(rubricId)) ? null : Number(rubricId), isNaN(Number(rubricTypeNameId)) ? null : Number(rubricTypeNameId), req["user"].id));
     }
 
     @UseGuards(AuthGuard)
@@ -191,7 +191,7 @@ export class ProductsController {
       @Query("rubricTypeNameId") rubricTypeNameId: string,
       @Req() req: Request
     ) {
-        return await this.productsServiceAdmin.getProductsByFiltersAndAdminId(20, 0, Number(priceFrom), Number(priceTo), available, isNaN(Number(rubricId)) ? null : Number(rubricId), isNaN(Number(rubricTypeNameId)) ? null : Number(rubricTypeNameId), req["user"].id);
+        return await this.productsService.parseProductsForLoadCards(await this.productsServiceAdmin.getProductsByFiltersAndAdminId(20, 0, Number(priceFrom), Number(priceTo), available, isNaN(Number(rubricId)) ? null : Number(rubricId), isNaN(Number(rubricTypeNameId)) ? null : Number(rubricTypeNameId), req["user"].id));
     }
 
     @UseGuards(AuthGuard)
@@ -202,6 +202,6 @@ export class ProductsController {
       @Query("take", new ParseIntPipe()) take: number,
       @Query("skip", new ParseIntPipe()) skip: number,
     ) {
-        return await this.productsServiceDb.getProductsAndImagesLikeNameByUserId(take, skip, name, req["user"].id);
+        return this.productsService.parseProductsForLoadCards(await this.productsServiceDb.getProductsAndImagesLikeNameByUserId(take, skip, name, req["user"].id));
     }
 }
