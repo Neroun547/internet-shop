@@ -19,7 +19,9 @@ const productsType = wrapperProducts.getAttribute("data-type");
 const activeRubric = wrapperProducts.getAttribute("data-rubric");
 const searchName = wrapperProducts.getAttribute("data-searchname");
 
-let skip = 8;
+let skip = 16;
+const skipStep = 16;
+const take = 16;
 
 let availableFilter;
 let priceFromFilter;
@@ -63,7 +65,7 @@ wrapperFiltersForm.addEventListener("submit", async function (e) {
     const products = await fetch(url);
     const response = await products.json();
 
-    skip = 8;
+    skip = skipStep;
 
     if(response.length) {
         const noProductsFilters = document.querySelector(".no-products-filters");
@@ -278,9 +280,9 @@ function callLoadMoreProductsEvent() {
 async function loadMoreProducts() {
     let products;
 
-    skip += 8;
+    skip += skipStep;
 
-    let loadMoreUrl = "/products/load-more?take=8&skip=" + (skip-8);
+    let loadMoreUrl = `/products/load-more?take=${take}&skip=${skip-skipStep}`;
 
     if(productsType) {
         loadMoreUrl += "&type=" + productsType;

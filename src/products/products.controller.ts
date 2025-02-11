@@ -5,6 +5,7 @@ import {BasketService} from "../basket/service/basket.service";
 import { TranslateService } from "../translate/service/translate.service";
 import { TranslateServiceDb } from "../../db/translate/translate.service";
 import { RubricsTypesServiceDb } from "../../db/rubrics-types/rubrics-types.service";
+import { PRODUCTS_STEP } from "./constants";
 
 @Controller()
 export class ProductsController {
@@ -26,7 +27,7 @@ export class ProductsController {
         @Query("searchName") searchName: string,
         @Req() req: Request
     ) {
-        const productsAndImages = await this.productsService.getProductsByFilters(8, 0, available, priceFrom, priceTo, type, rubricId, searchName);
+        const productsAndImages = await this.productsService.getProductsByFilters(PRODUCTS_STEP, 0, available, priceFrom, priceTo, type, rubricId, searchName);
 
         if(req.cookies["iso_code_shop"] === "en") {
             return await this.productsService.getParseProductsWithTranslate(req.cookies["iso_code_shop"], req.cookies["basket_in_shop"], productsAndImages);
@@ -60,7 +61,7 @@ export class ProductsController {
 
     @Get("by-type/:type")
     async getProductsByType(@Param("type") type, @Query("rubricId") rubricId, @Req() req: Request, @Res() res: Response) {
-        const products = await this.productsService.getProductsByType(8, 0, type, req.cookies["iso_code_shop"]);
+        const products = await this.productsService.getProductsByType(PRODUCTS_STEP, 0, type, req.cookies["iso_code_shop"]);
 
         const maxProductsPrice = await this.productsService.getMaxPriceProductsByType(type);
         const minProductsPrice = await this.productsService.getMinPriceProductsByType(type);
@@ -89,7 +90,7 @@ export class ProductsController {
                 maxProductsPrice: maxProductsPrice,
                 minProductsPrice: minProductsPrice,
                 activeLanguage: req.cookies["iso_code_shop"],
-                loadMore: products.length >= 8,
+                loadMore: products.length >= PRODUCTS_STEP,
                 ...translate,
                 rubrics: rubrics.length > 2 ? rubrics : false,
                 filtersMenuItems: await this.rubricsTypesServiceDb.getTypesByRubricId(rubricId),
@@ -103,9 +104,9 @@ export class ProductsController {
         let products;
 
         if(rubricId === 0) {
-            products = await this.productsService.getProductsByType(8, 0, "", req.cookies["iso_code_shop"]);
+            products = await this.productsService.getProductsByType(PRODUCTS_STEP, 0, "", req.cookies["iso_code_shop"]);
         } else {
-            products = await this.productsService.getProductsByRubricId(rubricId, 8, 0);
+            products = await this.productsService.getProductsByRubricId(rubricId, PRODUCTS_STEP, 0);
         }
         const maxProductsPrice = await this.productsService.getMaxProductsPriceByRubricId(rubricId);
         const minProductsPrice = await this.productsService.getMinProductsPriceByRubricId(rubricId);
@@ -121,7 +122,7 @@ export class ProductsController {
             maxProductsPrice: maxProductsPrice,
             minProductsPrice: minProductsPrice,
             activeLanguage: req.cookies["iso_code_shop"],
-            loadMore: products.length >= 8,
+            loadMore: products.length >= PRODUCTS_STEP,
             ...translate,
             filtersMenuItems: await this.rubricsTypesServiceDb.getTypesByRubricId(rubricId),
             rubric_id: rubricId,
@@ -131,7 +132,7 @@ export class ProductsController {
 
     @Get("by-name")
     async getProductsLikeName(@Query("name") name: string, @Res() res: Response, @Req() req: Request) {
-        const products = await this.productsService.getProductsLikeName(8, 0, name);
+        const products = await this.productsService.getProductsLikeName(PRODUCTS_STEP, 0, name);
         const translate = await this.translateService.getTranslateObjectByKeyAndIsoCode("products_page", req.cookies["iso_code_shop"]);
 
         const maxProductsPrice = await this.productsService.getMaxProductPriceLikeName(name);
@@ -144,7 +145,7 @@ export class ProductsController {
             maxProductsPrice: maxProductsPrice,
             minProductsPrice: minProductsPrice,
             activeLanguage: req.cookies["iso_code_shop"],
-            loadMore: products.length >= 8,
+            loadMore: products.length >= PRODUCTS_STEP,
             ...translate,
             rubrics: false,
             searchName: name
