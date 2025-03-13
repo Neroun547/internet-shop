@@ -15,13 +15,12 @@ import { Response, Request } from "express";
 import {OrdersService} from "./service/orders.service";
 import {AuthGuard} from "../auth/guards/auth.guard";
 import {ChangeStatusDto} from "./dto/change-status.dto";
-import {HttpExceptionFilter} from "../../../error-filters/error-filter-admin";
 import {AddAdminNoteDto} from "./dto/add-admin-note.dto";
 import { OrdersServiceDb } from "../../../db/orders/orders.service";
 import { UsersServiceDb } from "../../../db/users/users.service";
+import { ORDERS_STEP } from "./constants";
 
 @Controller()
-@UseFilters(HttpExceptionFilter)
 export class OrdersController {
     constructor(
       private ordersService: OrdersService,
@@ -31,31 +30,12 @@ export class OrdersController {
 
     @UseGuards(AuthGuard)
     @Get()
-    async getOrdersPage(@Req() req: Request, @Res() res: Response) {
-        const orders = await this.ordersService.getOrdersByUserId(10, 0, req["user"].id);
+    async getOrdersPage(@Req() req: Request) {
+        const orders = await this.ordersService.getOrdersByUserId(ORDERS_STEP, 0, req["user"].id);
 
-        if(orders.length) {
-            const countOrders = await this.ordersServiceDb.getCountOrdersByStatusAndUserId("", req["user"].id);
+        const countOrders = await this.ordersServiceDb.getCountOrdersByStatusAndUserId("", req["user"].id);
 
-            res.render("admin/orders/orders", {
-                orders: orders,
-                admin: true,
-                auth: true,
-                styles: ["/css/admin/orders/orders.css"],
-                scripts: ["/js/admin/orders/orders.js"],
-                countOrders: countOrders,
-                partner: req["user"].role !== "admin"
-            });
-        } else {
-            res.render("admin/orders/orders", {
-                orders: false,
-                admin: true,
-                auth: true,
-                styles: ["/css/admin/orders/orders.css"],
-                countOrders: 0,
-                partner: req["user"].role !== "admin"
-            });
-        }
+        return { orders: orders, countOrders: countOrders };
     }
 
     @UseGuards(AuthGuard)
@@ -83,26 +63,22 @@ export class OrdersController {
 
     @UseGuards(AuthGuard)
     @Get(":idOrder")
-    async getOrderPage(@Req() req: Request, @Param("idOrder") idOrder: string, @Res() res: Response) {
+    async getOrderPage(@Req() req: Request, @Param("idOrder") idOrder: string) {
         const order = await this.ordersService.getOrderAndProductByOrderIdAndUserId(idOrder, req["user"].id);
 
-        res.render("admin/orders/order", {
-            auth: true,
-            admin: true,
-            order: order.order,
+        return {
+            products: order.order.map(el => ({ ...el.product, count: el.count })),
             all_sum: order.all_sum,
             contact_info: order.contact_info,
-            idOrder: idOrder,
             complete: order.complete,
             remark: order.remark,
             status: order.status,
             first_name: order.first_name,
             last_name: order.last_name,
             admin_note: order.admin_note,
-            styles: ["/css/admin/orders/order.css"],
-            scripts: ["/js/admin/orders/order.js"],
-            partner: req["user"].role === "partner"
-        });
+            partner: req["user"].role === "partner",
+            created_at: order.created_at
+        };
     }
 
     @UseGuards(AuthGuard)
@@ -136,9 +112,9 @@ export class OrdersController {
 
     @UseGuards(AuthGuard)
     @Post("/add-admin-note/:id")
-    async addAdminNote(@Body() body: AddAdminNoteDto, @Param("id") id: string, @Res() res: Response) {
+    async addAdminNote(@Body() body: AddAdminNoteDto, @Param("id") id: string) {
         await this.ordersService.addAdminNote(id, body.note);
 
-        res.redirect("/admin/orders/"+id);
+        return;
     }
 }

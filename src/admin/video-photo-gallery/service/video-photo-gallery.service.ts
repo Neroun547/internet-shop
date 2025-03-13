@@ -7,6 +7,7 @@ import {
 import { rename, unlink } from "fs/promises";
 import { resolve } from "path";
 import { VideoPhotoGalleryService } from "../../../video-photo-gallery/service/video-photo-gallery.service";
+import { existsSync } from "fs";
 
 @Injectable()
 export class VideoPhotoGalleryServiceAdmin {
@@ -30,7 +31,9 @@ export class VideoPhotoGalleryServiceAdmin {
     const videoPhotoGalleryFiles = await this.videoPhotoGalleryFilesServiceDb.getByVideoPhotoGalleryId(id);
 
     for(let i = 0; i < videoPhotoGalleryFiles.length; i++) {
-      await unlink(resolve("static/gallery/" + videoPhotoGalleryFiles[i].file_name));
+      if(existsSync(resolve("static/gallery/" + videoPhotoGalleryFiles[i].file_name))) {
+        await unlink(resolve("static/gallery/" + videoPhotoGalleryFiles[i].file_name));
+      }
     }
     await this.videoPhotoGalleryFilesServiceDb.deleteByVideoPhotoGalleryId(id);
     await this.videoPhotoGalleryServiceDb.deleteById(id);

@@ -26,33 +26,11 @@ export class RubricsControllerAdmin {
     private rubricsServiceDb: RubricsServiceDb
   ) {}
 
+
   @UseGuards(AuthGuard)
-  @Get()
-  async getRubricsPage(@Req() req: Request, @Res() res: Response) {
-
-    if(req["user"].role === "admin") {
-      const rubrics = JSON.parse(JSON.stringify(await this.rubricsServiceDb.getAllRubricsWithTypes()));
-      const rubricTypes = rubrics.map(rubric => {
-        return rubric.rubricTypes.map((rubricType, i) => {
-
-          if(i === rubric.rubricTypes.length - 1) {
-            return rubricType.name += ".";
-          }
-          return rubricType.name += ",";
-        });
-      });
-
-      res.render("admin/rubrics/rubrics", {
-        admin: true,
-        auth: true,
-        rubrics: rubrics,
-        rubricTypes: rubricTypes,
-        styles: ["/css/admin/rubrics/rubrics.css"],
-        scripts: ["/js/admin/rubrics/rubrics.js"]
-      });
-    } else {
-      throw new ForbiddenException();
-    }
+  @Get(":id")
+  async getRubricById(@Param("id", new ParseIntPipe()) rubricId: number) {
+    return await this.rubricsServiceDb.getRubricById(rubricId);
   }
 
   @UseGuards(AuthGuard)

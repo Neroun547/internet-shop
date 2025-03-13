@@ -1,9 +1,10 @@
-import {BadRequestException, Injectable} from "@nestjs/common";
+import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
 import {CommonService} from "../../../../common/common.service";
 import * as Moment from "moment";
 import {ArticlesServiceDb} from "../../../../db/articles/articles.service";
 import {resolve} from "path";
-import {readFile, writeFile, unlink} from "fs/promises";
+import {readFile, writeFile, unlink } from "fs/promises";
+import { existsSync } from "fs";
 import {SaveArticleDto} from "../dto/save-article.dto";
 
 @Injectable()
@@ -17,10 +18,10 @@ export class ArticlesService {
         const date = localMoment.format('MMMM Do YYYY, hh:mm a');
         const filename = this.commonService.generateRandomHash(20);
 
-        await writeFile(resolve("views/articles/articles/" + filename + ".hbs"), content);
+        await writeFile(resolve("views/articles/articles/" + filename + ".html"), content);
 
         const saveArticle = {
-            filename: filename,
+            filename: filename + ".html",
             created_at: date,
             updated_at: null,
             authors: authors,
@@ -32,13 +33,9 @@ export class ArticlesService {
         await this.articlesServiceDb.saveArticle(saveArticle);
     }
 
-    async getArticles(count: number, skip: number) {
-        return await this.articlesServiceDb.getArticles(count, skip);
-    }
-
     async getArticleContentByFilename(filename: string) {
         const article = await this.articlesServiceDb.getArticleByFilename(filename);
-        const content = (await readFile(resolve("views/articles/articles/" + filename + ".hbs"))).toString();
+        const content = (await readFile(resolve("views/articles/articles/" + filename))).toString();
 
         return {
             content: content,
@@ -52,14 +49,19 @@ export class ArticlesService {
             name: data.name,
             theme: data.theme
         });
-        await writeFile(resolve("views/articles/articles/" + filename + ".hbs"), data.content);
+
+        if(existsSync(resolve("views/articles/articles/" + filename))) {
+            await writeFile(resolve("views/articles/articles/" + filename), data.content);
+        } else {
+            throw new NotFoundException();
+        }
     }
 
     async deleteArticleByFilename(filename: string) {
         await this.articlesServiceDb.deleteArticleByFilename(filename);
 
         try {
-            await unlink(resolve("views/articles/articles/" + filename + ".hbs"));
+            await unlink(resolve("views/articles/articles/" + filename + ".html"));
         } catch {
             throw new BadRequestException();
         }

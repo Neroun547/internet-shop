@@ -33,4 +33,8 @@ export class RubricsServiceDb {
   async updateRubricNameById(name: string, id: number) {
     await this.repository.nativeUpdate({ id: id }, { name: name });
   }
+
+  async getRubricById(rubricId: number) {
+    return await this.repository.findOne({ id: rubricId });
+  }
 }

@@ -4,7 +4,6 @@ import { AuthGuard } from "./auth/guards/auth.guard";
 import {HttpExceptionFilter} from "../../error-filters/error-filter-admin";
 
 @Controller()
-@UseFilters(HttpExceptionFilter)
 export class AdminController {
     constructor() {}
 

@@ -1,6 +1,5 @@
 import { Injectable } from "@nestjs/common";
 import { ProductsServiceDb } from "../../../db/products/products.service";
-import { BasketService } from "../../basket/service/basket.service";
 import { translateTypeProduct } from "../../../constants";
 import { UsersServiceDb } from "../../../db/users/users.service";
 import { RubricsTypesServiceDb } from "../../../db/rubrics-types/rubrics-types.service";
@@ -11,34 +10,22 @@ import { TranslateServiceDb } from "../../../db/translate/translate.service";
 export class ProductsService {
     constructor(
         private productsServiceDb: ProductsServiceDb,
-        private basketService: BasketService,
         private usersServiceDb: UsersServiceDb,
         private rubricsTypesServiceDb: RubricsTypesServiceDb,
         private rubricsServiceDb: RubricsServiceDb,
         private translateServiceDb: TranslateServiceDb
     ) {}
 
-    async parseProductsForLoadCards(productsAndImages, basket?: string) {
+    async parseProductsForLoadCards(productsAndImages) {
         const parseArr = [];
 
         for(let i = 0; i < productsAndImages.length; i++) {
             if(productsAndImages[i]) {
-
-                if (basket && this.basketService.parseProductsCookie(basket).find(el => el === String(productsAndImages[i].id))) {
-                    parseArr.push({
-                        ...productsAndImages[i],
-                        file_name: productsAndImages[i].productsImages[0] ? productsAndImages[i].productsImages[0].file_name : null,
-                        inBasket: true,
-                        partner: (await this.usersServiceDb.getUserById(productsAndImages[i].user_id)).role === "partner"
-                    });
-                } else {
-                    parseArr.push({
-                        ...productsAndImages[i],
-                        file_name: productsAndImages[i].productsImages[0] ? productsAndImages[i].productsImages[0].file_name : null,
-                        inBasket: false,
-                        partner: (await this.usersServiceDb.getUserById(productsAndImages[i].user_id)).role === "partner"
-                    });
-                }
+                parseArr.push({
+                    ...productsAndImages[i],
+                    file_name: productsAndImages[i].productsImages[0] ? productsAndImages[i].productsImages[0].file_name : null,
+                    partner: (await this.usersServiceDb.getUserById(productsAndImages[i].user_id)).role === "partner"
+                });
             }
         }
         return parseArr;
@@ -119,26 +106,39 @@ export class ProductsService {
     }
 
     async getProductsByFilters(take: number, skip: number, available: string, priceFrom: number, priceTo: number, type: string, rubricId?: any, searchName?: string) {
+        let productType: string;
+
+        if(type === "all") {
+            productType = "";
+        } else if(isNaN(Number(type))) {
+            productType = translateTypeProduct[type];
+        } else {
+            const typeInDb = await this.rubricsTypesServiceDb.getTypeById(Number(type));
+
+            if(typeInDb) {
+                productType = typeInDb.name
+            }
+        }
 
         if(!isNaN(Number(rubricId)) && Number(rubricId) !== 0) {
             if(available === "all") {
-                return await this.productsServiceDb.getProductsAndImagesByFiltersAndRubricId(take, skip, priceFrom, priceTo, type === "all" ? "" : translateTypeProduct[type], undefined, Number(rubricId), searchName);
+                return await this.productsServiceDb.getProductsAndImagesByFiltersAndRubricId(take, skip, priceFrom, priceTo, productType, undefined, Number(rubricId), searchName);
             }
             if(available === "not_available") {
-                return await this.productsServiceDb.getProductsAndImagesByFiltersAndRubricId(take, skip, priceFrom, priceTo, type === "all" ? "" : translateTypeProduct[type], false, Number(rubricId), searchName);
+                return await this.productsServiceDb.getProductsAndImagesByFiltersAndRubricId(take, skip, priceFrom, priceTo, productType, false, Number(rubricId), searchName);
             }
             if(available === "available") {
-                return await this.productsServiceDb.getProductsAndImagesByFiltersAndRubricId(take, skip, priceFrom, priceTo, type === "all" ? "" : translateTypeProduct[type], true, Number(rubricId), searchName);
+                return await this.productsServiceDb.getProductsAndImagesByFiltersAndRubricId(take, skip, priceFrom, priceTo, productType, true, Number(rubricId), searchName);
             }
         } else {
             if(available === "all") {
-                return await this.productsServiceDb.getProductsAndImagesByFilters(take, skip, priceFrom, priceTo, type === "all" ? "" : translateTypeProduct[type], undefined, searchName);
+                return await this.productsServiceDb.getProductsAndImagesByFilters(take, skip, priceFrom, priceTo, productType, undefined, searchName);
             }
             if(available === "not_available") {
-                return await this.productsServiceDb.getProductsAndImagesByFilters(take, skip, priceFrom, priceTo, type === "all" ? "" : translateTypeProduct[type], false, searchName);
+                return await this.productsServiceDb.getProductsAndImagesByFilters(take, skip, priceFrom, priceTo, productType, false, searchName);
             }
             if(available === "available") {
-                return await this.productsServiceDb.getProductsAndImagesByFilters(take, skip, priceFrom, priceTo, type === "all" ? "" : translateTypeProduct[type], true, searchName);
+                return await this.productsServiceDb.getProductsAndImagesByFilters(take, skip, priceFrom, priceTo, productType, true, searchName);
             }
         }
     }
@@ -178,10 +178,10 @@ export class ProductsService {
         }
         return parseRubrics;
     }
-    async getParseProductsWithTranslate(language: string, basket, products) {
+    async getParseProductsWithTranslate(language: string, products) {
 
         if(language === "en") {
-            return await Promise.all((await this.parseProductsForLoadCards(products, basket))
+            return await Promise.all((await this.parseProductsForLoadCards(products))
               .map(async product => {
                   const translateTitle = (await this.translateServiceDb.getTranslateByKeyAndIsoCode("product_translate_" + product.id, "en"));
 
@@ -191,7 +191,11 @@ export class ProductsService {
                   }
               }));
         } else {
-            return await this.parseProductsForLoadCards(products, basket);
+            return await this.parseProductsForLoadCards(products);
         }
+    }
+
+    async getProductsAndImages(take: number, skip: number) {
+        return await this.productsServiceDb.getProductsAndImages(take, skip);
     }
 }

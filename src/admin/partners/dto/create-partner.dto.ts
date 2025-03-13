@@ -4,4 +4,8 @@ export class CreatePartnerDto {
   @IsString()
   @Length(1, 50, { message: "Ім'я повинно містити від 1 до 50 символів" })
   name: string;
+
+  @IsString()
+  @Length(1, 30)
+  password: "";
 }

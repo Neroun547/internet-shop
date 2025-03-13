@@ -1,5 +1,4 @@
-import {MiddlewareConsumer, Module} from '@nestjs/common';
-import { MainController } from './main.controller';
+import {Module} from '@nestjs/common';
 import {RouterModule} from "@nestjs/core";
 import {AuthModule} from "./admin/auth/auth.module";
 import {AdminModule} from "./admin/admin.module";
@@ -7,7 +6,6 @@ import {MikroOrmModule} from "@mikro-orm/nestjs";
 import {ConfigModule} from "@nestjs/config";
 import { ProductsModule } from "./products/products.module";
 import { ProductsModuleAdmin } from "./admin/products/products.module";
-import {BasketModule} from "./basket/basket.module";
 import {BuyModule} from "./buy/buy.module";
 import {OrdersModule} from "./admin/orders/orders.module";
 import {SupportChatModule} from "./support-chat/support-chat.module";
@@ -29,6 +27,7 @@ import { RubricsModuleDb } from "../db/rubrics/rubrics.module";
 import { RubricsModule } from "./rubrics/rubrics.module";
 import { RubricsTypesModuleDb } from "../db/rubrics-types/rubrics-types.module";
 import {ProductsModuleDb} from "../db/products/products.module";
+import { PricesModule } from "./products/prices/prices.module";
 
 @Module({
   imports: [
@@ -41,7 +40,6 @@ import {ProductsModuleDb} from "../db/products/products.module";
       AdminModule,
       ProductsModule,
       ProductsModuleAdmin,
-      BasketModule,
       BuyModule,
       OrdersModule,
       SupportChatModule,
@@ -62,6 +60,7 @@ import {ProductsModuleDb} from "../db/products/products.module";
       RubricsModule,
       RubricsTypesModuleDb,
       ProductsModuleDb,
+      PricesModule,
       MikroOrmModule.forRoot({
           dbName: process.env.DB_NAME,
           user: process.env.DB_USER,
@@ -90,11 +89,10 @@ import {ProductsModuleDb} from "../db/products/products.module";
           },
           {
               path: "products",
-              module: ProductsModule
-          },
-          {
-              path: "basket",
-              module: BasketModule
+              module: ProductsModule,
+              children: [
+                  { path: "prices", module: PricesModule }
+              ]
           },
           {
               path: "buy",
@@ -126,7 +124,7 @@ import {ProductsModuleDb} from "../db/products/products.module";
           }
       ])
   ],
-  controllers: [MainController],
+  controllers: [],
   providers: []
 })
 export class MainModule {}

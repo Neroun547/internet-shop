@@ -1,44 +1,12 @@
-import {Controller, Get, Query, Req, Res} from '@nestjs/common';
-import { Request, Response } from "express";
-import {ProductsService} from "./products/service/products.service";
-import { TranslateService } from "./translate/service/translate.service";
-import { RubricsServiceDb } from "../db/rubrics/rubrics.service";
-import { RubricsTypesServiceDb } from "../db/rubrics-types/rubrics-types.service";
-import { PRODUCTS_STEP } from "./products/constants";
+import {Controller, Get} from '@nestjs/common';
 
 @Controller()
 export class MainController {
   constructor(
-    private productsService: ProductsService,
-    private translateService: TranslateService,
-    private rubricsServiceDb: RubricsServiceDb,
-    private rubricsTypesServiceDb: RubricsTypesServiceDb,
   ) {}
 
   @Get()
-  async getMainPage(
-      @Query("type") type: string,
-      @Req() req: Request,
-      @Res() res: Response) {
-        const rubrics = JSON.parse(JSON.stringify(await this.rubricsServiceDb.getAllRubrics()));
-        const translate = await this.translateService.getTranslateObjectByKeyAndIsoCode("main_page", req.cookies["iso_code_shop"]);
-        const productsAndImages = await this.productsService.getProductsByType(PRODUCTS_STEP, 0, type, req.cookies["iso_code_shop"]);
-        const maxProductsPrice = await this.productsService.getMaxPriceProducts();
-        const minProductsPrice = await this.productsService.getMinPriceProducts();
-
-        res.render("root", {
-          admin: false,
-          products: await this.productsService.getParseProductsWithTranslate(req.cookies["iso_code_shop"], req.cookies["basket_in_shop"], productsAndImages),
-          styles: ["/css/root.css"],
-          scripts: ["/js/root.js"],
-          maxProductsPrice: maxProductsPrice,
-          minProductsPrice: minProductsPrice,
-          activeLanguage: req.cookies["iso_code_shop"],
-          loadMore: productsAndImages.length >= PRODUCTS_STEP,
-          ...translate,
-          rubrics: rubrics.length > 1 ? [...rubrics, { name: "Всі товари", active: true, id: 0 }] : false,
-          filtersMenuItems: rubrics.length > 1 ? false : await this.rubricsTypesServiceDb.getTypesByRubricId(rubrics[0].id),
-          rubric_id: rubrics.length <= 1 ? rubrics[0].id : ""
-        });
-    }
+  async getMainPage() {
+    return;
+  }
 }

@@ -13,7 +13,7 @@ export class ArticlesServiceDb {
         await this.repository.nativeInsert(article);
     }
     async getArticles(count: number, skip: number) {
-        return await this.repository.find({  }, { limit: count, offset: skip });
+        return await this.repository.find({  }, { limit: count, offset: skip, orderBy: { created_at: "ASC" } });
     }
     async getArticleByFilename(filename: string) {
         return await this.repository.findOne({ filename: filename });

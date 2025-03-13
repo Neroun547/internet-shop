@@ -71,7 +71,8 @@ export class OrdersService {
             status: arr[0].status,
             first_name: arr[0].first_name,
             last_name: arr[0].last_name,
-            admin_note: arr[0].admin_note
+            admin_note: arr[0].admin_note,
+            created_at: arr[0].created_at ? new Moment(arr[0].created_at).format("LLLL") : null,
         };
 
         for(let i = 0; i < arr.length; i++) {

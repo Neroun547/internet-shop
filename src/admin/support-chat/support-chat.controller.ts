@@ -25,37 +25,6 @@ export class SupportChatControllerAdmin {
     }
 
     @UseGuards(AuthGuard)
-    @Get()
-    async getChatsPage(@Res() res: Response) {
-        const chats = await this.supportChatsServiceAdmin.getChats(0, 5);
-
-        res.render("admin/support-chats/support-chats", {
-            auth: true,
-            admin: true,
-            chats: chats,
-            styles: ["/css/admin/support-chats/support-chats.css"],
-            scripts: ["/js/admin/chat/chats.js"]
-        });
-    }
-
-    @UseGuards(AuthGuard)
-    @Get(":id")
-    async getChatPage(@Param("id", new ParseIntPipe()) id: number, @Res() res: Response) {
-        const messages = await this.supportChatsServiceAdmin.getMessagesByChatId(id, 10, 0);
-
-        res.render("admin/support-chats/support-chat", {
-            styles: ["/css/chat/chat.css", "/css/chat-media.css"],
-            scripts: ["/js/admin/chat/chat.js", "/js/admin/chat/chats.js"],
-            messages: messages,
-            admin: true,
-            auth: true,
-            chatId: id,
-            idLastMessage: messages[messages.length - 1] ? messages[messages.length - 1].id : -1,
-            loadMore: messages.length === 10
-        });
-    }
-
-    @UseGuards(AuthGuard)
     @Post("save-message")
     async saveMessage(@Body() body: SaveMessageAdminDto) {
         await this.supportChatsServiceAdmin.saveMessage(body);

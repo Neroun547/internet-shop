@@ -48,18 +48,15 @@ export class PartnersService {
       }
     }).filter(el => el !== undefined);
   }
-  async createPartner(name: string): Promise<string> {
+  async createPartner(name: string, password: string): Promise<void> {
     const userWithTheSameName = await this.usersServiceDb.getUserByName(name);
 
     if(userWithTheSameName) {
       throw new BadRequestException({ message: "Користувач з таким ім'ям вже існує" });
     }
-    const password = this.commonService.generateRandomPassword();
     const passwordHash = await argon.hash(password);
 
     await this.usersServiceDb.createUser({ name: name, password: passwordHash, role: "partner" });
-
-    return password;
   }
   async deletePartnerById(id: number) {
     await this.ordersServiceDb.deleteOrdersByUserId(id);
@@ -96,8 +93,18 @@ export class PartnersService {
   async getPartnerById(id: number) {
     return await this.usersServiceDb.getUserById(id);
   }
-  async updatePartnerNameById(id: number, name: string) {
-    await this.usersServiceDb.updateUserNameById(name, id);
+  async updatePartnerById(id: number, name: string, password: string) {
+    if(!password && name) {
+      await this.usersServiceDb.updateUserNameById(name, id);
+    } else if(password && !name) {
+      const passwordHash = await argon.hash(password);
+      await this.usersServiceDb.updateUserPasswordById(passwordHash, id);
+    } else {
+      const passwordHash = await argon.hash(password);
+
+      await this.usersServiceDb.updateUserNameById(name, id);
+      await this.usersServiceDb.updateUserPasswordById(passwordHash, id);
+    }
   }
 
   async generateNewPasswordById(id: number) {

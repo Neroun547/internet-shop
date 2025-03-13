@@ -350,7 +350,7 @@ export class ProductsServiceDb {
             user_id: adminId
         };
 
-        if(priceFrom && priceTo) {
+        if(typeof priceFrom === "number" && typeof priceTo === "number" && !isNaN(priceFrom) && !isNaN(priceTo)) {
             //@ts-ignore
             filtersObject.price = { $gte: priceFrom, $lte: priceTo };
         }

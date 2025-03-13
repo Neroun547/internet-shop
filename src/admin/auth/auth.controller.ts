@@ -5,25 +5,13 @@ import {AuthDto} from "./dto/auth.dto";
 
 @Controller()
 export class AuthController {
-    constructor(private authService: AuthService) {
-    }
-
-    @Get()
-    getAuthPage(@Res() res: Response) {
-        res.render("admin/auth/auth", {
-            admin: true,
-            auth: false,
-            styles: ["/css/admin/auth/auth.css"],
-            scripts: ["/js/admin/auth/auth.js"]
-        });
-    }
+    constructor(private authService: AuthService) {}
 
     @Post()
-    async auth(@Body() body: AuthDto, @Res() res: Response) {
-        const token = await this.authService.auth(body);
+    async auth(@Body() body: AuthDto) {
+        const data = await this.authService.auth(body);
 
-        res.cookie(process.env.AUTH_TOKEN_COOKIE_NAME, token);
-        res.send({ message: "Auth success" });
+        return { token: data.token, role: data.userRole };
     }
 
     @Get("exit")

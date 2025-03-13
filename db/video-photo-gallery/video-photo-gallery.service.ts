@@ -28,6 +28,7 @@ export class VideoPhotoGalleryServiceDb {
       .joinAndSelect("videoPhotoGalleryFiles", "files")
       .offset(skip)
       .limit(count)
+      .orderBy({ id: "DESC" })
       .getResult();
   }
 

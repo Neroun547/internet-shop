@@ -20,7 +20,10 @@ export class AuthService {
         const checkPassword = await argon2.verify(userInDb.password, user.password);
 
         if(checkPassword) {
-            return this.jwtService.sign(JSON.parse(JSON.stringify(userInDb)), { secret: process.env.SECRET_JWT});
+            return {
+                token: this.jwtService.sign(JSON.parse(JSON.stringify(userInDb)), { secret: process.env.SECRET_JWT}),
+                userRole: userInDb.role
+            };
         }
         throw new UnauthorizedException({ message: "Хибне ім'я або пароль" });
     }
