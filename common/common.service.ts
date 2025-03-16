@@ -107,4 +107,15 @@ export class CommonService {
         }
         return false;
     }
+    getVideoMimeType(filename: string): string | null {
+        const substr = filename.substring(filename.length-4, filename.length);
+
+        if(substr.includes(".mov")) {
+            return "video/quicktime";
+        }
+        if(substr.includes(".mp4")) {
+            return "video/mp4";
+        }
+        return null;
+    }
 }
