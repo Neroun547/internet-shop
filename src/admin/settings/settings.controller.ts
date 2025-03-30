@@ -21,4 +21,19 @@ export class SettingsController {
 
     return;
   }
+
+  @UseGuards(AuthGuard)
+  @Get("admin")
+  async getAdminSettings() {
+    return await this.settingsService.getAdminSettings();
+  }
+
+  @UseGuards(AuthGuard)
+  @Post("admin")
+  async saveAdminSettings(@Body() body) {
+    await this.settingsService.saveAdminSettings(body);
+
+    return;
+  }
+
 }

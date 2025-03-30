@@ -14,4 +14,10 @@ export class SettingsServiceDb {
   async saveSetting(setting: SettingsInterface) {
     await this.repository.nativeInsert(setting);
   }
+  async updateSettingById(id: number, value: string) {
+    await this.repository.nativeUpdate({ id: id }, { setting_value: value });
+  }
+  async getAdminSettings() {
+    return await this.repository.findAll();
+  }
 }

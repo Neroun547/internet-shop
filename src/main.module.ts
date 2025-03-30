@@ -28,6 +28,7 @@ import { RubricsModule } from "./rubrics/rubrics.module";
 import { RubricsTypesModuleDb } from "../db/rubrics-types/rubrics-types.module";
 import {ProductsModuleDb} from "../db/products/products.module";
 import { PricesModule } from "./products/prices/prices.module";
+import { SettingsModule } from "./admin/settings/settings.module";
 
 @Module({
   imports: [
@@ -61,6 +62,7 @@ import { PricesModule } from "./products/prices/prices.module";
       RubricsTypesModuleDb,
       ProductsModuleDb,
       PricesModule,
+      SettingsModule,
       MikroOrmModule.forRoot({
           dbName: process.env.DB_NAME,
           user: process.env.DB_USER,
@@ -84,7 +86,8 @@ import { PricesModule } from "./products/prices/prices.module";
                 { path: "statistics", module: StatisticsModule },
                 { path: "video-photo-gallery", module: VideoPhotoGalleryModuleAdmin },
                 { path: "partners", module: PartnersModule },
-                { path: "rubrics", module: RubricsModuleAdmin }
+                { path: "rubrics", module: RubricsModuleAdmin },
+                { path: "settings", module: SettingsModule }
             ]
           },
           {

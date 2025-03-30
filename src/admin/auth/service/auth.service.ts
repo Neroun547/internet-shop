@@ -22,7 +22,8 @@ export class AuthService {
         if(checkPassword) {
             return {
                 token: this.jwtService.sign(JSON.parse(JSON.stringify(userInDb)), { secret: process.env.SECRET_JWT}),
-                userRole: userInDb.role
+                userRole: userInDb.role,
+                id: userInDb.id
             };
         }
         throw new UnauthorizedException({ message: "Хибне ім'я або пароль" });

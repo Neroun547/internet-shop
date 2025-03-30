@@ -11,7 +11,7 @@ export class AuthController {
     async auth(@Body() body: AuthDto) {
         const data = await this.authService.auth(body);
 
-        return { token: data.token, role: data.userRole };
+        return { token: data.token, role: data.userRole, id: data.id };
     }
 
     @Get("exit")
