@@ -16,7 +16,7 @@ import {SupportChatAuthGuard} from "./auth/guards/support-chat-auth.guard";
 import {HttpExceptionFilter} from "../../error-filters/error-filter-client-chat";
 import {SaveMessageDto} from "./dto/save-message.dto";
 import { TranslateService } from "../translate/service/translate.service";
-import { CommonService } from "../../common/common.service";
+import { CommonService } from "../common/common.service";
 
 @Controller()
 @UseFilters(HttpExceptionFilter)

@@ -30,7 +30,7 @@ export class ArticlesController {
     @Get(":filename")
     async getEditArticlePage(@Param("filename") filename: string) {
         const { content, article } = await this.articlesService.getArticleContentByFilename(filename);
-
+        
         return {
             content: content,
             authors: article.authors,

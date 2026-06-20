@@ -33,6 +33,6 @@ export class AuthGuard implements CanActivate {
     }
 
     private extractTokenHeaders(request: Request): string | undefined {
-        return request.headers.authorization ? request.headers.authorization.replace('Bearer ', '') : null;
+        return request.headers.authorization ? request.headers.authorization.replace('Bearer ', '') : undefined;
     }
 }

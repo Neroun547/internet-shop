@@ -1,10 +1,11 @@
-import { Injectable } from "@nestjs/common";
-import {SupportChatServiceDb} from "../../../../db/support-chats/support-chats.service";
+import { Injectable, NotFoundException } from "@nestjs/common";
+import {SupportChatServiceDb} from "../../../db/support-chats/support-chats.service";
 import {
     SupportChatMessagesServiceDb
-} from "../../../../db/support-chats/support-chat-messages/support-chat-messages.service";
+} from "../../../db/support-chats/support-chat-messages/support-chat-messages.service";
 import {SaveMessageAdminDto} from "../dto/save-message-admin.dto";
 import * as Moment from "moment";
+import { SupportChats } from "src/db/support-chats/support-chats.entity";
 
 @Injectable()
 export class SupportChatServiceAdmin {
@@ -14,13 +15,17 @@ export class SupportChatServiceAdmin {
     ) {}
 
     async getChats(skip: number, take: number) {
-        const chats = JSON.parse(JSON.stringify(await this.supportChatServiceDb.getChats(skip, take)));
+        const chats = await this.supportChatServiceDb.getChats(skip, take);
 
         return (await this.checkExistsMessagesInChats(chats)).map(el => ({ id: el.id, username: el.support_chat_user.username }));
     }
 
     async getMessagesByChatId(chatId: number, take: number, skip: number) {
-        const messages = JSON.parse(JSON.stringify(await this.supportChatMessagesServiceDb.getMessagesByChatIdDESC(chatId, take, skip))).sort((a, b) => a.id - b.id);
+        const messages = (await this.supportChatMessagesServiceDb.getMessagesByChatIdDESC(chatId, take, skip)).sort((a, b) => {
+            if(a.id && b.id) return a.id - b.id;
+
+            return -1;
+        });
 
         return messages.map(el => {
             return { ...el, date: el.date ? Moment(el.date).format("YYYY-MM-DD HH:mm:ss") : "" }
@@ -29,6 +34,10 @@ export class SupportChatServiceAdmin {
 
     async saveMessage(data: SaveMessageAdminDto) {
         const chat = await this.supportChatServiceDb.getChatById(data.chatId);
+
+        if(!chat) {
+            throw new NotFoundException({ message: "Chat not found" });
+        }
         await this.supportChatMessagesServiceDb.saveMessage({ message: data.message, admin: true, chat: chat.id, date: Moment().format("YYYY-MM-DD HH:mm:ss") });
     }
 
@@ -41,8 +50,8 @@ export class SupportChatServiceAdmin {
         await this.supportChatServiceDb.deleteChatById(chatId);
     }
 
-    async checkExistsMessagesInChats(chats) {
-        const result = [];
+    async checkExistsMessagesInChats(chats: Array<SupportChats>) {
+        const result: Array<SupportChats> = [];
 
         for(let i = 0; i < chats.length; i++) {
             if((await this.supportChatMessagesServiceDb.getCountMessagesByChatId(chats[i].id)) >= 1) {

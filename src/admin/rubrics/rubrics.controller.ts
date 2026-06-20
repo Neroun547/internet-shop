@@ -1,21 +1,17 @@
 import {
   Body,
   Controller, Delete,
-  ForbiddenException,
   Get,
   Param,
   ParseIntPipe, Patch,
   Post,
-  Req,
-  Res,
   UseGuards
 } from "@nestjs/common";
-import { Response, Request } from "express";
 import { AuthGuard } from "../auth/guards/auth.guard";
 import { RubricsService } from "./service/rubrics.service";
 import { CreateRubricDto } from "./dto/create-rubric.dto";
-import { RubricsTypesServiceDb } from "../../../db/rubrics-types/rubrics-types.service";
-import { RubricsServiceDb } from "../../../db/rubrics/rubrics.service";
+import { RubricsTypesServiceDb } from "../../db/rubrics-types/rubrics-types.service";
+import { RubricsServiceDb } from "../../db/rubrics/rubrics.service";
 import { UpdateRubricDto } from "./dto/update-rubric.dto";
 
 @Controller()
@@ -36,7 +32,6 @@ export class RubricsControllerAdmin {
   @UseGuards(AuthGuard)
   @Post()
   async createRubric(@Body() body: CreateRubricDto) {
-
     return { id: await this.rubricsService.createRubricAndReturnId(body.name, body.types) };
   }
 

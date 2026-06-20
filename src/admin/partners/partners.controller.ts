@@ -76,7 +76,7 @@ export class PartnersController {
   async getPartner(@Req() req: Request, @Param("id", new ParseIntPipe()) id: number) {
     if(req["user"].role === "admin") {
       const data = await this.partnersService.getPartnerById(id);
-
+      
       return {
         name: data.name
       }

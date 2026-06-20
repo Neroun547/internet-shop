@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import {OrdersServiceDb} from "../../../../db/orders/orders.service";
+import {OrdersServiceDb} from "../../../db/orders/orders.service";
 const Moment = require("moment");
 
 Moment.locale("uk");
@@ -37,7 +37,7 @@ export class OrdersService {
     }
 
     async parseOrders(arr, userId: number) {
-        const result = [];
+        const result: Array<any> = [];
 
         for(let i = 0; i < arr.length; i++) {
             const ordersAndProducts = (await this.ordersServiceDb.geOrdersAndProductsByOrderIdAndUserId(arr[i].id_order, userId));
@@ -45,12 +45,13 @@ export class OrdersService {
 
             for(let i = 0; i < ordersAndProducts.length; i++) {
                 if(setOfProductsNames.size < 5) {
-                    setOfProductsNames.add(ordersAndProducts[i].product.name);
+                    setOfProductsNames.add(ordersAndProducts[i].product?.name);
                 } else {
                     setOfProductsNames.add("...");
 
                     break;
                 }
+                
             }
             result.push({
                 ...arr[i],
@@ -74,7 +75,6 @@ export class OrdersService {
             admin_note: arr[0].admin_note,
             created_at: arr[0].created_at ? new Moment(arr[0].created_at).format("LLLL") : null,
         };
-
         for(let i = 0; i < arr.length; i++) {
             result.all_sum += arr[i].product.price * arr[i].count
         }

@@ -1,7 +1,7 @@
-import { Injectable } from "@nestjs/common";
-import { SupportChatServiceDb } from "../../../db/support-chats/support-chats.service";
-import { SupportChatMessagesServiceDb } from "../../../db/support-chats/support-chat-messages/support-chat-messages.service";
-import { SupportChatUsersServiceDb } from "../../../db/support-chats/support-chat-users/support-chat-users.service";
+import { Injectable, NotFoundException } from "@nestjs/common";
+import { SupportChatServiceDb } from "../../db/support-chats/support-chats.service";
+import { SupportChatMessagesServiceDb } from "../../db/support-chats/support-chat-messages/support-chat-messages.service";
+import { SupportChatUsersServiceDb } from "../../db/support-chats/support-chat-users/support-chat-users.service";
 import * as Moment from "moment";
 
 @Injectable()
@@ -33,6 +33,10 @@ export class SupportChatService {
         } else {
             await this.supportChatsServiceDb.saveChat(userId);
             const chat = await this.supportChatsServiceDb.getChatByUserId(userId);
+
+            if(!chat) {
+                throw new NotFoundException();
+            }
             await this.supportChatMessagesServiceDb.saveMessage({ admin: false, message: message, chat: chat.id, date: Moment().format("YYYY-MM-DD HH:mm:ss") });
         }
     }

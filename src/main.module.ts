@@ -15,19 +15,21 @@ import {SupportChatModuleAdmin} from "./admin/support-chat/support-chat.module";
 import { ArticlesModule } from "./articles/articles.module";
 import { ArticlesModuleAdmin } from "./admin/articles/articles.module";
 import {StatisticsModule} from "./admin/statistics/statistics.module";
-import {StatisticsModuleDb} from "../db/statistics/statistics.module";
-import {CommonModule} from "../common/common.module";
+import {StatisticsModuleDb} from "./db/statistics/statistics.module";
+import {CommonModule} from "./common/common.module";
 import { VideoPhotoGalleryModule } from "./video-photo-gallery/video-photo-gallery.module";
 import { VideoPhotoGalleryModuleAdmin } from "./admin/video-photo-gallery/video-photo-gallery.module";
 import { TranslateModule } from "./translate/translate.module";
-import { TranslateModuleDb } from "../db/translate/translate.module";
+import { TranslateModuleDb } from "./db/translate/translate.module";
 import { PartnersModule } from "./admin/partners/partners.module";
 import { RubricsModuleAdmin } from "./admin/rubrics/rubrics.module";
-import { RubricsModuleDb } from "../db/rubrics/rubrics.module";
+import { RubricsModuleDb } from "./db/rubrics/rubrics.module";
 import { RubricsModule } from "./rubrics/rubrics.module";
-import { RubricsTypesModuleDb } from "../db/rubrics-types/rubrics-types.module";
-import {ProductsModuleDb} from "../db/products/products.module";
+import { RubricsTypesModuleDb } from "./db/rubrics-types/rubrics-types.module";
+import {ProductsModuleDb} from "./db/products/products.module";
 import { PricesModule } from "./products/prices/prices.module";
+import { MySqlDriver } from '@mikro-orm/mysql';
+import { SettingsModule } from './admin/settings/settings.module';
 
 @Module({
   imports: [
@@ -61,15 +63,21 @@ import { PricesModule } from "./products/prices/prices.module";
       RubricsTypesModuleDb,
       ProductsModuleDb,
       PricesModule,
+      SettingsModule,
       MikroOrmModule.forRoot({
-          dbName: process.env.DB_NAME,
-          user: process.env.DB_USER,
-          password: process.env.DB_PASSWORD,
-          type: "mysql",
-          port: Number(process.env.DB_PORT),
-          entities: [],
-          autoLoadEntities: true,
-          allowGlobalContext: true
+        driver: MySqlDriver,
+        dbName: process.env.DB_NAME,
+        user: process.env.DB_USER,
+        password: process.env.DB_PASSWORD,
+        host: process.env.DB_HOST ?? 'localhost',
+        port: Number(process.env.DB_PORT ?? 3306),
+        entities: ['./dist/db/**/*.entity.js'],
+        entitiesTs: ['./src/db/**/*.entity.ts'],        
+        migrations: {
+            path: './dist/migrations',
+            pathTs: './src/migrations',
+        },
+        autoLoadEntities: true
       }),
       RouterModule.register([
           {
@@ -84,7 +92,8 @@ import { PricesModule } from "./products/prices/prices.module";
                 { path: "statistics", module: StatisticsModule },
                 { path: "video-photo-gallery", module: VideoPhotoGalleryModuleAdmin },
                 { path: "partners", module: PartnersModule },
-                { path: "rubrics", module: RubricsModuleAdmin }
+                { path: "rubrics", module: RubricsModuleAdmin },
+                { path: "settings", module: SettingsModule }
             ]
           },
           {

@@ -3,7 +3,7 @@ import {CreateUserDto} from "../signup/dto/create-user.dto";
 import {SupportChatAuthService} from "./service/support-chat-auth.service";
 import { Response, Request } from "express";
 import { TranslateService } from "../../translate/service/translate.service";
-import { RubricsTypesServiceDb } from "../../../db/rubrics-types/rubrics-types.service";
+import { RubricsTypesServiceDb } from "../../db/rubrics-types/rubrics-types.service";
 
 @Controller()
 export class SupportChatAuthController {
@@ -40,7 +40,7 @@ export class SupportChatAuthController {
     async auth(@Body() body: CreateUserDto, @Res() res: Response) {
         const token: string = await this.chatAuthService.auth(body);
 
-        res.cookie(process.env.AUTH_CHAT_COOKIE_NAME, token);
+        res.cookie(process.env.AUTH_CHAT_COOKIE_NAME ?? "chat_auth_token_shop", token);
         res.send({ message: "Аунтифікація успішна" });
     }
 }

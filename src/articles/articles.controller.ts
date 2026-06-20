@@ -1,8 +1,5 @@
-import { Controller, Get, NotFoundException, Param, ParseIntPipe, Query, Req, Res } from "@nestjs/common";
-import { Response, Request } from "express";
+import { Controller, Get, NotFoundException, Param, ParseIntPipe, Query } from "@nestjs/common";
 import {ArticlesService} from "./service/articles.service";
-import { TranslateService } from "../translate/service/translate.service";
-import { CommonService } from "../../common/common.service";
 import { readFile } from "fs/promises";
 import { resolve } from "path";
 
@@ -10,8 +7,6 @@ import { resolve } from "path";
 export class ArticlesController {
     constructor(
       private articlesService: ArticlesService,
-      private translateService: TranslateService,
-      private commonService: CommonService
     ) {}
 
     @Get()

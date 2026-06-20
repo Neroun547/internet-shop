@@ -33,6 +33,6 @@ export class SupportChatAuthGuard implements CanActivate {
     }
 
     private extractTokenFromCookie(request: Request): string | undefined {
-        return request.cookies[process.env.AUTH_CHAT_COOKIE_NAME];
+        return request.cookies[process.env.AUTH_CHAT_COOKIE_NAME ?? "chat_auth_token_shop"];
     }
 }

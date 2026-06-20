@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
-import {CommonService} from "../../../../common/common.service";
+import {CommonService} from "../../../common/common.service";
 import * as Moment from "moment";
-import {ArticlesServiceDb} from "../../../../db/articles/articles.service";
+import {ArticlesServiceDb} from "../../../db/articles/articles.service";
 import {resolve} from "path";
 import {readFile, writeFile, unlink } from "fs/promises";
 import { existsSync } from "fs";
@@ -23,7 +23,7 @@ export class ArticlesService {
         const saveArticle = {
             filename: filename + ".html",
             created_at: date,
-            updated_at: null,
+            updated_at: "",
             authors: authors,
             name: name,
             theme: theme,
@@ -37,6 +37,9 @@ export class ArticlesService {
         const article = await this.articlesServiceDb.getArticleByFilename(filename);
         const content = (await readFile(resolve("views/articles/articles/" + filename))).toString();
 
+        if(!article || !content) {
+            throw new NotFoundException();
+        }
         return {
             content: content,
             article: article

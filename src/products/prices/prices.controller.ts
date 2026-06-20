@@ -1,5 +1,5 @@
 import { Controller, Get } from "@nestjs/common";
-import { ProductsServiceDb } from "../../../db/products/products.service";
+import { ProductsServiceDb } from "../../db/products/products.service";
 
 @Controller()
 export class PricesController {

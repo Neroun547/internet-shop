@@ -1,9 +1,9 @@
 import { forwardRef, Inject, Injectable } from "@nestjs/common";
-import { VideoPhotoGalleryServiceDb } from "../../../../db/video-photo-gallery/video-photo-gallery.service";
+import { VideoPhotoGalleryServiceDb } from "../../../db/video-photo-gallery/video-photo-gallery.service";
 import { UploadVideoPhotoDto } from "../dto/upload-video-photo.dto";
 import {
   VideoPhotoGalleryFilesServiceDb
-} from "../../../../db/video-photo-gallery-files/video-photo-gallery-files.service";
+} from "../../../db/video-photo-gallery-files/video-photo-gallery-files.service";
 import { rename, unlink } from "fs/promises";
 import { resolve } from "path";
 import { VideoPhotoGalleryService } from "../../../video-photo-gallery/service/video-photo-gallery.service";
@@ -20,7 +20,9 @@ export class VideoPhotoGalleryServiceAdmin {
   async savePublication(body: UploadVideoPhotoDto, files: Array<Express.Multer.File>, userId: number) {
     const publication = await this.videoPhotoGalleryServiceDb.saveAndReturn({ ...body, user_id: userId });
 
-    await this.saveFiles(files, publication.id);
+    if(publication.id) {
+      await this.saveFiles(files, publication.id);
+    }
   }
 
   async getPublications(count: number, skip: number) {

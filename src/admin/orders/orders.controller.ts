@@ -7,17 +7,15 @@ import {
     ParseIntPipe,
     Patch, Post,
     Query, Req,
-    Res,
-    UseFilters,
     UseGuards
 } from "@nestjs/common";
-import { Response, Request } from "express";
+import { Request } from "express";
 import {OrdersService} from "./service/orders.service";
 import {AuthGuard} from "../auth/guards/auth.guard";
 import {ChangeStatusDto} from "./dto/change-status.dto";
 import {AddAdminNoteDto} from "./dto/add-admin-note.dto";
-import { OrdersServiceDb } from "../../../db/orders/orders.service";
-import { UsersServiceDb } from "../../../db/users/users.service";
+import { OrdersServiceDb } from "../../db/orders/orders.service";
+import { UsersServiceDb } from "../../db/users/users.service";
 import { ORDERS_STEP } from "./constants";
 
 @Controller()
@@ -94,7 +92,7 @@ export class OrdersController {
     async deleteOrderByOrderId(@Req() req: Request, @Param("idOrder") idOrder: string) {
         const user = await this.usersServiceDb.getUserById(req["user"].id);
 
-        if(user.role === "admin") {
+        if(user && user.role === "admin") {
             await this.ordersService.deleteOrderByOrderId(idOrder);
 
             return;

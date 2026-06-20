@@ -3,7 +3,7 @@ import {CreateUserDto} from "./dto/create-user.dto";
 import {SupportChatSignupService} from "./service/support-chat-signup.service";
 import {Response, Request} from "express";
 import { TranslateService } from "../../translate/service/translate.service";
-import { RubricsTypesServiceDb } from "../../../db/rubrics-types/rubrics-types.service";
+import { RubricsTypesServiceDb } from "../../db/rubrics-types/rubrics-types.service";
 
 @Controller()
 export class SupportChatSignupController {

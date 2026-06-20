@@ -2,15 +2,14 @@ import {
   BadRequestException,
   Body,
   Controller, Delete,
-  Get, Param, ParseIntPipe, Patch,
+  Param, ParseIntPipe, Patch,
   Post, Req,
-  Res,
   UploadedFiles,
   UseGuards,
   UseInterceptors
 } from "@nestjs/common";
 import { VideoPhotoGalleryServiceAdmin } from "./service/video-photo-gallery.service";
-import { Response, Request } from "express";
+import { Request } from "express";
 import { AuthGuard } from "../auth/guards/auth.guard";
 import { FilesInterceptor } from "@nestjs/platform-express";
 import { UploadVideoPhotoDto } from "./dto/upload-video-photo.dto";
@@ -31,6 +30,13 @@ export class VideoPhotoGalleryController {
   @Post()
   @UseInterceptors(FilesInterceptor('files', 5, {
     fileFilter(req: any, file: { fieldname: string; originalname: string; encoding: string; mimetype: string; size: number; destination: string; filename: string; path: string; buffer: Buffer }, callback: (error: (Error | null), acceptFile: boolean) => void) {
+      const videoOrImageMaxSize = process.env.VIDEO_OR_IMAGE_MAX_SIZE ? Number(process.env.VIDEO_OR_IMAGE_MAX_SIZE) : 104857600;
+
+      if(file.size > videoOrImageMaxSize) {
+        callback(new BadRequestException(), false);
+
+        return;
+      }
       if(file.mimetype !== "image/jpeg" && file.mimetype !== "image/jpg" && file.mimetype !== "image/png" && file.mimetype !== "video/mp4" && file.mimetype !== "video/quicktime") {
         callback(new BadRequestException(), false);
 
@@ -52,6 +58,13 @@ export class VideoPhotoGalleryController {
   @Patch(":id")
   @UseInterceptors(FilesInterceptor('files', 5, {
     fileFilter(req: any, file: { fieldname: string; originalname: string; encoding: string; mimetype: string; size: number; destination: string; filename: string; path: string; buffer: Buffer }, callback: (error: (Error | null), acceptFile: boolean) => void) {
+      const videoOrImageMaxSize = process.env.VIDEO_OR_IMAGE_MAX_SIZE ? Number(process.env.VIDEO_OR_IMAGE_MAX_SIZE) : 104857600;
+
+      if(file.size > videoOrImageMaxSize) {
+        callback(new BadRequestException(), false);
+
+        return;
+      }
       if(file.mimetype !== "image/jpeg" && file.mimetype !== "image/jpg" && file.mimetype !== "image/png" && file.mimetype !== "video/mp4" && file.mimetype !== "video/quicktime") {
         callback(new BadRequestException(), false);
 

@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
-import { VideoPhotoGalleryServiceDb } from "../../../db/video-photo-gallery/video-photo-gallery.service";
-import { CommonService } from "../../../common/common.service";
+import { VideoPhotoGalleryServiceDb } from "../../db/video-photo-gallery/video-photo-gallery.service";
+import { CommonService } from "../../common/common.service";
 
 @Injectable()
 export class VideoPhotoGalleryService {

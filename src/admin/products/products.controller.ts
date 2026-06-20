@@ -8,6 +8,7 @@ import {
     ParseIntPipe,
     Patch,
     Post,
+    Put,
     Query,
     Req,
     Res,
@@ -19,9 +20,11 @@ import { Request, Response } from "express";
 import { AuthGuard } from "../auth/guards/auth.guard";
 import { FilesInterceptor } from "@nestjs/platform-express";
 import { ProductsService } from "../../products/service/products.service";
-import { ProductsServiceDb } from "../../../db/products/products.service";
+import { ProductsServiceDb } from "../../db/products/products.service";
 import { ProductsServiceAdmin } from "./service/products.service";
-import { RubricsServiceDb } from "../../../db/rubrics/rubrics.service";
+import { RubricsServiceDb } from "../../db/rubrics/rubrics.service";
+import { uploadProductFileValidator } from "./validators/upload-product.validator";
+import { UploadProductBodyInterceptor } from "./interceptors/upload-product-body.interceptor";
 
 @Controller()
 export class ProductsController {
@@ -73,20 +76,11 @@ export class ProductsController {
     @UseGuards(AuthGuard)
     @UseInterceptors(FilesInterceptor('files', 5, {
         fileFilter(req: any, file: { fieldname: string; originalname: string; encoding: string; mimetype: string; size: number; destination: string; filename: string; path: string; buffer: Buffer }, callback: (error: (Error | null), acceptFile: boolean) => void) {
-            if(file.mimetype !== "image/jpeg" && file.mimetype !== "image/jpg" && file.mimetype !== "image/png") {
-                callback(new BadRequestException(), false);
-
-                return;
-            }
-            callback(null, true);
+            uploadProductFileValidator(req, file, callback);
         }
-    }))
+    }), UploadProductBodyInterceptor)
     @Post()
     async uploadProduct(@Req() req: Request, @Body() body, @UploadedFiles() files: Array<Express.Multer.File>, @Res() res: Response) {
-        this.productsServiceAdmin.checkFilesSize(files);
-
-        body.available = body.available === "true";
-
         await this.productsServiceAdmin.uploadProduct({ ...body, user_id: req["user"].id }, files);
 
         res.sendStatus(200);
@@ -103,22 +97,11 @@ export class ProductsController {
     @UseGuards(AuthGuard)
     @UseInterceptors(FilesInterceptor('files', 5, {
         fileFilter(req: any, file: { fieldname: string; originalname: string; encoding: string; mimetype: string; size: number; destination: string; filename: string; path: string; buffer: Buffer }, callback: (error: (Error | null), acceptFile: boolean) => void) {
-            if(file.mimetype !== "image/jpeg" && file.mimetype !== "image/jpg" && file.mimetype !== "image/png") {
-                callback(new BadRequestException(), false);
-
-                return;
-            }
-            callback(null, true);
+            uploadProductFileValidator(req, file, callback);
         }
-    }))
-    @Patch(":id")
+    }), UploadProductBodyInterceptor)
+    @Put(":id")
     async updateProductById(@Param("id", new ParseIntPipe()) id: number, @Req() req: Request, @UploadedFiles() files: Array<Express.Multer.File>, @Body() body) {
-        this.productsServiceAdmin.checkFilesSize(files);
-
-        body.available = body.available === "true";
-        body.num = Number(body.num);
-        body.rubric_id = Number(body.rubric_id);
-
         await this.productsServiceAdmin.updateProductById(id, body, files, req["user"].id);
 
         return;

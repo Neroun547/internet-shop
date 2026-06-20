@@ -1,6 +1,6 @@
 import { Injectable, UnauthorizedException} from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
-import {UsersServiceDb} from "../../../../db/users/users.service";
+import {UsersServiceDb} from "../../../db/users/users.service";
 import * as argon2 from "argon2";
 import { AuthInterface } from "../interfaces/auth.interface";
 
@@ -21,7 +21,7 @@ export class AuthService {
 
         if(checkPassword) {
             return {
-                token: this.jwtService.sign(JSON.parse(JSON.stringify(userInDb)), { secret: process.env.SECRET_JWT}),
+                token: this.jwtService.sign(userInDb, { secret: process.env.SECRET_JWT}),
                 userRole: userInDb.role
             };
         }

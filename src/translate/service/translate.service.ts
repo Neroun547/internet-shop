@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { TranslateServiceDb } from "../../../db/translate/translate.service";
+import { TranslateServiceDb } from "../../db/translate/translate.service";
 import { TranslateObjectInterface } from "../interfaces/translate-object.interface";
 
 @Injectable()

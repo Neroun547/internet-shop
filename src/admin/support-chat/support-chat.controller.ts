@@ -8,11 +8,10 @@ import {
     Post,
     Query,
     Req,
-    Res,
     UseFilters,
     UseGuards
 } from "@nestjs/common";
-import { Response, Request } from "express";
+import { Request } from "express";
 import {SupportChatServiceAdmin} from "./service/support-chat.service";
 import {AuthGuard} from "../auth/guards/auth.guard";
 import {SaveMessageAdminDto} from "./dto/save-message-admin.dto";

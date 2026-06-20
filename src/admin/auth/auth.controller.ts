@@ -16,7 +16,7 @@ export class AuthController {
 
     @Get("exit")
     exit(@Res() res: Response) {
-        res.cookie(process.env.AUTH_TOKEN_COOKIE_NAME, "");
+        res.cookie(process.env.AUTH_TOKEN_COOKIE_NAME ?? "admin_token_shop", "");
         res.redirect("/admin/auth");
     }
 }

@@ -63,7 +63,7 @@ export class ProductsController {
     @Get("by-type/:type")
     async getProductsByType(@Param("type") type: string, @Req() req: Request) {
         const products = await this.productsService.getProductsByType(PRODUCTS_STEP, 0, type, req.cookies["iso_code_shop"]);
-
+   
         const maxProductsPrice = await this.productsService.getMaxPriceProductsByType(type);
         const minProductsPrice = await this.productsService.getMinPriceProductsByType(type);
 

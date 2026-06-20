@@ -1,10 +1,10 @@
 import { Module } from "@nestjs/common";
-import { SupportChatUsersModuleDb } from "../../../db/support-chats/support-chat-users/support-chat-users.module";
+import { SupportChatUsersModuleDb } from "../../db/support-chats/support-chat-users/support-chat-users.module";
 import {SupportChatAuthController} from "./support-chat-auth.controller";
 import {SupportChatAuthService} from "./service/support-chat-auth.service";
 import {JwtModule} from "@nestjs/jwt";
 import { TranslateModule } from "../../translate/translate.module";
-import { RubricsTypesModuleDb } from "../../../db/rubrics-types/rubrics-types.module";
+import { RubricsTypesModuleDb } from "../../db/rubrics-types/rubrics-types.module";
 
 @Module({
     imports: [

@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import {ArticlesServiceDb} from "../../../db/articles/articles.service";
+import {ArticlesServiceDb} from "../../db/articles/articles.service";
 
 @Injectable()
 export class ArticlesService {

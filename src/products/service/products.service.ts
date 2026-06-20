@@ -1,10 +1,11 @@
-import { Injectable } from "@nestjs/common";
-import { ProductsServiceDb } from "../../../db/products/products.service";
+import { Injectable, NotFoundException } from "@nestjs/common";
+import { ProductsServiceDb } from "../../db/products/products.service";
 import { translateTypeProduct } from "../../../constants";
-import { UsersServiceDb } from "../../../db/users/users.service";
-import { RubricsTypesServiceDb } from "../../../db/rubrics-types/rubrics-types.service";
-import { RubricsServiceDb } from "../../../db/rubrics/rubrics.service";
-import { TranslateServiceDb } from "../../../db/translate/translate.service";
+import { UsersServiceDb } from "../../db/users/users.service";
+import { RubricsTypesServiceDb } from "../../db/rubrics-types/rubrics-types.service";
+import { RubricsServiceDb } from "../../db/rubrics/rubrics.service";
+import { TranslateServiceDb } from "../../db/translate/translate.service";
+import { UserInterface } from "src/db/users/interfaces/user.interface";
 
 @Injectable()
 export class ProductsService {
@@ -17,15 +18,20 @@ export class ProductsService {
     ) {}
 
     async parseProductsForLoadCards(productsAndImages) {
-        const parseArr = [];
+        const parseArr: Array<any> = [];
+        let tmpUser: UserInterface | null;
 
         for(let i = 0; i < productsAndImages.length; i++) {
             if(productsAndImages[i]) {
-                parseArr.push({
-                    ...productsAndImages[i],
-                    file_name: productsAndImages[i].productsImages[0] ? productsAndImages[i].productsImages[0].file_name : null,
-                    partner: (await this.usersServiceDb.getUserById(productsAndImages[i].user_id)).role === "partner"
-                });
+                tmpUser = (await this.usersServiceDb.getUserById(productsAndImages[i].user_id));
+                
+                if(tmpUser) {
+                    parseArr.push({
+                        ...productsAndImages[i],
+                        file_name: productsAndImages[i].productsImages[0] ? productsAndImages[i].productsImages[0].file_name : null,
+                        partner: tmpUser.role === "partner"
+                    });
+                }
             }
         }
         return parseArr;
@@ -41,10 +47,14 @@ export class ProductsService {
         }
         if(!isNaN(Number(type))) {
             const productType = await this.rubricsTypesServiceDb.getTypeById(Number(type));
-            return await this.productsServiceDb.getProductsAndImagesByType(take, skip, productType.name, searchName);
+
+            if(!productType) {
+                throw new NotFoundException();
+            }
+            return await this.productsServiceDb.getProductsAndImagesByType(take, skip, productType.name, productType.rubric_id,  searchName);
         }
         if(type) {
-            return await this.productsServiceDb.getProductsAndImagesByType(take, skip, translateTypeProduct[type], searchName);
+            return await this.productsServiceDb.getProductsAndImagesByType(take, skip, translateTypeProduct[type], undefined, searchName);
         }
     }
 
@@ -53,27 +63,36 @@ export class ProductsService {
     }
 
     async getProductAndImageByProductId(id: number) {
-       const productAndImages = await this.productsServiceDb.getProductAndImagesById(id);
+        const productAndImages = await this.productsServiceDb.getProductAndImagesById(id);
 
-       await productAndImages.productsImages.init();
+        if(!productAndImages) {
+            throw new NotFoundException();
+        }
+        const user = (await this.usersServiceDb.getUserById(productAndImages.user_id));
 
-       return {
-           num: productAndImages.num,
-           id: productAndImages.id,
-           name: productAndImages.name,
-           price: productAndImages.price,
-           type: productAndImages.type,
-           description: productAndImages.description,
-           available: productAndImages.available,
-           images: [...productAndImages.productsImages].map((el) => el.file_name),
-           role: (await this.usersServiceDb.getUserById(productAndImages.user_id)).role === "partner",
-           rubric_id: productAndImages.rubric_id
-       }
+        if(!user) {
+            throw new NotFoundException();
+        }
+        return {
+            num: productAndImages.num,
+            id: productAndImages.id,
+            name: productAndImages.name,
+            price: productAndImages.price,
+            type: productAndImages.type,
+            description: productAndImages.description,
+            available: productAndImages.available,
+            images: productAndImages.productsImages ? [...productAndImages.productsImages].map((el) => el.file_name) : [],
+            role: user.role === "partner",
+            rubric_id: productAndImages.rubric_id
+        }
+       
     }
 
     async getMaxPriceProductsByType(type: string) {
         if(!isNaN(Number(type))) {
             const productType = await this.rubricsTypesServiceDb.getTypeById(Number(type));
+            
+            if(!productType) return 0;
 
             return await this.productsServiceDb.getMaxPriceProductsByType(productType.name);
         }
@@ -83,6 +102,8 @@ export class ProductsService {
     async getMinPriceProductsByType(type: string) {
         if(!isNaN(Number(type))) {
             const productType = await this.rubricsTypesServiceDb.getTypeById(Number(type));
+
+            if(!productType) return 0;
 
             return await this.productsServiceDb.getMinPriceProductsByType(productType.name);
         }
@@ -106,7 +127,7 @@ export class ProductsService {
     }
 
     async getProductsByFilters(take: number, skip: number, available: string, priceFrom: number, priceTo: number, type: string, rubricId?: any, searchName?: string) {
-        let productType: string;
+        let productType: string = "";
 
         if(type === "all") {
             productType = "";

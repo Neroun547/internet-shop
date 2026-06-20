@@ -1,7 +1,6 @@
-import { Controller, Get, Req, Res, UseFilters, UseGuards } from "@nestjs/common";
-import { Response, Request } from "express";
+import { Controller, Get, Res, UseGuards } from "@nestjs/common";
+import { Response } from "express";
 import { AuthGuard } from "./auth/guards/auth.guard";
-import {HttpExceptionFilter} from "../../error-filters/error-filter-admin";
 
 @Controller()
 export class AdminController {
@@ -9,7 +8,7 @@ export class AdminController {
 
     @UseGuards(AuthGuard)
     @Get()
-    getAdminPage(@Req() req: Request, @Res() res: Response) {
+    getAdminPage(@Res() res: Response) {
         res.redirect("/admin/orders");
     }
 }

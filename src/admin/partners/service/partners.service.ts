@@ -1,16 +1,17 @@
-import { BadRequestException, Injectable } from "@nestjs/common";
-import { UsersServiceDb } from "../../../../db/users/users.service";
-import { CommonService } from "../../../../common/common.service";
+import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from "@nestjs/common";
+import { UsersServiceDb } from "../../../db/users/users.service";
+import { CommonService } from "../../../common/common.service";
 import * as argon from "argon2";
-import { OrdersServiceDb } from "../../../../db/orders/orders.service";
-import { VideoPhotoGalleryServiceDb } from "../../../../db/video-photo-gallery/video-photo-gallery.service";
+import { OrdersServiceDb } from "../../../db/orders/orders.service";
+import { VideoPhotoGalleryServiceDb } from "../../../db/video-photo-gallery/video-photo-gallery.service";
 import {
   VideoPhotoGalleryFilesServiceDb
-} from "../../../../db/video-photo-gallery-files/video-photo-gallery-files.service";
-import { ArticlesServiceDb } from "../../../../db/articles/articles.service";
-import { ProductsServiceDb } from "../../../../db/products/products.service";
-import { ProductsImagesServiceDb } from "../../../../db/products-images/products-images.service";
+} from "../../../db/video-photo-gallery-files/video-photo-gallery-files.service";
+import { ArticlesServiceDb } from "../../../db/articles/articles.service";
+import { ProductsServiceDb } from "../../../db/products/products.service";
+import { ProductsImagesServiceDb } from "../../../db/products-images/products-images.service";
 import { unlink } from "fs/promises";
+
 const Moment = require("moment");
 
 Moment.locale("uk");
@@ -31,20 +32,18 @@ export class PartnersService {
   deleteFile(path: string) {
     try {
       unlink(path);
-    } catch {
-
+    } catch(error) {
+      console.log("Delete file error:", error);
     }
   }
 
   async getPartners(adminId: number) {
-    const serializedData = JSON.parse(JSON.stringify(await this.usersServiceDb.getUsers()));
+    const serializedData = await this.usersServiceDb.getUsers();
 
     return serializedData.map(el => {
 
       if(el.id !== adminId) {
-        delete el.password;
-
-        return el;
+        return { ...el, password: undefined };
       }
     }).filter(el => el !== undefined);
   }
@@ -59,39 +58,52 @@ export class PartnersService {
     await this.usersServiceDb.createUser({ name: name, password: passwordHash, role: "partner" });
   }
   async deletePartnerById(id: number) {
-    await this.ordersServiceDb.deleteOrdersByUserId(id);
-
     const productsAndImages = await this.productsServiceDb.getAllProductsAndImagesByUserId(id);
 
-    for(let i = 0; i < productsAndImages.length; i++) {
-      for(let j = 0; j < productsAndImages[i].productsImages.length; j++) {
-        this.deleteFile("static/images/" + productsAndImages[i].productsImages[j].file_name);
+    for(const product of productsAndImages) {
+      if(product.productsImages) {
+        for(const productImage of product.productsImages) {
+          if(productImage) {
+            this.deleteFile("static/images/" + productImage.file_name);
+          }
+        }
       }
-      await this.productsImagesServiceDb.deleteProductImagesByProductId(productsAndImages[i].id);
+      if(product && product.id) {
+        await this.productsImagesServiceDb.deleteProductImagesByProductId(product.id);
+      }
     }
-    await this.productsServiceDb.deleteProductsByUserId(id);
-
     const videoPhotoPublicationsAndFiles = await this.videoPhotoGalleryServiceDb.getPublicationAndFilesByUserId(id);
 
-    for(let i = 0; i < videoPhotoPublicationsAndFiles.length; i++) {
-      for(let j = 0; j < videoPhotoPublicationsAndFiles[i].videoPhotoGalleryFiles.length; j++) {
-        this.deleteFile("static/images/" + videoPhotoPublicationsAndFiles[i].videoPhotoGalleryFiles[j].file_name);
+    for(const videoPhotoPublication of videoPhotoPublicationsAndFiles) {
+      if(videoPhotoPublication.videoPhotoGalleryFiles) {
+        for(const file of videoPhotoPublication.videoPhotoGalleryFiles) {
+          this.deleteFile("static/images/" + file.file_name);
+        }
+        if(videoPhotoPublication.id) {
+          await this.videoPhotoGalleryFilesServiceDb.deleteByVideoPhotoGalleryId(videoPhotoPublication.id);
+        }
       }
-      await this.videoPhotoGalleryFilesServiceDb.deleteByVideoPhotoGalleryId(videoPhotoPublicationsAndFiles[i].id);
     }
-    await this.videoPhotoGalleryServiceDb.deleteByUserId(id);
-
     const articles = await this.articlesServiceDb.getAllArticlesByUserId(id);
 
     for(let i = 0; i < articles.length; i++) {
       this.deleteFile(articles[i].filename);
-
-      await this.articlesServiceDb.deleteArticleByFilename(articles[i].filename);
     }
-    await this.usersServiceDb.deleteUserById(id);
+    try {
+      await this.usersServiceDb.deleteUserByIdTransaction(id);
+    } catch(error) {
+      console.log("Transaction failed:", error);
+
+      throw new InternalServerErrorException({ message: "Невдалося видалити партнера." });
+    }
   }
   async getPartnerById(id: number) {
-    return await this.usersServiceDb.getUserById(id);
+    const data = await this.usersServiceDb.getUserById(id);
+
+    if(!data) {
+      throw new NotFoundException();
+    }
+    return data;
   }
   async updatePartnerById(id: number, name: string, password: string) {
     if(!password && name) {

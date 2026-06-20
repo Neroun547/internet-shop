@@ -1,7 +1,7 @@
 import {BadRequestException, Injectable} from "@nestjs/common";
-import {SupportChatUsersInterface} from "../../../../db/support-chats/support-chat-users/interfaces/support-chat-users.interface";
+import {SupportChatUsersInterface} from "../../../db/support-chats/support-chat-users/interfaces/support-chat-users.interface";
 import * as argon2 from "argon2";
-import {SupportChatUsersServiceDb} from "../../../../db/support-chats/support-chat-users/support-chat-users.service";
+import {SupportChatUsersServiceDb} from "../../../db/support-chats/support-chat-users/support-chat-users.service";
 
 @Injectable()
 export class SupportChatSignupService {

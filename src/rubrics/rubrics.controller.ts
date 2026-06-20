@@ -1,6 +1,6 @@
 import { Controller, Get, Param, ParseIntPipe } from "@nestjs/common";
-import { RubricsTypesServiceDb } from "../../db/rubrics-types/rubrics-types.service";
-import { RubricsServiceDb } from "../../db/rubrics/rubrics.service";
+import { RubricsTypesServiceDb } from "../db/rubrics-types/rubrics-types.service";
+import { RubricsServiceDb } from "../db/rubrics/rubrics.service";
 
 @Controller()
 export class RubricsController {

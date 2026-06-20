@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import {StatisticsServiceDb} from "../../../../db/statistics/statistics.service";
+import {StatisticsServiceDb} from "../../../db/statistics/statistics.service";
 const Moment = require("moment");
 
 @Injectable()
@@ -19,13 +19,13 @@ export class StatisticsService {
         }
         const countDates = Object.keys(objectWithCountVisitsAndDateKey).length;
 
-        const parseData = [];
+        const parseData: Array<any> = [];
 
         objectWithCountVisitsAndDateKey = this.sortDataInObj(objectWithCountVisitsAndDateKey);
 
         if(countDates > 10) {
             const countDates = Math.floor(Object.keys(objectWithCountVisitsAndDateKey).length / 10);
-            const parseData = [];
+            const parseData: Array<any> = [];
             let remainder = Math.floor(Object.keys(objectWithCountVisitsAndDateKey).length) % 10;
 
             let tmp;
@@ -71,7 +71,7 @@ export class StatisticsService {
     }
 
     async getDataByDateFromAndDateTo(dateFrom: string, dateTo: string) {
-        const data = JSON.parse(JSON.stringify(await this.statisticsServiceDb.getDataByDateFromAndDateTo(dateFrom, dateTo)));
+        const data = await this.statisticsServiceDb.getDataByDateFromAndDateTo(dateFrom, dateTo);
 
         return this.parseStatisticData(data);
     }
