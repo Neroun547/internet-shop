@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
+import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from "@nestjs/common";
 import {CommonService} from "../../../common/common.service";
 import * as Moment from "moment";
 import {ArticlesServiceDb} from "../../../db/articles/articles.service";
@@ -47,26 +47,28 @@ export class ArticlesService {
     }
 
     async updateArticleByFilename(filename: string, data: SaveArticleDto) {
+        if(existsSync(resolve("views/articles/articles/" + filename))) {
+            await writeFile(resolve("views/articles/articles/" + filename), data.content);
+        } else {
+            throw new NotFoundException({ message: "Статтю не знайдено" });
+        }
+
         await this.articlesServiceDb.updateArticleByFilename(filename, {
             authors: data.authors,
             name: data.name,
             theme: data.theme
         });
-
-        if(existsSync(resolve("views/articles/articles/" + filename))) {
-            await writeFile(resolve("views/articles/articles/" + filename), data.content);
-        } else {
-            throw new NotFoundException();
-        }
     }
 
     async deleteArticleByFilename(filename: string) {
-        await this.articlesServiceDb.deleteArticleByFilename(filename);
-
-        try {
-            await unlink(resolve("views/articles/articles/" + filename + ".html"));
-        } catch {
-            throw new BadRequestException();
+        if(!existsSync(resolve("views/articles/articles/" + filename))) {
+            throw new NotFoundException({ message: "Статтю не знайдено" });
         }
+        try {
+            await unlink(resolve("views/articles/articles/" + filename));
+        } catch {
+            throw new InternalServerErrorException({ message: "Помилка видалення статті" });
+        }
+        await this.articlesServiceDb.deleteArticleByFilename(filename);
     }
 }
